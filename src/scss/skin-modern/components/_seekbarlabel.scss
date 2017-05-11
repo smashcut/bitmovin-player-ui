@@ -50,22 +50,58 @@
       }
 
       .#{$prefix}-seekbar-label-metadata {
-        background: linear-gradient(to bottom, $color-transparent, $color-background-bars);
         bottom: 0;
         display: block;
-        padding: .5em;
         position: absolute;
         width: 100%;
 
-        .#{$prefix}-seekbar-label-time {
-          display: block;
-          line-height: .8em;
+        .#{$prefix}-seekbar-label-metadata-title {
+          padding: .5em;
+          width: 100%;
+
+          > .#{$prefix}-container-wrapper {
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            position: relative;
+
+            .#{$prefix}-seekbar-label-title {
+              display: block;
+              margin-bottom: .3em;
+              white-space: normal;
+            }
+
+            .#{$prefix}-seekbar-label-avatar {
+              display: block;
+              margin-bottom: .3em;
+              white-space: normal;
+            }
+
+            .#{$prefix}-seekbar-label-number {
+              display: block;
+              margin-bottom: .3em;
+              white-space: normal;
+            }
+          }
         }
 
-        .#{$prefix}-seekbar-label-title {
-          display: block;
-          margin-bottom: .3em;
-          white-space: normal;
+        .#{$prefix}-seekbar-label-metadata-content {
+          padding: .5em;
+
+          .#{$prefix}-seekbar-label-time {
+            display: block;
+            line-height: .8em;
+          }
+
+          .#{$prefix}-seekbar-label-comment {
+            clear: left;
+            display: block;
+            font-size: .7em;
+            margin-bottom: .3em;
+            text-align: left;
+            white-space: normal;
+          }
         }
       }
     }

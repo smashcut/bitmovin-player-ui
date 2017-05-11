@@ -82,7 +82,18 @@
       > .#{$prefix}-seekbar-marker {
         @extend %bar;
 
-        border-right: $marker-width solid $color-primary;
+        border-right: $marker-width solid $color-smashcut-orange;
+        // don't consider the border for width, else it does not overlap at edges
+        box-sizing: content-box;
+        // offset position marker to center it on its actual position
+        margin-left: -$marker-width / 2;
+        width: 0;
+      }
+
+      > .#{$prefix}-seekbar-marker-typetwo {
+        @extend %bar;
+
+        border-right: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position

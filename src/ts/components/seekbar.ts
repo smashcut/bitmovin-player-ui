@@ -402,11 +402,16 @@ export class SeekBar extends Component<SeekBarConfig> {
       // Generate timeline markers from the config if we have markers and if we have a duration
       // The duration check is for buggy platforms where the duration is not available instantly (Chrome on Android 4.3)
       if (markers && player.getDuration() !== Infinity) {
-        for (let marker of markers) {
-          this.timelineMarkers.push({
-            time: 100 / player.getDuration() * marker.time, // convert time to percentage
-            title: marker.title,
-          })
+        for (let o of markers) {
+          let marker = {
+            time: 100 / player.getDuration() * o.time, // convert time to percentage
+            title: o.title,
+            markerType: '' + (o.markerType || 1),
+            comment: o.comment || '',
+            avatar: o.avatar,
+            number: o.number || ''
+          }
+          this.timelineMarkers.push(marker)
         }
       }
 
@@ -581,14 +586,18 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   protected updateMarkers(): void {
     this.seekBarMarkersContainer.empty();
+
     for (let marker of this.timelineMarkers) {
-      this.seekBarMarkersContainer.append(new DOM('div', {
-        'class': this.prefixCss('seekbar-marker'),
+      let className = marker.markerType === '2' ? this.prefixCss('seekbar-marker-typetwo') : this.prefixCss('seekbar-marker')
+
+      let markerDom = new DOM('div', {
+        'class': className,
         'data-marker-time': String(marker.time),
         'data-marker-title': String(marker.title),
       }).css({
         'width': marker.time + '%',
-      }));
+      })
+      this.seekBarMarkersContainer.append(markerDom)
     }
   }
 

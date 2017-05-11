@@ -18,26 +18,49 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
+  private numberLabel: Label<LabelConfig>;
+  private commentLabel: Label<LabelConfig>;
+  private avatarLabel: Label<LabelConfig>;
   private thumbnail: Component<ComponentConfig>;
+  private metadata: Component<ComponentConfig>;
 
   private timeFormat: string;
 
   constructor(config: SeekBarLabelConfig = {}) {
     super(config);
 
-    this.timeLabel = new Label({ cssClasses: ['seekbar-label-time'] });
-    this.titleLabel = new Label({ cssClasses: ['seekbar-label-title'] });
-    this.thumbnail = new Component({ cssClasses: ['seekbar-thumbnail'] });
+    this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
+    this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
+    this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
+    this.numberLabel = new Label({cssClasses: ['seekbar-label-number']});
+    this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
+    this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
+    this.metadata = new Container({
+      components: [
+        new Container({
+          components: [
+            this.avatarLabel,
+            this.titleLabel,
+            this.numberLabel],
+          cssClass: 'seekbar-label-metadata-title',
+        }),
+        new Container({
+          components: [
+            this.commentLabel,
+            this.timeLabel],
+          cssClass: 'seekbar-label-metadata-content',
+        }),
+      ],
+      cssClass: 'seekbar-label-metadata'
+    });
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-seekbar-label',
       components: [new Container({
         components: [
           this.thumbnail,
-          new Container({
-            components: [this.titleLabel, this.timeLabel],
-            cssClass: 'seekbar-label-metadata',
-          })],
+          this.metadata
+        ],
         cssClass: 'seekbar-label-inner',
       })],
       hidden: true
@@ -54,15 +77,20 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       } else {
         let percentage = 0;
         if (args.marker) {
-          percentage = args.marker.time;
           this.setTitleText(args.marker.title);
+          this.setSmashcutData(args.marker);
+          this.setTime(args.marker.time);
+          this.setThumbnail(null);
+          this.setBackground(true);
         } else {
           percentage = args.position;
           this.setTitleText(null);
+          this.setSmashcutData(null);
+          let time = player.getDuration() * (percentage / 100);
+          this.setTime(time);
+          this.setThumbnail(player.getThumb(time));
+          this.setBackground(false);
         }
-        let time = player.getDuration() * (percentage / 100);
-        this.setTime(time);
-        this.setThumbnail(player.getThumb(time));
       }
     });
 
@@ -100,6 +128,18 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.titleLabel.setText(text);
   }
 
+  setSmashcutData(marker: any) {
+    if (marker) {
+      this.commentLabel.setText(marker.comment);
+      this.numberLabel.setText(marker.number);
+      this.avatarLabel.setText(marker.avatar);
+    } else {
+      this.commentLabel.setText(null);
+      this.numberLabel.setText(null);
+      this.avatarLabel.setText(null);
+    }
+  }
+
   /**
    * Sets or removes a thumbnail on the label.
    * @param thumbnail the thumbnail to display on the label or null to remove a displayed thumbnail
@@ -110,9 +150,9 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     if (thumbnail == null) {
       thumbnailElement.css({
         'background-image': null,
-        'display': null,
-        'width': null,
-        'height': null
+        'display': 'null',
+        'width': 'null',
+        'height': 'null'
       });
     }
     else {
@@ -122,6 +162,21 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         'width': thumbnail.w + 'px',
         'height': thumbnail.h + 'px',
         'background-position': `-${thumbnail.x}px -${thumbnail.y}px`
+      });
+    }
+  }
+
+  setBackground(onOff: boolean) {
+    let metadataElement = this.metadata.getDomElement();
+
+    if (onOff) {
+      metadataElement.css({
+        'background': '#000'
+      });
+    }
+    else {
+      metadataElement.css({
+        'background': 'initial'
       });
     }
   }

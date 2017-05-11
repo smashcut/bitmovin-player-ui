@@ -56,6 +56,10 @@ export interface UIRecommendationConfig {
 export interface TimelineMarker {
   time: number;
   title?: string;
+  markerType?: string;
+  comment?: string;
+  avatar?: string;
+  number?: string;
 }
 
 export interface UIConfig {
@@ -372,10 +376,10 @@ export namespace UIManager.Factory {
             new VolumeToggleButton(),
             new VolumeSlider(),
             new Spacer(),
-            new PictureInPictureToggleButton(),
-            new AirPlayToggleButton(),
-            new CastToggleButton(),
-            new VRToggleButton(),
+            /*new PictureInPictureToggleButton(),*/
+            /*new AirPlayToggleButton(),*/
+            /*new CastToggleButton(),*/
+            /*new VRToggleButton(),*/
             new SettingsToggleButton({ settingsPanel: settingsPanel }),
             new FullscreenToggleButton(),
           ],
@@ -393,7 +397,7 @@ export namespace UIManager.Factory {
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),
-        new Watermark(),
+        /*new Watermark(),*/
         new ErrorMessageOverlay()
       ], cssClasses: ['ui-skin-modern']
     });
@@ -403,8 +407,9 @@ export namespace UIManager.Factory {
     return new UIContainer({
       components: [
         new BufferingOverlay(),
-        new AdClickOverlay(),
+        /*new AdClickOverlay(),*/
         new PlaybackToggleOverlay(),
+        /*
         new Container({
           components: [
             new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
@@ -412,6 +417,7 @@ export namespace UIManager.Factory {
           ],
           cssClass: 'ui-ads-status'
         }),
+        */
         new ControlBar({
           components: [
             new Container({
@@ -468,14 +474,14 @@ export namespace UIManager.Factory {
           components: [
             new MetadataLabel({ content: MetadataLabelContent.Title }),
             new CastToggleButton(),
-            new VRToggleButton(),
+            /*new VRToggleButton(),*/
             new SettingsToggleButton({ settingsPanel: settingsPanel }),
             new FullscreenToggleButton(),
           ]
         }),
         settingsPanel,
         new RecommendationOverlay(),
-        new Watermark(),
+        /*new Watermark(),*/
         new ErrorMessageOverlay()
       ], cssClasses: ['ui-skin-modern', 'ui-skin-smallscreen']
     });
@@ -524,7 +530,7 @@ export namespace UIManager.Factory {
         new SubtitleOverlay(),
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        new Watermark(),
+        /*new Watermark(),*/
         controlBar,
         new TitleBar({ keepHiddenWithoutMetadata: true }),
         new ErrorMessageOverlay()
