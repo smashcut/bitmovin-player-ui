@@ -20,7 +20,7 @@ export class VideoQualitySelectBox extends SelectBox {
       this.clearItems();
 
       // Add entry for automatic quality switching (default setting)
-      this.addItem('auto', 'auto');
+      this.addItem('Auto', 'Auto');
 
       // Add video qualities
       for (let videoQuality of videoQualities) {
@@ -39,7 +39,7 @@ export class VideoQualitySelectBox extends SelectBox {
     // Update quality selection when quality is changed (from outside)
     player.addEventHandler(player.EVENT.ON_VIDEO_DOWNLOAD_QUALITY_CHANGE, () => {
       let data = player.getDownloadedVideoData();
-      this.selectItem(data.isAuto ? 'auto' : data.id);
+      this.selectItem(data.isAuto ? 'Auto' : data.id);
     });
 
     // Populate qualities at startup

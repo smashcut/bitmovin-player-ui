@@ -14,6 +14,20 @@ export class AudioTrackSelectBox extends SelectBox {
   configure(player: bitmovin.player.Player, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
+    // TODO Move to config?
+    let getAudioTrackLabel = (id: string) => {
+      switch (id) {
+        case 'en_stereo':
+          return 'English - Stereo';
+        case 'no-voices_stereo':
+          return 'No Voices - Stereo';
+        case 'en_surround':
+          return 'English - Surround';
+        default:
+          return id
+      }
+    }
+
     let updateAudioTracks = () => {
       let audioTracks = player.getAvailableAudio();
 
@@ -21,7 +35,7 @@ export class AudioTrackSelectBox extends SelectBox {
 
       // Add audio tracks
       for (let audioTrack of audioTracks) {
-        this.addItem(audioTrack.id, audioTrack.label);
+        this.addItem(audioTrack.id, getAudioTrackLabel(audioTrack.label));
       }
     };
 

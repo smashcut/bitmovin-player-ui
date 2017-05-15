@@ -3,12 +3,16 @@
 .#{$prefix}-ui-selectbox {
   @extend %ui-component;
 
+  appearance: none; //remove default arrow
+  background: svg('assets/skin-modern/images/select.svg') no-repeat right center;
   background-color: transparent;
+  background-size: 10px 10px;
   border: 0;
   color: $color-highlight;
   cursor: pointer;
   font-size: .8em;
   padding: .3em;
+  width: 12em;
 
   option {
     color: $color-secondary;

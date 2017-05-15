@@ -20,7 +20,7 @@ export class AudioQualitySelectBox extends SelectBox {
       this.clearItems();
 
       // Add entry for automatic quality switching (default setting)
-      this.addItem('auto', 'auto');
+      this.addItem('Auto', 'Auto');
 
       // Add audio qualities
       for (let audioQuality of audioQualities) {
@@ -41,7 +41,7 @@ export class AudioQualitySelectBox extends SelectBox {
     // Update quality selection when quality is changed (from outside)
     player.addEventHandler(player.EVENT.ON_AUDIO_DOWNLOAD_QUALITY_CHANGE, () => {
       let data = player.getDownloadedAudioData();
-      this.selectItem(data.isAuto ? 'auto' : data.id);
+      this.selectItem(data.isAuto ? 'Auto' : data.id);
     });
 
     // Populate qualities at startup

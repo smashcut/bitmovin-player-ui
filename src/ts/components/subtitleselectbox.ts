@@ -17,11 +17,28 @@ export class SubtitleSelectBox extends SelectBox {
   configure(player: bitmovin.player.Player, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
+    let getLabel = (id: string) => {
+      switch (id) {
+        case 'off' :
+          return 'Off'
+        case 'en' :
+          return 'English'
+        case 'fr' :
+          return 'Francais'
+        case 'de' :
+          return 'Deutsch'
+        case 'es' :
+          return 'Espaniol'
+        default:
+          return id
+      }
+    }
+
     let updateSubtitles = () => {
       this.clearItems();
 
       for (let subtitle of player.getAvailableSubtitles()) {
-        this.addItem(subtitle.id, subtitle.label);
+        this.addItem(subtitle.id, getLabel(subtitle.label));
       }
     };
 
