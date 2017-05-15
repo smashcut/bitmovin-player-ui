@@ -309,7 +309,7 @@ export class UIManager {
 
     /* Append ui to parent instead of player */
     let parentElement = new DOM(this.playerElement.getElements()[0].parentElement);
-    parentElement.css({'margin-bottom': '80px', 'background-color' : '#000'});
+    parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
     parentElement.append(dom);
 
     // Fire onConfigured after UI DOM elements are successfully added. When fired immediately, the DOM elements
@@ -415,7 +415,7 @@ export namespace UIManager.Factory {
       components: [
         new SubtitleOverlay(),
         new BufferingOverlay(),
-        new PlaybackToggleOverlay(),
+        /** new PlaybackToggleOverlay(), **/
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),

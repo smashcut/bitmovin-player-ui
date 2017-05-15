@@ -1,5 +1,12 @@
 @import 'variables';
 
+//this class makes space for
+//the controlbar below the video
+.smashcut-custom-ui-bitmovin-player-holder {
+  margin-bottom: $controlbar-height;
+}
+
+
 .#{$prefix}-ui-skin-modern {
   @import 'mixins';
   @import 'components/component';

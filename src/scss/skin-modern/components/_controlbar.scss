@@ -5,8 +5,8 @@
   @extend %ui-container;
 
   background: $color-black;
-  bottom: -70px;
-  height: 62px;
+  bottom: -$controlbar-height;
+  height: $controlbar-height;
   left: 0;
   line-height: 1em;
   padding: 5px 0 0 .9em;
@@ -34,7 +34,7 @@
   .#{$prefix}-controlbar-bottom {
     > .#{$prefix}-container-wrapper {
       > * {
-        margin: 0 .8em;
+        margin: 0 .3em;
       }
 
       .#{$prefix}-ui-volumeslider {
