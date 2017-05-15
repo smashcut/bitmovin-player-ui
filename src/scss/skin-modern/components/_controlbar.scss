@@ -4,18 +4,20 @@
 .#{$prefix}-ui-controlbar {
   @extend %ui-container;
 
-  @include hidden-animated;
-  @include layout-align-bottom;
-
-  background: linear-gradient(to bottom, $color-transparent, $color-background-bars);
+  background: $color-black;
+  bottom: -70px;
+  height: 62px;
+  left: 0;
   line-height: 1em;
-  padding: 1em 1em .5em;
+  padding: 5px 0 0 .9em;
+  position: absolute;
+  right: 0;
 
   .#{$prefix}-controlbar-top,
+  .#{$prefix}-controlbar-middle,
   .#{$prefix}-controlbar-bottom {
     > .#{$prefix}-container-wrapper {
       display: flex;
-      margin: .5em;
     }
   }
 
@@ -25,14 +27,14 @@
     }
 
     > .#{$prefix}-container-wrapper > * {
-      margin: 0 .5em;
+      margin: 0 .8em;
     }
   }
 
   .#{$prefix}-controlbar-bottom {
     > .#{$prefix}-container-wrapper {
       > * {
-        margin: 0 .25em;
+        margin: 0 .8em;
       }
 
       .#{$prefix}-ui-volumeslider {
@@ -40,6 +42,39 @@
         width: 5em;
       }
     }
+  }
+}
+
+&.ui-skin-smashcut {
+  .#{$prefix}-ui-controlbar {
+    > .#{$prefix}-container-wrapper {
+      display: flex;
+    }
+
+    .#{$prefix}-controlbar-inner {
+      flex-grow: 1;
+      margin-left: .3em;
+    }
+
+    .#{$prefix}-controlbar-top,
+    .#{$prefix}-controlbar-middle,
+    .#{$prefix}-controlbar-bottom {
+      > .#{$prefix}-container-wrapper {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        margin: initial;
+      }
+    }
+
+    .#{$prefix}-controlbar-middle {
+      margin: 0 .6em;
+    }
+
+    .#{$prefix}-ui-playbacktogglebutton {
+      margin-top: 1em;
+    }
+
   }
 }
 

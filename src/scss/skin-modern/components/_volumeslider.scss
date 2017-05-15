@@ -3,9 +3,32 @@
 .#{$prefix}-ui-volumeslider {
   @extend %ui-seekbar;
 
+  $bar-inset: .41em;
+
   .#{$prefix}-seekbar {
+    .#{$prefix}-seekbar-backdrop {
+      @extend %bar;
+      margin: $bar-inset 0;
+    }
+
+    .#{$prefix}-seekbar-bufferlevel {
+      @extend %bar;
+      margin: $bar-inset 0;
+    }
+
+    .#{$prefix}-seekbar-seekposition {
+      @extend %bar;
+      margin: $bar-inset 0;
+    }
+
+    .#{$prefix}-seekbar-playbackposition {
+      @extend %bar;
+      margin: $bar-inset 0;
+    }
+
     .#{$prefix}-seekbar-playbackposition-marker {
       background-image: svg('assets/skin-modern/images/dot-volume.svg');
+      display: initial;
     }
   }
 }

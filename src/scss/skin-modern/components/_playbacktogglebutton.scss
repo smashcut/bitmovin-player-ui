@@ -4,14 +4,14 @@
 .#{$prefix}-ui-playbacktogglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/play.svg');
+  background-image: svg('assets/skin-modern/images/play-filled.svg', '[color]:white');
 
   &:hover {
     @include svg-icon-shadow;
   }
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/pause.svg');
+    background-image: svg('assets/skin-modern/images/pause-filled.svg', '[color]:white');
 
     &.#{$prefix}-stoptoggle {
       background-image: svg('assets/skin-modern/images/stop.svg');

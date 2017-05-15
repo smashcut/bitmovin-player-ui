@@ -21,13 +21,25 @@
       height: 24px;
       width: 24px;
     }
+
+    .player-with-controlbar-below {
+      /*margin-bottom: 80px;*/
+    }
+
+    .bitmovinplayer-container {
+      /*border: 1px solid green;*/
+    }
+
+    .bmpui-ui-controlbar {
+      /*border: 1px solid red;*/
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="player-wrapper">
-    <div class="player"
+    <div class="player player-with-controlbar-below"
         id="player"></div>
   </div>
 
@@ -237,7 +249,7 @@
     key: 'YOUR KEY HERE',
     source: sources.fullyFeatured,
     style: {
-      ux: false
+      ux: false,
     },
     cast: {
       enable: true

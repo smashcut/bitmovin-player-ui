@@ -79,8 +79,8 @@ export interface UIConditionContext {
   isAdWithUI: boolean;
   isFullscreen: boolean;
   isMobile: boolean;
-  width: number;
   documentWidth: number;
+  width: number;
 }
 
 /**
@@ -150,7 +150,7 @@ export class UIManager {
       }
 
       // Add the default player UI
-      uiVariants.push({ ui: playerUi });
+      uiVariants.push({ui: playerUi});
 
       this.uiVariants = uiVariants;
     }
@@ -306,16 +306,24 @@ export class UIManager {
     /* Append the UI DOM after configuration to avoid CSS transitions at initialization
      * Example: Components are hidden during configuration and these hides may trigger CSS transitions that are
      * undesirable at this time. */
-    this.playerElement.append(dom);
+
+    /* Append ui to parent instead of player */
+    let parentElement = new DOM(this.playerElement.getElements()[0].parentElement);
+    parentElement.css({'margin-bottom': '80px', 'background-color' : '#000'});
+    parentElement.append(dom);
 
     // Fire onConfigured after UI DOM elements are successfully added. When fired immediately, the DOM elements
     // might not be fully configured and e.g. do not have a size.
     // https://swizec.com/blog/how-to-properly-wait-for-dom-elements-to-show-up-in-modern-browsers/swizec/6663
     if (window.requestAnimationFrame) {
-      requestAnimationFrame(() => { ui.onConfigured.dispatch(ui.getUI()); });
+      requestAnimationFrame(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      });
     } else {
       // IE9 fallback
-      setTimeout(() => { ui.onConfigured.dispatch(ui.getUI()); }, 0);
+      setTimeout(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      }, 0);
     }
   }
 
@@ -347,6 +355,75 @@ export namespace UIManager.Factory {
     return UIManager.Factory.buildModernCastReceiverUI(player, config);
   }
 
+  function smashcutUi() {
+    let settingsPanel = new SettingsPanel({
+      components: [
+        new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),
+        new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
+        new SettingsPanelItem('Audio Track', new AudioTrackSelectBox()),
+        new SettingsPanelItem('Audio Quality', new AudioQualitySelectBox()),
+        new SettingsPanelItem('Subtitles', new SubtitleSelectBox())
+      ],
+      hidden: true
+    });
+
+    let controlBarTop = new Container({
+      cssClasses: ['controlbar-top'],
+      components: [
+        new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+        new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
+      ]
+    });
+
+    let controlBarMiddle = new Container({
+      cssClasses: ['controlbar-middle'],
+      components: [
+        new SeekBar({label: new SeekBarLabel()}),
+      ]
+    });
+
+    let controlBarBottom = new Container({
+      cssClasses: ['controlbar-bottom'],
+      components: [
+        new Spacer(),
+        new VolumeSlider(),
+        new VolumeToggleButton(),
+        new SettingsToggleButton({settingsPanel: settingsPanel}),
+        new FullscreenToggleButton(),
+      ]
+    });
+
+
+    let controlBar = new ControlBar({
+      components: [
+        new PlaybackToggleButton(),
+        new Container({
+          cssClasses: ['controlbar-inner'],
+          components: [
+            settingsPanel,
+            controlBarTop,
+            controlBarMiddle,
+            controlBarBottom,
+          ]
+        })
+      ]
+    });
+
+    return new UIContainer({
+      hideDelay: 0,
+      cssClasses: ['ui-skin-modern ui-skin-smashcut'],
+      components: [
+        new SubtitleOverlay(),
+        new BufferingOverlay(),
+        new PlaybackToggleOverlay(),
+        controlBar,
+        new TitleBar(),
+        new RecommendationOverlay(),
+        new ErrorMessageOverlay()
+      ]
+    });
+  }
+
   function modernUI() {
     let settingsPanel = new SettingsPanel({
       components: [
@@ -364,9 +441,9 @@ export namespace UIManager.Factory {
         settingsPanel,
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({label: new SeekBarLabel()}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top']
         }),
@@ -376,11 +453,11 @@ export namespace UIManager.Factory {
             new VolumeToggleButton(),
             new VolumeSlider(),
             new Spacer(),
-            /*new PictureInPictureToggleButton(),*/
-            /*new AirPlayToggleButton(),*/
-            /*new CastToggleButton(),*/
-            /*new VRToggleButton(),*/
-            new SettingsToggleButton({ settingsPanel: settingsPanel }),
+            new PictureInPictureToggleButton(),
+            new AirPlayToggleButton(),
+            new CastToggleButton(),
+            new VRToggleButton(),
+            new SettingsToggleButton({settingsPanel: settingsPanel}),
             new FullscreenToggleButton(),
           ],
           cssClasses: ['controlbar-bottom']
@@ -397,7 +474,7 @@ export namespace UIManager.Factory {
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),
-        /*new Watermark(),*/
+        new Watermark(),
         new ErrorMessageOverlay()
       ], cssClasses: ['ui-skin-modern']
     });
@@ -407,17 +484,15 @@ export namespace UIManager.Factory {
     return new UIContainer({
       components: [
         new BufferingOverlay(),
-        /*new AdClickOverlay(),*/
+        new AdClickOverlay(),
         new PlaybackToggleOverlay(),
-        /*
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton()
           ],
           cssClass: 'ui-ads-status'
         }),
-        */
         new ControlBar({
           components: [
             new Container({
@@ -448,15 +523,15 @@ export namespace UIManager.Factory {
       hidden: true,
       hideDelay: -1,
     });
-    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
+    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
 
     let controlBar = new ControlBar({
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({label: new SeekBarLabel()}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top']
         }),
@@ -472,16 +547,16 @@ export namespace UIManager.Factory {
         controlBar,
         new TitleBar({
           components: [
-            new MetadataLabel({ content: MetadataLabelContent.Title }),
+            new MetadataLabel({content: MetadataLabelContent.Title}),
             new CastToggleButton(),
             /*new VRToggleButton(),*/
-            new SettingsToggleButton({ settingsPanel: settingsPanel }),
+            new SettingsToggleButton({settingsPanel: settingsPanel}),
             new FullscreenToggleButton(),
           ]
         }),
         settingsPanel,
         new RecommendationOverlay(),
-        /*new Watermark(),*/
+        new Watermark(),
         new ErrorMessageOverlay()
       ], cssClasses: ['ui-skin-modern', 'ui-skin-smallscreen']
     });
@@ -496,13 +571,13 @@ export namespace UIManager.Factory {
         new TitleBar({
           components: [
             // dummy label with no content to move buttons to the right
-            new Label({ cssClass: 'label-metadata-title' }),
+            new Label({cssClass: 'label-metadata-title'}),
             new FullscreenToggleButton(),
           ]
         }),
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton()
           ],
           cssClass: 'ui-ads-status'
@@ -516,9 +591,9 @@ export namespace UIManager.Factory {
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ smoothPlaybackPositionUpdateIntervalMs: -1 }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({smoothPlaybackPositionUpdateIntervalMs: -1}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top']
         }),
@@ -530,9 +605,9 @@ export namespace UIManager.Factory {
         new SubtitleOverlay(),
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        /*new Watermark(),*/
+        new Watermark(),
         controlBar,
-        new TitleBar({ keepHiddenWithoutMetadata: true }),
+        new TitleBar({keepHiddenWithoutMetadata: true}),
         new ErrorMessageOverlay()
       ], cssClasses: ['ui-skin-modern', 'ui-skin-cast-receiver']
     });
@@ -558,7 +633,7 @@ export namespace UIManager.Factory {
         return context.isMobile && context.documentWidth < smallScreenSwitchWidth;
       }
     }, {
-      ui: modernUI()
+      ui: smashcutUi()
     }], config);
   }
 
@@ -592,11 +667,11 @@ export namespace UIManager.Factory {
       components: [
         settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({ label: new SeekBarLabel() }),
+        new SeekBar({label: new SeekBarLabel()}),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeControlButton(),
-        new SettingsToggleButton({ settingsPanel: settingsPanel }),
+        new SettingsToggleButton({settingsPanel: settingsPanel}),
         new CastToggleButton(),
         new FullscreenToggleButton()
       ]
@@ -667,14 +742,14 @@ export namespace UIManager.Factory {
     let controlBar = new ControlBar({
       components: [settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({ label: new SeekBarLabel() }),
+        new SeekBar({label: new SeekBarLabel()}),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeToggleButton(),
         new VolumeSlider(),
         new VolumeControlButton(),
-        new VolumeControlButton({ vertical: false }),
-        new SettingsToggleButton({ settingsPanel: settingsPanel }),
+        new VolumeControlButton({vertical: false}),
+        new SettingsToggleButton({settingsPanel: settingsPanel}),
         new CastToggleButton(),
         new FullscreenToggleButton()
       ]
@@ -965,7 +1040,7 @@ class PlayerWrapper {
     // on the player
     let wrapper = <any>{};
     for (let member of methods) {
-      wrapper[member] = function() {
+      wrapper[member] = function () {
         // console.log('called ' + member); // track method calls on the player
         return (<any>player)[member].apply(player, arguments);
       };

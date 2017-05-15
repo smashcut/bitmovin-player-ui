@@ -1,6 +1,8 @@
 // TODO change to internal (not exported) class, how to use in other files?
 /**
- * Executes a callback after a specified amount of time, optionally repeatedly until stopped.
+ * Executes a callback after a specified amount of time,
+ * optionally repeatedly until stopped. When delay is <= 0
+ * the timeout is disabled
  */
 export class Timeout {
 
@@ -68,6 +70,8 @@ export class Timeout {
     };
 
     lastScheduleTime = Date.now();
-    this.timeoutHandle = setTimeout(internalCallback, this.delay);
+    if (this.delay > 0) {
+      this.timeoutHandle = setTimeout(internalCallback, this.delay);
+    }
   }
 }

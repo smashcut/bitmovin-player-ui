@@ -3,7 +3,11 @@
 .#{$prefix}-ui-playbacktimelabel {
   @extend %ui-label;
 
+  font-family: Roboto Mono;
+  font-size: 80%;
+  font-weight: bold;
   text-transform: uppercase;
+
 
   &.#{$prefix}-ui-playbacktimelabel-live {
     cursor: pointer;

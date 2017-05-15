@@ -12,7 +12,7 @@
   position: relative;
   width: 100%;
 
-  $bar-inset: .41em;
+  $bar-inset: 0;
 
   .#{$prefix}-seekbar {
     height: 100%;
@@ -32,28 +32,30 @@
 
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
-      background-color: transparentize($color-primary, .8);
+      background-color: transparent; //transparentize($color-white, .8);
+      border: 1px solid transparentize($color-white, .8);
       margin: $bar-inset 0;
       width: 100%;
     }
 
     .#{$prefix}-seekbar-bufferlevel {
       @extend %bar;
-      background-color: $color-primary;
+      background-color: transparentize($color-white, .7);
       margin: $bar-inset 0;
+      opacity: .5;
       transition: .3s linear, .3s linear;
       transition-property: transform;
     }
 
     .#{$prefix}-seekbar-seekposition {
       @extend %bar;
-      background-color: transparentize($color-primary, .8);
+      background-color: transparentize($color-white, .7);
       margin: $bar-inset 0;
     }
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
-      background-color: $color-highlight;
+      background-color: transparentize($color-white, .7);
       margin: $bar-inset 0;
       transition: .1s linear, .1s linear;
       transition-property: transform;
@@ -66,6 +68,7 @@
       background-position: center;
       background-repeat: no-repeat;
       background-size: 1.6em;
+      display: none;
       height: 1em;
       left: -.5em;
       position: absolute;
