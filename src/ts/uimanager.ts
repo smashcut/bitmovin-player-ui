@@ -415,7 +415,7 @@ export namespace UIManager.Factory {
       components: [
         new SubtitleOverlay(),
         new BufferingOverlay(),
-        /** new PlaybackToggleOverlay(), **/
+        new PlaybackToggleOverlay(),
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),

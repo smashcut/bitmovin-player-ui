@@ -44,6 +44,7 @@
   overflow: hidden; // hide overflow from scale animation
   width: 8em;
 
+  /*
   .#{$prefix}-image {
     background-image: svg('assets/skin-modern/images/play_big.svg');
     background-position: center;
@@ -56,6 +57,7 @@
       animation: breathe 3s ease-in-out infinite;
     }
   }
+  */
 
   &.#{$prefix}-on {
     .#{$prefix}-image {
