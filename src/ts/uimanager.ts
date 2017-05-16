@@ -45,6 +45,7 @@ import PlayerEvent = bitmovin.player.PlayerEvent;
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
 import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
 import {Spacer} from './components/spacer';
+import {EmbedVideoToggleButton} from './components/embedvideotogglebutton'
 
 export interface UIRecommendationConfig {
   title: string;
@@ -389,6 +390,7 @@ export namespace UIManager.Factory {
         new VolumeSlider(),
         new VolumeToggleButton(),
         new SettingsToggleButton({settingsPanel: settingsPanel}),
+        new EmbedVideoToggleButton(),
         new FullscreenToggleButton(),
       ]
     });
