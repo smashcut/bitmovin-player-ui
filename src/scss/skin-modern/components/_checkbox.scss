@@ -1,0 +1,31 @@
+@import '../variables';
+@import '../mixins';
+
+.#{$prefix}-ui-checkbox {
+
+  > .#{$prefix}-container-wrapper {
+    align-content: center;
+    display: flex;
+    margin-top: 5px;
+  }
+
+  .#{$prefix}-checkbox-button {
+    @extend %ui-button;
+
+    background-image: svg('assets/skin-modern/images/checkbox-off.svg');
+
+    &:hover {
+      @include svg-icon-shadow;
+    }
+
+    &.#{$prefix}-on {
+      background-image: svg('assets/skin-modern/images/checkbox-on.svg');
+    }
+  }
+
+  .#{$prefix}-checkbox-label {
+    color: $color-black;
+    font-size: 80%;
+  }
+
+}

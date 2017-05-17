@@ -1,0 +1,53 @@
+@import '../variables';
+@import '../mixins';
+
+.#{$prefix}-ui-embedvideo-panel {
+  @extend %ui-container;
+
+  @include hidden-animated;
+
+  $background-color: $color-white;
+
+  background-color: $background-color;
+  bottom: 6em;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: absolute;
+  right: 2em;
+
+  > .#{$prefix}-container-wrapper {
+    margin: .5em;
+  }
+
+  .#{$prefix}-ui-closebutton {
+    background-image: svg('assets/skin-modern/images/close.svg', '[fill]:black');
+    height: 15px;
+    width: 15px;
+  }
+
+  .#{$prefix}-ui-embedvideo-panel-header {
+    > .#{$prefix}-container-wrapper {
+      align-content: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .#{$prefix}-ui-embedvideo-panel-title {
+    color: $color-black;
+    font-weight: bold;
+    margin-top:  5px;
+  }
+
+  .#{$prefix}-ui-embedvideo-panel-codefield {
+    background: #ddd;
+    border: 1px solid #aaa;
+    color: $color-black;
+    display: block;
+    font-size: 80%;
+    padding: 15px;
+    width: 300px;
+  }
+}
+

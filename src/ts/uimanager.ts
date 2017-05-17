@@ -10,6 +10,8 @@ import {SeekBar} from './components/seekbar';
 import {PlaybackTimeLabel, PlaybackTimeLabelMode} from './components/playbacktimelabel';
 import {ControlBar} from './components/controlbar';
 import {NoArgs, EventDispatcher, CancelEventArgs} from './eventdispatcher';
+import {EmbedVideoToggleButton} from './components/embedvideotogglebutton';
+import {EmbedVideoPanel} from './components/embedvideopanel';
 import {SettingsToggleButton} from './components/settingstogglebutton';
 import {SettingsPanel, SettingsPanelItem} from './components/settingspanel';
 import {VideoQualitySelectBox} from './components/videoqualityselectbox';
@@ -45,7 +47,7 @@ import PlayerEvent = bitmovin.player.PlayerEvent;
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
 import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
 import {Spacer} from './components/spacer';
-import {EmbedVideoToggleButton} from './components/embedvideotogglebutton'
+
 
 export interface UIRecommendationConfig {
   title: string;
@@ -368,6 +370,10 @@ export namespace UIManager.Factory {
       hidden: true
     });
 
+    let embedVideoPanel = new EmbedVideoPanel({
+      hidden: true
+    });
+
     let controlBarTop = new Container({
       cssClasses: ['controlbar-top'],
       components: [
@@ -390,7 +396,7 @@ export namespace UIManager.Factory {
         new VolumeSlider(),
         new VolumeToggleButton(),
         new SettingsToggleButton({settingsPanel: settingsPanel}),
-        new EmbedVideoToggleButton(),
+        new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
         new FullscreenToggleButton(),
       ]
     });
@@ -403,6 +409,7 @@ export namespace UIManager.Factory {
           cssClasses: ['controlbar-inner'],
           components: [
             settingsPanel,
+            embedVideoPanel,
             controlBarTop,
             controlBarMiddle,
             controlBarBottom,
