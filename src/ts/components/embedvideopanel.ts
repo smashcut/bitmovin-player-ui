@@ -89,6 +89,7 @@ export class EmbedVideoPanel extends Container<EmbedVideoPanelConfig> {
     };
 
     let init = () => {
+      console.log('BitmovinCustomUI playerConfig: ', player.getConfig().source);
       if (uiconfig && uiconfig.metadata && uiconfig.metadata.embedVideo) {
         let ev = uiconfig.metadata.embedVideo
         if (this.showCommentsCheckbox.isOn && ev.withComments) {
