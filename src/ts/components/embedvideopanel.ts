@@ -1,5 +1,5 @@
 import {ContainerConfig, Container} from './container';
-import {UIInstanceManager, UISingleEmbedVideoConfig} from '../uimanager';
+import {UIInstanceManager} from '../uimanager';
 import {Timeout} from '../timeout';
 import {Label, LabelConfig} from './label';
 import {CloseButton} from './closebutton';
