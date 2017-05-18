@@ -56,6 +56,11 @@ export interface UIRecommendationConfig {
   duration?: number;
 }
 
+export interface UIEmbedVideoConfig {
+  default: string;
+  withComments?: string;
+}
+
 export interface TimelineMarker {
   time: number;
   title?: string;
@@ -70,6 +75,7 @@ export interface UIConfig {
     title?: string;
     description?: string;
     markers?: TimelineMarker[];
+    embedVideo?: UIEmbedVideoConfig;
   };
   recommendations?: UIRecommendationConfig[];
 }

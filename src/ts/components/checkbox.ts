@@ -20,8 +20,9 @@ export class Checkbox extends Container<CheckboxConfig> {
   private label: Label<LabelConfig>;
   private button: ToggleButton<ToggleButtonConfig>;
 
-  private buttonEvents = {
-    onClick: new EventDispatcher<Checkbox, NoArgs>()
+  private checkboxEvents = {
+    onClick: new EventDispatcher<Checkbox, NoArgs>(),
+    onChange: new EventDispatcher<Checkbox, NoArgs>()
   };
 
   constructor(config: CheckboxConfig = {text: ''}) {
@@ -40,10 +41,11 @@ export class Checkbox extends Container<CheckboxConfig> {
     super.configure(player, uimanager);
 
     // Listen for the click event on the element and
-    // trigger the corresponding event on the button component
+    // trigger the corresponding events on the button component
     this.getDomElement().on('click', () => {
-      this.onClickEvent()
       this.button.toggle()
+      this.onClickEvent()
+      this.onChangeEvent()
     });
   }
 
@@ -56,7 +58,11 @@ export class Checkbox extends Container<CheckboxConfig> {
   }
 
   protected onClickEvent() {
-    this.buttonEvents.onClick.dispatch(this);
+    this.checkboxEvents.onClick.dispatch(this);
+  }
+
+  protected onChangeEvent() {
+    this.checkboxEvents.onChange.dispatch(this);
   }
 
   /**
@@ -64,6 +70,18 @@ export class Checkbox extends Container<CheckboxConfig> {
    * @returns {Event<Checkbox, NoArgs>}
    */
   get onClick(): Event<Checkbox, NoArgs> {
-    return this.buttonEvents.onClick.getEvent();
+    return this.checkboxEvents.onClick.getEvent();
+  }
+
+  /**
+   * Gets the event that is fired when the value is changed
+   * @returns {Event<Checkbox, NoArgs>}
+   */
+  get onChange(): Event<Checkbox, NoArgs> {
+    return this.checkboxEvents.onChange.getEvent();
+  }
+
+  get isOn(): boolean {
+    return this.button.isOn()
   }
 }
