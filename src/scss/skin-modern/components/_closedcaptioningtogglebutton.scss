@@ -1,0 +1,12 @@
+@import '../variables';
+@import '../mixins';
+
+.#{$prefix}-ui-closedcaptioning-togglebutton {
+  @extend %ui-button;
+
+  background-image: svg('assets/skin-modern/images/smashcut/ronik/closed-captioning.svg', '[fill]:#fff');
+
+  &.#{$prefix}-on {
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/closed-captioning.svg', '[fill]:#777');
+  }
+}

@@ -67,6 +67,12 @@
       }
     }
 
+    .#{$prefix}-controlbar-bottom {
+      > .#{$prefix}-container-wrapper {
+        align-items: center;
+      }
+    }
+
     .#{$prefix}-controlbar-middle {
       margin: 0 .6em;
     }

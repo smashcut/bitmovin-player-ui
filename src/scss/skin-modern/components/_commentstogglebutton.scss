@@ -1,0 +1,12 @@
+@import '../variables';
+@import '../mixins';
+
+.#{$prefix}-ui-comments-togglebutton {
+  @extend %ui-button;
+
+  background-image: svg('assets/skin-modern/images/smashcut/ronik/comments.svg', '[fill]:#fff');
+
+  &.#{$prefix}-on {
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/comments.svg', '[fill]:#777');
+  }
+}

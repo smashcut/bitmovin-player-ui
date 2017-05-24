@@ -4,13 +4,9 @@
 .#{$prefix}-ui-embedvideo-togglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/embedvideo.svg');
-
-  &:hover {
-    @include svg-icon-shadow;
-  }
+  background-image: svg('assets/skin-modern/images/smashcut/ronik/embed.svg', '[fill]:#fff');
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/embedvideoX.svg');
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/embed.svg', '[fill]:#777');
   }
 }

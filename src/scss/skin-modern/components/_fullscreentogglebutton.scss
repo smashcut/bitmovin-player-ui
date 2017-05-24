@@ -4,13 +4,9 @@
 .#{$prefix}-ui-fullscreentogglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/fullscreen.svg');
-
-  &:hover {
-    @include svg-icon-shadow;
-  }
+  background-image: svg('assets/skin-modern/images/smashcut/ronik/full_screen.svg', '[fill]:#fff');
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/fullscreenX.svg');
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/windowed_video.svg', '[fill]:#fff');
   }
 }

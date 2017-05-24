@@ -4,13 +4,21 @@
 .#{$prefix}-ui-settingstogglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/settings.svg');
+  background-image: svg('assets/skin-modern/images/smashcut/ronik/settings.svg', '[fill]:#fff');
 
+  /*
   &:hover {
-    @include svg-icon-shadow;
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/settings.svg', '[fill]:#fff');
   }
+  */
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/settingsX.svg');
+    background-image: svg('assets/skin-modern/images/smashcut/ronik/settings.svg', '[fill]:#777');
+
+    /*
+    &:hover {
+      background-image: svg('assets/skin-modern/images/smashcut/ronik/settings.svg', '[fill]:#777');
+    }
+    */
   }
 }
