@@ -84,6 +84,13 @@
   }
 }
 
+&.#{$prefix}-fullscreen {
+  .#{$prefix}-ui-controlbar {
+    bottom: 0;
+  }
+}
+
+
 // IE9 compatibility: fallback for missing flexbox support
 // sass-lint:disable nesting-depth
 &.#{$prefix}-no-flexbox {
