@@ -85,8 +85,8 @@
 }
 
 &.#{$prefix}-fullscreen {
-  .#{$prefix}-ui-controlbar { 
-    bottom: 0;
+  .#{$prefix}-ui-controlbar {
+    bottom: 0 !important;
   }
 }
 
