@@ -80,6 +80,9 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   private smoothPlaybackPositionUpdater: Timeout;
 
+  private _commentsOn: boolean = true;
+
+
   // https://hacks.mozilla.org/2013/04/detecting-touch-its-the-why-not-the-how/
   private touchSupported = ('ontouchstart' in window);
 
@@ -95,7 +98,12 @@ export class SeekBar extends Component<SeekBarConfig> {
     /**
      * Fired when a scrubbing seek has finished or when a direct seek is issued.
      */
-    onSeeked: new EventDispatcher<SeekBar, number>()
+    onSeeked: new EventDispatcher<SeekBar, number>(),
+
+    /**
+     * Fire when commentsOn is toggled
+     */
+    onChangeCommentsOn: new EventDispatcher<SeekBar, boolean>()
   };
 
   constructor(config: SeekBarConfig = {}) {
@@ -587,6 +595,10 @@ export class SeekBar extends Component<SeekBarConfig> {
   protected updateMarkers(): void {
     this.seekBarMarkersContainer.empty();
 
+    if (!this._commentsOn) {
+      return;
+    }
+
     for (let marker of this.timelineMarkers) {
       let className = marker.markerType === '2' ? this.prefixCss('seekbar-marker-typetwo') : this.prefixCss('seekbar-marker')
 
@@ -713,8 +725,8 @@ export class SeekBar extends Component<SeekBarConfig> {
     }
     let style = this.config.vertical ?
       // -ms-transform required for IE9
-      { 'transform': 'translateY(' + px + 'px)', '-ms-transform': 'translateY(' + px + 'px)' } :
-      { 'transform': 'translateX(' + px + 'px)', '-ms-transform': 'translateX(' + px + 'px)' };
+      {'transform': 'translateY(' + px + 'px)', '-ms-transform': 'translateY(' + px + 'px)'} :
+      {'transform': 'translateX(' + px + 'px)', '-ms-transform': 'translateX(' + px + 'px)'};
     this.seekBarPlaybackPositionMarker.css(style);
   }
 
@@ -751,8 +763,8 @@ export class SeekBar extends Component<SeekBarConfig> {
     let scale = percent / 100;
     let style = this.config.vertical ?
       // -ms-transform required for IE9
-      { 'transform': 'scaleY(' + scale + ')', '-ms-transform': 'scaleY(' + scale + ')' } :
-      { 'transform': 'scaleX(' + scale + ')', '-ms-transform': 'scaleX(' + scale + ')' };
+      {'transform': 'scaleY(' + scale + ')', '-ms-transform': 'scaleY(' + scale + ')'} :
+      {'transform': 'scaleX(' + scale + ')', '-ms-transform': 'scaleX(' + scale + ')'};
     element.css(style);
   }
 
@@ -844,6 +856,23 @@ export class SeekBar extends Component<SeekBarConfig> {
     return this.seekBarEvents.onSeeked.getEvent();
   }
 
+  protected onChangeCommentsOnEvent(on: boolean) {
+    this.seekBarEvents.onChangeCommentsOn.dispatch(this, on);
+  }
+
+  get onChangeCommentsOn(): Event<SeekBar, boolean> {
+    return this.seekBarEvents.onChangeCommentsOn.getEvent();
+  }
+
+  toggleCommentsOn(): void {
+    this._commentsOn = !this._commentsOn;
+    this.onChangeCommentsOnEvent(this._commentsOn);
+    this.updateMarkers();
+  }
+
+  get commentsOn(): boolean {
+    return this._commentsOn
+  }
 
   protected onShowEvent(): void {
     super.onShowEvent();

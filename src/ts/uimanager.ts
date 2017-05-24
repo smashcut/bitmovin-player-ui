@@ -390,11 +390,11 @@ export namespace UIManager.Factory {
       ]
     });
 
+    let seekBar = new SeekBar({label: new SeekBarLabel()});
+
     let controlBarMiddle = new Container({
       cssClasses: ['controlbar-middle'],
-      components: [
-        new SeekBar({label: new SeekBarLabel()}),
-      ]
+      components: [seekBar]
     });
 
     let controlBarBottom = new Container({
@@ -403,7 +403,7 @@ export namespace UIManager.Factory {
         new Spacer(),
         new VolumeSlider(),
         new VolumeToggleButton(),
-        new CommentsToggleButton(),
+        new CommentsToggleButton({seekBar: seekBar}),
         new ClosedCaptioningToggleButton(),
         new SettingsToggleButton({settingsPanel: settingsPanel}),
         new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
