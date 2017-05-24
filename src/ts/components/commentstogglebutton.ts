@@ -53,6 +53,5 @@ export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfi
     });
 
     updateOnOff();
-
   }
 }

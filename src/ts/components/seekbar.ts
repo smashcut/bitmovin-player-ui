@@ -69,6 +69,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   private label: SeekBarLabel;
 
+  private _commentsOn: boolean = true;
   private timelineMarkers: TimelineMarker[];
 
   /**
@@ -80,7 +81,6 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   private smoothPlaybackPositionUpdater: Timeout;
 
-  private _commentsOn: boolean = true;
 
 
   // https://hacks.mozilla.org/2013/04/detecting-touch-its-the-why-not-the-how/
