@@ -429,7 +429,7 @@ export namespace UIManager.Factory {
     });
 
     return new UIContainer({
-      hideDelay: 0,
+      hideDelay: 5000,
       cssClasses: ['ui-skin-modern ui-skin-smashcut'],
       components: [
         new SubtitleOverlay(),

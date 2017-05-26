@@ -87,9 +87,15 @@
 &.#{$prefix}-fullscreen {
   .#{$prefix}-ui-controlbar {
     bottom: 0 !important;
+    transition: bottom 1s;
+  }
+
+  &.#{$prefix}-controls-hidden {
+    .#{$prefix}-ui-controlbar {
+      bottom: -300px !important;
+    }
   }
 }
-
 
 // IE9 compatibility: fallback for missing flexbox support
 // sass-lint:disable nesting-depth
