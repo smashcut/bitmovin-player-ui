@@ -5,15 +5,19 @@
 
   $bar-inset: .41em;
 
+  margin: 0 $bar-inset 4px !important;
+
   .#{$prefix}-seekbar {
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
       margin: $bar-inset 0;
+      border-color: rgba(255, 255, 255, .4);
     }
 
     .#{$prefix}-seekbar-bufferlevel {
       @extend %bar;
       margin: $bar-inset 0;
+      background-color: rgba(255, 255, 255, 1);
     }
 
     .#{$prefix}-seekbar-seekposition {
