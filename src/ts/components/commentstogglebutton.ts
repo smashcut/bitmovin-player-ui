@@ -1,6 +1,6 @@
 import {ToggleButton, ToggleButtonConfig} from './togglebutton';
 import {UIInstanceManager} from '../uimanager';
-import {SeekBar} from "./seekbar";
+import {SeekBar} from './seekbar';
 
 /**
  * Configuration interface for the {@link CommentsToggleButton}.
@@ -30,7 +30,7 @@ export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfi
     }, <CommentsToggleButtonConfig>this.config);
   }
 
-  configure(player: bitmovin.player.Player, uimanager: UIInstanceManager): void {
+  configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
     let config = <CommentsToggleButtonConfig>this.getConfig(); // TODO fix generics type inference

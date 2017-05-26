@@ -3,7 +3,7 @@ import {UIInstanceManager} from '../uimanager';
 import {Container, ContainerConfig} from './container';
 import {Label, LabelConfig} from './label';
 import {Event, EventDispatcher, NoArgs} from '../eventdispatcher';
-import Config = bitmovin.player.Config;
+import Config = bitmovin.PlayerAPI.Config;
 
 /**
  * Configuration interface for a {@link Checkbox}.
@@ -37,7 +37,7 @@ export class Checkbox extends Container<CheckboxConfig> {
     }, this.config);
   }
 
-  configure(player: bitmovin.player.Player, uimanager: UIInstanceManager): void {
+  configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
     // Listen for the click event on the element and

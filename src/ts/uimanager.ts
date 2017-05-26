@@ -47,8 +47,8 @@ import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
 import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
 import {Spacer} from './components/spacer';
-import {CommentsToggleButton} from "./components/commentstogglebutton";
-import {ClosedCaptioningToggleButton} from "./components/closedcaptioningtogglebutton";
+import {CommentsToggleButton} from './components/commentstogglebutton';
+import {ClosedCaptioningToggleButton} from './components/closedcaptioningtogglebutton';
 
 
 export interface UIRecommendationConfig {
@@ -312,7 +312,7 @@ export class UIManager {
   }
 
   private addUi(ui: InternalUIInstanceManager): void {
-    let uiDom= ui.getUI().getDomElement();
+    let uiDom = ui.getUI().getDomElement();
     ui.configureControls();
 
     /* Append the UI DOM after configuration to avoid CSS transitions at initialization
@@ -321,7 +321,7 @@ export class UIManager {
 
     /* Append ui to parent instead of player */
     let parentElement = new DOM(this.playerElement.getElements()[0].parentElement);
-    if(!parentElement.hasClass('smashcut-custom-ui-bitmovin-player-holder')) {
+    if (!parentElement.hasClass('smashcut-custom-ui-bitmovin-player-holder')) {
       parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
       parentElement.append(uiDom);
     }
