@@ -27,14 +27,14 @@ import {CastToggleButton} from './components/casttogglebutton';
 import {CastStatusOverlay} from './components/caststatusoverlay';
 import {ErrorMessageOverlay} from './components/errormessageoverlay';
 import {TitleBar} from './components/titlebar';
-import Player = bitmovin.player.Player;
+import PlayerAPI = bitmovin.PlayerAPI;
 import {RecommendationOverlay} from './components/recommendationoverlay';
 import {AdMessageLabel} from './components/admessagelabel';
 import {AdSkipButton} from './components/adskipbutton';
 import {AdClickOverlay} from './components/adclickoverlay';
-import EVENT = bitmovin.player.EVENT;
-import PlayerEventCallback = bitmovin.player.PlayerEventCallback;
-import AdStartedEvent = bitmovin.player.AdStartedEvent;
+import EVENT = bitmovin.PlayerAPI.EVENT;
+import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
+import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
 import {ArrayUtils, UIUtils, BrowserUtils} from './utils';
 import {PlaybackSpeedSelectBox} from './components/playbackspeedselectbox';
 import {BufferingOverlay} from './components/bufferingoverlay';
@@ -43,7 +43,7 @@ import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';
 import {CloseButton} from './components/closebutton';
 import {MetadataLabel, MetadataLabelContent} from './components/metadatalabel';
 import {Label} from './components/label';
-import PlayerEvent = bitmovin.player.PlayerEvent;
+import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
 import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
 import {Spacer} from './components/spacer';
@@ -113,7 +113,7 @@ export interface UIVariant {
 
 export class UIManager {
 
-  private player: Player;
+  private player: PlayerAPI;
   private playerElement: DOM;
   private uiVariants: UIVariant[];
   private uiInstanceManagers: InternalUIInstanceManager[];
@@ -127,7 +127,7 @@ export class UIManager {
    * @param ui the UI to add to the player
    * @param config optional UI configuration
    */
-  constructor(player: Player, ui: UIContainer, config?: UIConfig);
+  constructor(player: PlayerAPI, ui: UIContainer, config?: UIConfig);
   /**
    * Creates a UI manager with a list of UI variants that will be dynamically selected and switched according to
    * the context of the UI.
@@ -141,8 +141,8 @@ export class UIManager {
    * @param uiVariants a list of UI variants that will be dynamically switched
    * @param config optional UI configuration
    */
-  constructor(player: Player, uiVariants: UIVariant[], config?: UIConfig);
-  constructor(player: Player, playerUiOrUiVariants: UIContainer | UIVariant[], config: UIConfig = {}) {
+  constructor(player: PlayerAPI, uiVariants: UIVariant[], config?: UIConfig);
+  constructor(player: PlayerAPI, playerUiOrUiVariants: UIContainer | UIVariant[], config: UIConfig = {}) {
     if (playerUiOrUiVariants instanceof UIContainer) {
       // Single-UI constructor has been called, transform arguments to UIVariant[] signature
       let playerUi = <UIContainer>playerUiOrUiVariants;
@@ -357,15 +357,15 @@ export class UIManager {
 
 export namespace UIManager.Factory {
 
-  export function buildDefaultUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildDefaultUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return UIManager.Factory.buildModernUI(player, config);
   }
 
-  export function buildDefaultSmallScreenUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildDefaultSmallScreenUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return UIManager.Factory.buildModernSmallScreenUI(player, config);
   }
 
-  export function buildDefaultCastReceiverUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildDefaultCastReceiverUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return UIManager.Factory.buildModernCastReceiverUI(player, config);
   }
 
@@ -635,7 +635,7 @@ export namespace UIManager.Factory {
     });
   }
 
-  export function buildModernUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildModernUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     // show smallScreen UI only on mobile/handheld devices
     let smallScreenSwitchWidth = 600;
 
@@ -659,7 +659,7 @@ export namespace UIManager.Factory {
     }], config);
   }
 
-  export function buildModernSmallScreenUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildModernSmallScreenUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return new UIManager(player, [{
       ui: modernSmallScreenAdsUI(),
       condition: (context: UIConditionContext) => {
@@ -670,7 +670,7 @@ export namespace UIManager.Factory {
     }], config);
   }
 
-  export function buildModernCastReceiverUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildModernCastReceiverUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return new UIManager(player, modernCastReceiverUI(), config);
   }
 
@@ -791,7 +791,7 @@ export namespace UIManager.Factory {
     });
   }
 
-  export function buildLegacyUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildLegacyUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return new UIManager(player, [{
       ui: legacyAdsUI(),
       condition: (context: UIConditionContext) => {
@@ -802,11 +802,11 @@ export namespace UIManager.Factory {
     }], config);
   }
 
-  export function buildLegacyCastReceiverUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildLegacyCastReceiverUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return new UIManager(player, legacyCastReceiverUI(), config);
   }
 
-  export function buildLegacyTestUI(player: Player, config: UIConfig = {}): UIManager {
+  export function buildLegacyTestUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     return new UIManager(player, legacyTestUI(), config);
   }
 }
@@ -842,7 +842,7 @@ export class UIInstanceManager {
     onControlsHide: new EventDispatcher<UIContainer, NoArgs>(),
   };
 
-  constructor(player: Player, ui: UIContainer, config: UIConfig = {}) {
+  constructor(player: PlayerAPI, ui: UIContainer, config: UIConfig = {}) {
     this.playerWrapper = new PlayerWrapper(player);
     this.ui = ui;
     this.config = config;
@@ -856,7 +856,7 @@ export class UIInstanceManager {
     return this.ui;
   }
 
-  getPlayer(): Player {
+  getPlayer(): PlayerAPI {
     return this.playerWrapper.getPlayer();
   }
 
@@ -1027,7 +1027,7 @@ class InternalUIInstanceManager extends UIInstanceManager {
 /**
  * Extended interface of the {@link Player} for use in the UI.
  */
-interface WrappedPlayer extends Player {
+interface WrappedPlayer extends PlayerAPI {
   /**
    * Fires an event on the player that targets all handlers in the UI but never enters the real player.
    * @param event the event to fire
@@ -1042,12 +1042,12 @@ interface WrappedPlayer extends Player {
  */
 class PlayerWrapper {
 
-  private player: Player;
+  private player: PlayerAPI;
   private wrapper: WrappedPlayer;
 
   private eventHandlers: { [eventType: string]: PlayerEventCallback[]; } = {};
 
-  constructor(player: Player) {
+  constructor(player: PlayerAPI) {
     this.player = player;
 
     // Collect all public API methods of the player
