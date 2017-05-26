@@ -312,16 +312,19 @@ export class UIManager {
   }
 
   private addUi(ui: InternalUIInstanceManager): void {
-    let dom = ui.getUI().getDomElement();
+    let uiDom= ui.getUI().getDomElement();
     ui.configureControls();
+
     /* Append the UI DOM after configuration to avoid CSS transitions at initialization
      * Example: Components are hidden during configuration and these hides may trigger CSS transitions that are
      * undesirable at this time. */
 
     /* Append ui to parent instead of player */
     let parentElement = new DOM(this.playerElement.getElements()[0].parentElement);
-    parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
-    parentElement.append(dom);
+    if(!parentElement.hasClass('smashcut-custom-ui-bitmovin-player-holder')) {
+      parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
+      parentElement.append(uiDom);
+    }
 
     // Fire onConfigured after UI DOM elements are successfully added. When fired immediately, the DOM elements
     // might not be fully configured and e.g. do not have a size.
