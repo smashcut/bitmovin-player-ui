@@ -370,6 +370,7 @@ export namespace UIManager.Factory {
   }
 
   function smashcutUi() {
+
     let settingsPanel = new SettingsPanel({
       components: [
         new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),

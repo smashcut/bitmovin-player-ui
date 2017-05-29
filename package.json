@@ -5,9 +5,11 @@
   "main": "dist/js/bitmovinplayer-ui.js",
   "scripts": {
     "build": "gulp build",
+    "lint": "gulp lint",
     "start": "gulp serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "gulp npm-prepare"
+    "prepublish": "gulp npm-prepare",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",

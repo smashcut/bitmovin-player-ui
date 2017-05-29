@@ -10,14 +10,14 @@
   .#{$prefix}-seekbar {
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
-      margin: $bar-inset 0;
       border-color: rgba(255, 255, 255, .4);
+      margin: $bar-inset 0;
     }
 
     .#{$prefix}-seekbar-bufferlevel {
       @extend %bar;
-      margin: $bar-inset 0;
       background-color: rgba(255, 255, 255, 1);
+      margin: $bar-inset 0;
     }
 
     .#{$prefix}-seekbar-seekposition {

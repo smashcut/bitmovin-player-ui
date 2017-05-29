@@ -29,7 +29,7 @@ export class DOM {
    * @param tagName the tag name of the DOM element
    * @param attributes a list of attributes of the element
    */
-  constructor(tagName: string, attributes: {[name: string]: string});
+  constructor(tagName: string, attributes: { [name: string]: string });
   /**
    * Selects all elements from the DOM that match the specified selector.
    * @param selector the selector to match DOM elements with
@@ -50,7 +50,7 @@ export class DOM {
    * @param document the document to wrap
    */
   constructor(document: Document);
-  constructor(something: string | HTMLElement | HTMLElement[] | Document, attributes?: {[name: string]: string}) {
+  constructor(something: string | HTMLElement | HTMLElement[] | Document, attributes?: { [name: string]: string }) {
     this.document = document; // Set the global document to the local document field
 
     if (something instanceof Array) {
@@ -391,6 +391,25 @@ export class DOM {
   }
 
   /**
+   * Allow to dispatch browser events
+   * @param event
+   */
+  dispatchEvent(event: Event): any {
+    if (this.elements == null) {
+      this.document.dispatchEvent(event);
+    }
+    else {
+      this.forEach((element) => {
+        element.dispatchEvent(event);
+      });
+    }
+  }
+
+  dispatchSmashcutPlayerUiEvent(data: any): any {
+    this.dispatchEvent(new CustomEvent('smashcutplayerui', {detail: data, bubbles: true, cancelable: true}))
+  }
+
+  /**
    * Adds the specified class(es) to all elements.
    * @param className the class(es) to add, multiple classes separated by space
    * @returns {DOM}
@@ -469,8 +488,8 @@ export class DOM {
    * Sets a collection of CSS properties and their values on all elements.
    * @param propertyValueCollection an object containing pairs of property names and their values
    */
-  css(propertyValueCollection: {[propertyName: string]: string}): DOM;
-  css(propertyNameOrCollection: string | {[propertyName: string]: string}, value?: string): string | null | DOM {
+  css(propertyValueCollection: { [propertyName: string]: string }): DOM;
+  css(propertyNameOrCollection: string | { [propertyName: string]: string }, value?: string): string | null | DOM {
     if (typeof propertyNameOrCollection === 'string') {
       let propertyName = propertyNameOrCollection;
 
@@ -499,7 +518,7 @@ export class DOM {
     return this;
   }
 
-  private setCssCollection(ruleValueCollection: {[ruleName: string]: string}): DOM {
+  private setCssCollection(ruleValueCollection: { [ruleName: string]: string }): DOM {
     this.forEach((element) => {
       // http://stackoverflow.com/a/34490573/370252
       Object.assign(element.style, ruleValueCollection);
