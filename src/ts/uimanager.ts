@@ -321,10 +321,8 @@ export class UIManager {
 
     /* Append ui to parent instead of player */
     let parentElement = new DOM(this.playerElement.getElements()[0].parentElement);
-    if (!parentElement.hasClass('smashcut-custom-ui-bitmovin-player-holder')) {
-      parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
-      parentElement.append(uiDom);
-    }
+    parentElement.addClass('smashcut-custom-ui-bitmovin-player-holder');
+    parentElement.append(uiDom);
 
     // Fire onConfigured after UI DOM elements are successfully added. When fired immediately, the DOM elements
     // might not be fully configured and e.g. do not have a size.
