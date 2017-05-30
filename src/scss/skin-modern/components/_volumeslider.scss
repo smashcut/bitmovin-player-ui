@@ -4,34 +4,43 @@
   @extend %ui-seekbar;
 
   $bar-inset: .41em;
+  $border-radius: 3px;
 
-  margin: 0 $bar-inset 4px !important;
+  margin: 0 18px 4px !important;
 
   .#{$prefix}-seekbar {
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
-      border-color: rgba(255, 255, 255, .4);
+      background-color: transparentize($color-white, .1);
+      border-color: transparentize($color-white, .9);
+      border-radius: $border-radius;
       margin: $bar-inset 0;
     }
 
     .#{$prefix}-seekbar-bufferlevel {
       @extend %bar;
-      background-color: rgba(255, 255, 255, 1);
+      background-color: transparentize($color-white, 0);
+      border-radius: $border-radius;
       margin: $bar-inset 0;
+      visibility: hidden;
     }
 
     .#{$prefix}-seekbar-seekposition {
       @extend %bar;
+      border-radius: $border-radius;
       margin: $bar-inset 0;
+      visibility: hidden;
     }
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
+      border-radius: $border-radius;
       margin: $bar-inset 0;
+      visibility: hidden;
     }
 
     .#{$prefix}-seekbar-playbackposition-marker {
-      background-image: svg('assets/skin-modern/images/dot-volume.svg');
+      background-image: svg('assets/skin-modern/images/smashcut/edited/dot-volume.svg', '[fill]:#fff');
       display: initial;
     }
   }

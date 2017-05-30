@@ -4,13 +4,13 @@
 .#{$prefix}-ui-volumetogglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/smashcut/ronik/audio_max.svg', '[fill]:white');
+  background-image: svg('assets/skin-modern/images/smashcut/edited/audio_max.svg', '[fill]:white');
 
   &.#{$prefix}-low {
-    background-image: svg('assets/skin-modern/images/smashcut/ronik/audio_med.svg', '[fill]:white');
+    background-image: svg('assets/skin-modern/images/smashcut/edited/audio_med.svg', '[fill]:white');
   }
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/smashcut/ronik/audio_off.svg', '[fill]:white');
+    background-image: svg('assets/skin-modern/images/smashcut/edited/audio_off.svg', '[fill]:white');
   }
 }

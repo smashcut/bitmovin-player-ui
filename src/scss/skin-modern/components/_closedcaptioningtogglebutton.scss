@@ -4,9 +4,9 @@
 .#{$prefix}-ui-closedcaptioning-togglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/smashcut/ronik/closed-captioning.svg', '[fill]:#fff');
+  background-image: svg('assets/skin-modern/images/smashcut/edited/closed-captioning.svg', '[fill]:#fff');
 
   &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/smashcut/ronik/closed-captioning.svg', '[fill]:#777');
+    background-image: svg('assets/skin-modern/images/smashcut/edited/closed-captioning.svg', '[fill]:#777');
   }
 }
