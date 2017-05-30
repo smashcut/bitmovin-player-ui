@@ -24,14 +24,14 @@
   }
 
   .#{$prefix}-seekbar-label-inner {
-    border-bottom: .2em solid $color-primary;
+    border-bottom: .15em solid $color-smashcut-orange;
 
     // bottom arrow from http://www.cssarrowplease.com/
     &::after {
       border: solid transparent;
       border-color: transparent;
-      border-top-color: $color-primary;
-      border-width: .5em;
+      border-top-color: $color-smashcut-orange;
+      border-width: .3em;
       content: ' ';
       height: 0;
       left: 50%;
@@ -54,9 +54,9 @@
         display: block;
         position: absolute;
         width: 100%;
+        padding: .7em;
 
         .#{$prefix}-seekbar-label-metadata-title {
-          padding: .5em;
           width: 100%;
 
           > .#{$prefix}-container-wrapper {
@@ -65,11 +65,13 @@
             flex-direction: row;
             justify-content: space-between;
             position: relative;
+            font-size: .8em;
 
             .#{$prefix}-seekbar-label-title {
               display: block;
               margin-bottom: .3em;
               white-space: normal;
+              font-weight: bold;
             }
 
             .#{$prefix}-seekbar-label-avatar {
@@ -82,12 +84,13 @@
               display: block;
               margin-bottom: .3em;
               white-space: normal;
+              font-weight: bold;
+              color: $color-smashcut-orange;
             }
           }
         }
 
         .#{$prefix}-seekbar-label-metadata-content {
-          padding: .5em;
 
           .#{$prefix}-seekbar-label-time {
             display: block;

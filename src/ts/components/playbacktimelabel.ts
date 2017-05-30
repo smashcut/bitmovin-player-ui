@@ -16,7 +16,7 @@ export interface PlaybackTimeLabelConfig extends LabelConfig {
 
 /**
  * A label that display the current playback time and the total time through {@link PlaybackTimeLabel#setTime setTime}
- * or any string through {@link PlaybackTimeLabel#setText setText}.
+ * or any string through {@link PlaybackTimeLabel#setText setTimeText}.
  */
 export class PlaybackTimeLabel extends Label<PlaybackTimeLabelConfig> {
 

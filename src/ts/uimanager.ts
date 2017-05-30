@@ -65,6 +65,7 @@ export interface UIEmbedVideoConfig {
 
 export interface TimelineMarker {
   time: number;
+  timePercentage?: number
   title?: string;
   markerType?: string;
   comment?: string;

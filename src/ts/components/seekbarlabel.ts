@@ -79,7 +79,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         if (args.marker) {
           this.setTitleText(args.marker.title);
           this.setSmashcutData(args.marker);
-          this.setTime(args.marker.time);
+          this.setTimeText(null);
           this.setThumbnail(null);
           this.setBackground(true);
         } else {
@@ -108,7 +108,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
    * Sets arbitrary text on the label.
    * @param text the text to show on the label
    */
-  setText(text: string) {
+  setTimeText(text: string) {
     this.timeLabel.setText(text);
   }
 
@@ -117,7 +117,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
    * @param seconds the time in seconds to display on the label
    */
   setTime(seconds: number) {
-    this.setText(StringUtils.secondsToTime(seconds, this.timeFormat));
+    this.setTimeText(StringUtils.secondsToTime(seconds, this.timeFormat));
   }
 
   /**
@@ -130,7 +130,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   setSmashcutData(marker: any) {
     if (marker) {
-      this.commentLabel.setText(marker.comment);
+      this.commentLabel.setText('"' + marker.comment + '"');
       this.numberLabel.setText(marker.number);
       this.avatarLabel.setText(marker.avatar);
     } else {
@@ -171,12 +171,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     if (onOff) {
       metadataElement.css({
-        'background': '#000'
+        'background': '#fff',
+        'color': '#000'
       });
     }
     else {
       metadataElement.css({
-        'background': 'initial'
+        'background': 'initial',
+        'color': '#fff'
       });
     }
   }

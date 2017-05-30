@@ -413,9 +413,11 @@ export class SeekBar extends Component<SeekBarConfig> {
       // Generate timeline markers from the config if we have markers and if we have a duration
       // The duration check is for buggy platforms where the duration is not available instantly (Chrome on Android 4.3)
       if (markers && player.getDuration() !== Infinity) {
+        let duration = player.getDuration()
         for (let o of markers) {
           let marker = {
-            time: 100 / player.getDuration() * o.time, // convert time to percentage
+            time: o.time,
+            timePercentage: 100 / duration * o.time, // convert time to percentage
             title: o.title,
             markerType: '' + (o.markerType || 1),
             comment: o.comment || '',
@@ -540,7 +542,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       seeking = false;
 
       // Fire seeked event
-      this.onSeekedEvent(snappedChapter ? snappedChapter.time : targetPercentage);
+      this.onSeekedEvent(snappedChapter ? snappedChapter.timePercentage : targetPercentage);
     };
 
     // A seek always start with a touchstart or mousedown directly on the seekbar.
@@ -618,14 +620,16 @@ export class SeekBar extends Component<SeekBarConfig> {
     }
 
     for (let marker of this.timelineMarkers) {
-      let className = marker.markerType === '2' ? this.prefixCss('seekbar-marker-typetwo') : this.prefixCss('seekbar-marker')
+      let className = marker.markerType === '2' ?
+        this.prefixCss('seekbar-marker-type-mentor') :
+        this.prefixCss('seekbar-marker-type-student')
 
       let markerDom = new DOM('div', {
         'class': className,
         'data-marker-time': String(marker.time),
         'data-marker-title': String(marker.title),
       }).css({
-        'width': marker.time + '%',
+        'left': marker.timePercentage + '%',
       })
       this.seekBarMarkersContainer.append(markerDom)
     }
@@ -636,7 +640,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     let snappingRange = 1;
     if (this.timelineMarkers.length > 0) {
       for (let marker of this.timelineMarkers) {
-        if (percentage >= marker.time - snappingRange && percentage <= marker.time + snappingRange) {
+        if (percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange) {
           snappedMarker = marker;
           break;
         }
@@ -833,7 +837,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (snappedMarker ? snappedMarker.time : percentage) + '%'
+        'left': (snappedMarker ? snappedMarker.timePercentage : percentage) + '%'
       });
     }
 
