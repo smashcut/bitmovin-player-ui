@@ -11,7 +11,7 @@
   .#{$prefix}-seekbar {
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
-      background-color: transparentize($color-white, .1);
+      background-color: transparentize($color-white, .4);
       border-color: transparentize($color-white, .9);
       border-radius: $border-radius;
       margin: $bar-inset 0;
@@ -34,9 +34,9 @@
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
+      background-color: $color-white;
       border-radius: $border-radius;
       margin: $bar-inset 0;
-      visibility: hidden;
     }
 
     .#{$prefix}-seekbar-playbackposition-marker {
