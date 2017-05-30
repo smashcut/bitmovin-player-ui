@@ -54,38 +54,41 @@
         display: block;
         position: absolute;
         width: 100%;
-        padding: .7em;
 
-        .#{$prefix}-seekbar-label-metadata-title {
-          width: 100%;
+        > .#{$prefix}-container-wrapper {
+          padding: .7em;
 
-          > .#{$prefix}-container-wrapper {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            position: relative;
-            font-size: .8em;
+          .#{$prefix}-seekbar-label-metadata-title {
+            width: 100%;
 
-            .#{$prefix}-seekbar-label-title {
-              display: block;
-              margin-bottom: .3em;
-              white-space: normal;
-              font-weight: bold;
-            }
+            > .#{$prefix}-container-wrapper {
+              align-items: center;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              position: relative;
+              font-size: .8em;
 
-            .#{$prefix}-seekbar-label-avatar {
-              display: block;
-              margin-bottom: .3em;
-              white-space: normal;
-            }
+              .#{$prefix}-seekbar-label-title {
+                display: block;
+                margin-bottom: .3em;
+                white-space: normal;
+                font-weight: bold;
+              }
 
-            .#{$prefix}-seekbar-label-number {
-              display: block;
-              margin-bottom: .3em;
-              white-space: normal;
-              font-weight: bold;
-              color: $color-smashcut-orange;
+              .#{$prefix}-seekbar-label-avatar {
+                display: block;
+                margin-bottom: .3em;
+                white-space: normal;
+              }
+
+              .#{$prefix}-seekbar-label-number {
+                display: block;
+                margin-bottom: .3em;
+                white-space: normal;
+                font-weight: bold;
+                color: $color-smashcut-orange;
+              }
             }
           }
         }

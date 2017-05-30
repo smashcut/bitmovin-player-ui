@@ -89,7 +89,7 @@
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        margin-left: -$marker-width / 2;
+        margin-left: -$marker-width / 2 - 2;
         width: 0;
       }
 
@@ -104,6 +104,7 @@
         // offset position marker to center it on its actual position
         width: 8px;
         height: 8px;
+        margin-left: -6px;
       }
     }
   }
