@@ -19,13 +19,10 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   private avatarLabel: Label<LabelConfig>;
   private commentLabel: Label<LabelConfig>;
   private metadata: Component<ComponentConfig>;
-  private mentorDot: Component<ComponentConfig>;
-  private numberLabel: Label<LabelConfig>;
   private thumbnail: Component<ComponentConfig>;
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
 
-  private labelClass: string;
   private timeFormat: string;
 
   constructor(config: SeekBarLabelConfig = {}) {
@@ -33,8 +30,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
-    this.mentorDot = new Component({cssClasses: ['seekbar-label-mentor-dot']});
-    this.numberLabel = new Label({cssClasses: ['seekbar-label-number']});
     this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
     this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
@@ -44,14 +39,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         new Container({
           components: [
             this.avatarLabel,
-            this.titleLabel,
-            new Container({
-              components: [
-                this.mentorDot,
-                this.numberLabel
-              ],
-              cssClass: 'seekbar-label-number-container',
-            })
+            this.titleLabel
           ],
           cssClass: 'seekbar-label-metadata-title',
         }),
@@ -87,14 +75,12 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         this.setTime(time);
       } else {
         if (args.marker) {
-          this.setLabelClass(args.marker.markerType)
           this.setTitleText(args.marker.title);
           this.setSmashcutData(args.marker);
           this.setTimeText(null);
           this.setThumbnail(null);
           this.setBackground(true);
         } else {
-          this.setLabelClass('thumbnail')
           let percentage = args.position;
           this.setTitleText(null);
           this.setSmashcutData(null);
@@ -114,16 +100,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
-  }
-
-  setLabelClass(newLabelClass: string) {
-    if (this.labelClass) {
-      this.getDomElement().removeClass(this.prefixCss(this.labelClass))
-    }
-    this.labelClass = newLabelClass
-    if (this.labelClass) {
-      this.getDomElement().addClass(this.prefixCss(this.labelClass))
-    }
   }
 
   /**
@@ -153,11 +129,9 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   setSmashcutData(marker: any) {
     if (marker) {
       this.commentLabel.setText('"' + marker.comment + '"');
-      this.numberLabel.setText(marker.number);
       this.avatarLabel.setText(marker.avatar);
     } else {
       this.commentLabel.setText(null);
-      this.numberLabel.setText(null);
       this.avatarLabel.setText(null);
     }
   }

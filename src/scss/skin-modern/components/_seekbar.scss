@@ -93,7 +93,7 @@
         width: 0;
       }
 
-      > .#{$prefix}-seekbar-marker-type-student {
+      > .#{$prefix}-seekbar-marker-type-mentor {
         @extend %bar;
 
         border-right: $marker-width solid $color-smashcut-orange;
@@ -104,7 +104,7 @@
         width: 0;
       }
 
-      > .#{$prefix}-seekbar-marker-type-mentor {
+      > .#{$prefix}-seekbar-marker-type-student {
         border-radius: 50%;
         top: 4px;
         position: absolute;

@@ -69,53 +69,25 @@
       align-items: center;
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-start;
       position: relative;
       font-size: .8em;
-
-      .#{$prefix}-seekbar-label-avatar {
-        display: block;
-        margin-bottom: .3em;
-        white-space: normal;
-      }
-
-      .#{$prefix}-seekbar-label-title {
-        display: block;
-        margin-bottom: .3em;
-        white-space: normal;
-        font-weight: bold;
-      }
     }
-  }
 
-  .#{$prefix}-seekbar-label-number-container {
-    margin-bottom: 4px;
+    .#{$prefix}-seekbar-label-avatar {
+      display: block;
+      margin-right: 8px;
+    }
 
-    > .#{$prefix}-container-wrapper {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-
-      .#{$prefix}-seekbar-label-mentor-dot {
-        visibility: hidden;
-        border-radius: 50%;
-        border: 1px solid $color-smashcut-orange;
-        width: 8px;
-        height: 8px;
-        background-color: $color-smashcut-orange;
-        margin-right: 4px;
-      }
-
-      .#{$prefix}-seekbar-label-number {
-        white-space: normal;
-        font-weight: bold;
-        color: $color-smashcut-orange;
-      }
+    .#{$prefix}-seekbar-label-title {
+      display: block;
+      white-space: normal;
+      font-weight: bold;
     }
   }
 
   .#{$prefix}-seekbar-label-metadata-content {
+    margin-top: 8px;
 
     .#{$prefix}-seekbar-label-time {
       display: block;
@@ -131,13 +103,4 @@
     }
   }
 
-  &.#{$prefix}-mentor {
-    .#{$prefix}-seekbar-label-number-container {
-      .#{$prefix}-container-wrapper {
-        .#{$prefix}-seekbar-label-mentor-dot {
-          visibility: visible;
-        }
-      }
-    }
-  }
 }
