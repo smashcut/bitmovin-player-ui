@@ -16,32 +16,43 @@ export interface SeekBarLabelConfig extends ContainerConfig {
  */
 export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
+  private avatarLabel: Label<LabelConfig>;
+  private commentLabel: Label<LabelConfig>;
+  private metadata: Component<ComponentConfig>;
+  private mentorDot: Component<ComponentConfig>;
+  private numberLabel: Label<LabelConfig>;
+  private thumbnail: Component<ComponentConfig>;
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
-  private numberLabel: Label<LabelConfig>;
-  private commentLabel: Label<LabelConfig>;
-  private avatarLabel: Label<LabelConfig>;
-  private thumbnail: Component<ComponentConfig>;
-  private metadata: Component<ComponentConfig>;
 
+  private labelClass: string;
   private timeFormat: string;
 
   constructor(config: SeekBarLabelConfig = {}) {
     super(config);
 
+    this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
+    this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
+    this.mentorDot = new Component({cssClasses: ['seekbar-label-mentor-dot']});
+    this.numberLabel = new Label({cssClasses: ['seekbar-label-number']});
+    this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
     this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
-    this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
-    this.numberLabel = new Label({cssClasses: ['seekbar-label-number']});
-    this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
-    this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
+
     this.metadata = new Container({
       components: [
         new Container({
           components: [
             this.avatarLabel,
             this.titleLabel,
-            this.numberLabel],
+            new Container({
+              components: [
+                this.mentorDot,
+                this.numberLabel
+              ],
+              cssClass: 'seekbar-label-number-container',
+            })
+          ],
           cssClass: 'seekbar-label-metadata-title',
         }),
         new Container({
@@ -75,15 +86,16 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         let time = player.getMaxTimeShift() - player.getMaxTimeShift() * (args.position / 100);
         this.setTime(time);
       } else {
-        let percentage = 0;
         if (args.marker) {
+          this.setLabelClass(args.marker.markerType)
           this.setTitleText(args.marker.title);
           this.setSmashcutData(args.marker);
           this.setTimeText(null);
           this.setThumbnail(null);
           this.setBackground(true);
         } else {
-          percentage = args.position;
+          this.setLabelClass('thumbnail')
+          let percentage = args.position;
           this.setTitleText(null);
           this.setSmashcutData(null);
           let time = player.getDuration() * (percentage / 100);
@@ -102,6 +114,16 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
+  }
+
+  setLabelClass(newLabelClass: string) {
+    if (this.labelClass) {
+      this.getDomElement().removeClass(this.prefixCss(this.labelClass))
+    }
+    this.labelClass = newLabelClass
+    if (this.labelClass) {
+      this.getDomElement().addClass(this.prefixCss(this.labelClass))
+    }
   }
 
   /**
@@ -151,7 +173,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       thumbnailElement.css({
         'background-image': null,
         'display': 'null',
-        'width': 'null',
+        'width': '180px',
         'height': 'null'
       });
     }

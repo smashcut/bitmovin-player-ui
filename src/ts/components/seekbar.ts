@@ -419,7 +419,7 @@ export class SeekBar extends Component<SeekBarConfig> {
             time: o.time,
             timePercentage: 100 / duration * o.time, // convert time to percentage
             title: o.title,
-            markerType: '' + (o.markerType || 1),
+            markerType: o.markerType || 'default',
             comment: o.comment || '',
             avatar: o.avatar,
             number: o.number || ''
@@ -620,9 +620,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     }
 
     for (let marker of this.timelineMarkers) {
-      let className = marker.markerType === '2' ?
-        this.prefixCss('seekbar-marker-type-mentor') :
-        this.prefixCss('seekbar-marker-type-student')
+      let className = this.prefixCss('seekbar-marker-type-' + marker.markerType);
 
       let markerDom = new DOM('div', {
         'class': className,

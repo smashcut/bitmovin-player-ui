@@ -44,70 +44,98 @@
 
     > .#{$prefix}-container-wrapper {
       position: relative;
+    }
+  }
 
-      .#{$prefix}-seekbar-thumbnail {
-        width: 6em;
+  .#{$prefix}-seekbar-thumbnail {
+    width: 6em;
+  }
+
+  .#{$prefix}-seekbar-label-metadata {
+    bottom: 0;
+    display: block;
+    position: absolute;
+    width: 100%;
+
+    > .#{$prefix}-container-wrapper {
+      padding: .7em;
+    }
+  }
+
+  .#{$prefix}-seekbar-label-metadata-title {
+    width: 100%;
+
+    > .#{$prefix}-container-wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      position: relative;
+      font-size: .8em;
+
+      .#{$prefix}-seekbar-label-avatar {
+        display: block;
+        margin-bottom: .3em;
+        white-space: normal;
       }
 
-      .#{$prefix}-seekbar-label-metadata {
-        bottom: 0;
+      .#{$prefix}-seekbar-label-title {
         display: block;
-        position: absolute;
-        width: 100%;
+        margin-bottom: .3em;
+        white-space: normal;
+        font-weight: bold;
+      }
+    }
+  }
 
-        > .#{$prefix}-container-wrapper {
-          padding: .7em;
+  .#{$prefix}-seekbar-label-number-container {
+    margin-bottom: 4px;
 
-          .#{$prefix}-seekbar-label-metadata-title {
-            width: 100%;
+    > .#{$prefix}-container-wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
 
-            > .#{$prefix}-container-wrapper {
-              align-items: center;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              position: relative;
-              font-size: .8em;
+      .#{$prefix}-seekbar-label-mentor-dot {
+        visibility: hidden;
+        border-radius: 50%;
+        border: 1px solid $color-smashcut-orange;
+        width: 8px;
+        height: 8px;
+        background-color: $color-smashcut-orange;
+        margin-right: 4px;
+      }
 
-              .#{$prefix}-seekbar-label-title {
-                display: block;
-                margin-bottom: .3em;
-                white-space: normal;
-                font-weight: bold;
-              }
+      .#{$prefix}-seekbar-label-number {
+        white-space: normal;
+        font-weight: bold;
+        color: $color-smashcut-orange;
+      }
+    }
+  }
 
-              .#{$prefix}-seekbar-label-avatar {
-                display: block;
-                margin-bottom: .3em;
-                white-space: normal;
-              }
+  .#{$prefix}-seekbar-label-metadata-content {
 
-              .#{$prefix}-seekbar-label-number {
-                display: block;
-                margin-bottom: .3em;
-                white-space: normal;
-                font-weight: bold;
-                color: $color-smashcut-orange;
-              }
-            }
-          }
-        }
+    .#{$prefix}-seekbar-label-time {
+      display: block;
+      line-height: .8em;
+    }
 
-        .#{$prefix}-seekbar-label-metadata-content {
+    .#{$prefix}-seekbar-label-comment {
+      display: block;
+      font-size: .7em;
+      margin-bottom: .3em;
+      text-align: left;
+      white-space: normal;
+    }
+  }
 
-          .#{$prefix}-seekbar-label-time {
-            display: block;
-            line-height: .8em;
-          }
-
-          .#{$prefix}-seekbar-label-comment {
-            clear: left;
-            display: block;
-            font-size: .7em;
-            margin-bottom: .3em;
-            text-align: left;
-            white-space: normal;
-          }
+  &.#{$prefix}-mentor {
+    .#{$prefix}-seekbar-label-number-container {
+      .#{$prefix}-container-wrapper {
+        .#{$prefix}-seekbar-label-mentor-dot {
+          visibility: visible;
         }
       }
     }
