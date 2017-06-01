@@ -409,7 +409,7 @@ export namespace UIManager.Factory {
         new CommentsToggleButton({seekBar: seekBar}),
         new ClosedCaptioningToggleButton(),
         new SettingsToggleButton({settingsPanel: settingsPanel}),
-        new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
+        //new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
         new FullscreenToggleButton(),
       ]
     });
