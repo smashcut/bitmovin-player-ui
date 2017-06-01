@@ -79,6 +79,26 @@
       margin-right: 8px;
     }
 
+    .#{$prefix}-seekbar-label-marker-type {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      &.student {
+        background-color: $color-smashcut-orange;
+        border-radius: 50%;
+        height: 8px;
+        width: 8px;
+      }
+
+      &.mentor {
+        background-color: $color-smashcut-orange;
+        height: 14px;
+        width: 3px;
+      }
+    }
+
     .#{$prefix}-seekbar-label-title {
       display: block;
       white-space: normal;

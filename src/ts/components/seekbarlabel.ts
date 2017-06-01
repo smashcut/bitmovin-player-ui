@@ -3,6 +3,7 @@ import {Label, LabelConfig} from './label';
 import {Component, ComponentConfig} from './component';
 import {UIInstanceManager, SeekPreviewArgs} from '../uimanager';
 import {StringUtils} from '../utils';
+import {DOM} from "../dom";
 
 /**
  * Configuration interface for a {@link SeekBarLabel}.
@@ -18,11 +19,13 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   private avatarLabel: Label<LabelConfig>;
   private commentLabel: Label<LabelConfig>;
+  private markerType: Component<ComponentConfig>;
   private metadata: Component<ComponentConfig>;
   private thumbnail: Component<ComponentConfig>;
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
 
+  private markerTypeClass: string;
   private timeFormat: string;
 
   constructor(config: SeekBarLabelConfig = {}) {
@@ -30,6 +33,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
+    this.markerType = new Component({cssClasses: ['seekbar-label-marker-type']});
     this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
     this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
@@ -39,7 +43,8 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         new Container({
           components: [
             this.avatarLabel,
-            this.titleLabel
+            this.titleLabel,
+            this.markerType
           ],
           cssClass: 'seekbar-label-metadata-title',
         }),
@@ -130,9 +135,22 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     if (marker) {
       this.commentLabel.setText('"' + marker.comment + '"');
       this.avatarLabel.setText(marker.avatar);
+      this.setMarkerType(marker.markerType)
     } else {
       this.commentLabel.setText(null);
       this.avatarLabel.setText(null);
+      this.setMarkerType(null)
+    }
+  }
+
+  setMarkerType(type:string){
+    let dom = this.markerType.getDomElement()
+    if(this.markerTypeClass) {
+      dom.removeClass(this.markerTypeClass)
+    }
+    this.markerTypeClass = type
+    if(this.markerTypeClass) {
+      dom.addClass(type)
     }
   }
 
