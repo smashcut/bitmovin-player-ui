@@ -21,6 +21,7 @@ export class HugeReplayButton extends Button<ButtonConfig> {
     super.configure(player, uimanager);
 
     this.onClick.subscribe(() => {
+      this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', originator: 'HugeReplayButton'})
       player.play('ui-overlay');
     });
   }
