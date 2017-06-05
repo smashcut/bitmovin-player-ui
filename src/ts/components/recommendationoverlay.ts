@@ -87,6 +87,16 @@ export class RecommendationOverlay extends Container<ContainerConfig> {
       this.hide();
     });
 
+    // Hide recommendations when seek starts
+    player.addEventHandler(player.EVENT.ON_SEEK, () => {
+      this.hide();
+    });
+
+    // Hide recommendations when seek ends
+    player.addEventHandler(player.EVENT.ON_SEEKED, () => {
+      this.hide();
+    });
+
     // Init on startup
     setupRecommendations();
   }

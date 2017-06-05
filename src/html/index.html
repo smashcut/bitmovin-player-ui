@@ -389,6 +389,11 @@
 
 
   var actions = {
+    'Seek 60': function(){
+      player.play()
+      player.seek(60)
+      player.pause()
+    },
     'Recreate player': function () {
       var config = player.getConfig();
       player.destroy();
