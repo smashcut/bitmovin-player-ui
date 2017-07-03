@@ -106,7 +106,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     /**
      * Fire when commentsOn is toggled
      */
-    onChangeCommentsOn: new EventDispatcher<SeekBar, boolean>()
+    onChangeCommentsOn: new EventDispatcher<SeekBar, boolean>(),
   };
 
   constructor(config: SeekBarConfig = {}) {
@@ -149,31 +149,31 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     let dispatchMarkerEvent = (type: string, marker: TimelineMarker) => {
       console.log('dispatchMarkerEvent', type, marker)
-      this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker})
+      this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker});
     }
 
     let checkAutoShowMarkers = (currentTime: number, percentage: number) => {
-      let filteredCurrentMarkers = []
+      let filteredCurrentMarkers = [];
       for (let marker of this.currentAutoShowTimelineMarkers) {
-        let startTime = marker.time - marker.autoShowDuration / 2
-        let endTime = marker.time + marker.autoShowDuration / 2
+        let startTime = marker.time - marker.autoShowDuration / 2;
+        let endTime = marker.time + marker.autoShowDuration / 2;
         if (currentTime < startTime || currentTime > endTime) {
           dispatchMarkerEvent('hide', marker)
           if (this.isShowingAutoShowMarker) {
-            this.isShowingAutoShowMarker = false
+            this.isShowingAutoShowMarker = false;
             if (this.hasLabel() && !this.getLabel().isHidden()) {
-              this.getLabel().hide();
+              this.getLabel().hide(2000);
             }
           }
         } else {
-          filteredCurrentMarkers.push(marker)
+          filteredCurrentMarkers.push(marker);
         }
       }
-      this.currentAutoShowTimelineMarkers = filteredCurrentMarkers
+      this.currentAutoShowTimelineMarkers = filteredCurrentMarkers;
 
       for (let marker of this.autoShowTimelineMarkers) {
-        let startTime = marker.time - marker.autoShowDuration / 2
-        let endTime = marker.time + marker.autoShowDuration / 2
+        let startTime = marker.time - marker.autoShowDuration / 2;
+        let endTime = marker.time + marker.autoShowDuration / 2;
         if (currentTime >= startTime && currentTime <= endTime) {
           if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
             dispatchMarkerEvent('show', marker)
@@ -186,7 +186,7 @@ export class SeekBar extends Component<SeekBarConfig> {
                 position: marker.timePercentage,
                 marker,
               });
-              this.currentAutoShowTimelineMarkers.push(marker)
+              this.currentAutoShowTimelineMarkers.push(marker);
             }
           }
         }
@@ -472,7 +472,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         let duration = player.getDuration()
         for (let o of markers) {
           let marker = {
-            autoShowDuration: o.autoShowDuration || 10, //seconds
+            autoShowDuration: o.autoShowDuration || 10, // seconds
             avatar: o.avatar,
             comment: o.comment || '',
             isAutoShowMarker: o.isAutoShowMarker || false,
@@ -480,11 +480,11 @@ export class SeekBar extends Component<SeekBarConfig> {
             number: o.number || '',
             time: o.time,
             timePercentage: 100 / duration * o.time, // convert time to percentage
-            title: o.title
+            title: o.title,
           }
           this.timelineMarkers.push(marker)
           if (marker.isAutoShowMarker) {
-            this.autoShowTimelineMarkers.push(marker)
+            this.autoShowTimelineMarkers.push(marker);
           }
         }
       }
@@ -691,7 +691,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.setSeekPosition(0);
 
       if (this.hasLabel()) {
-        this.getLabel().hide();
+        this.getLabel().hide(2000);
       }
     });
 

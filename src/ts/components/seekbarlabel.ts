@@ -67,6 +67,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-seekbar-label',
+      hidden: true,
       components: [new Container({
         components: [
           this.thumbnail,
@@ -75,7 +76,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         ],
         cssClass: 'seekbar-label-inner',
       })],
-      hidden: true,
     }, this.config);
   }
 
@@ -121,20 +121,25 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
-
-    // hide initially without delay
-    super.hide();
   }
 
-  hide() {
-    let checkHovered = () => {
-      if (this.isHovered()) {
-        setTimeout(checkHovered, 2000);
-      } else {
-        super.hide();
-      }
-    };
-    setTimeout(checkHovered, 2000);
+  /**
+   * When a delay is supplied, the function waits until the component is not hovered
+   * @param delay
+   */
+  hide(delay: number = 0) {
+    if (delay > 0) {
+      let checkHovered = () => {
+        if (this.isHovered()) {
+          setTimeout(checkHovered, delay);
+        } else {
+          super.hide();
+        }
+      };
+      setTimeout(checkHovered, delay);
+    } else {
+      super.hide();
+    }
   }
 
   /**
