@@ -3,7 +3,6 @@ import {UIInstanceManager} from '../uimanager';
 import {Container, ContainerConfig} from './container';
 import {Label, LabelConfig} from './label';
 import {Event, EventDispatcher, NoArgs} from '../eventdispatcher';
-import Config = bitmovin.PlayerAPI.Config;
 
 /**
  * Configuration interface for a {@link Checkbox}.
@@ -22,7 +21,7 @@ export class Checkbox extends Container<CheckboxConfig> {
 
   private checkboxEvents = {
     onClick: new EventDispatcher<Checkbox, NoArgs>(),
-    onChange: new EventDispatcher<Checkbox, NoArgs>()
+    onChange: new EventDispatcher<Checkbox, NoArgs>(),
   };
 
   constructor(config: CheckboxConfig = {text: ''}) {
@@ -33,7 +32,7 @@ export class Checkbox extends Container<CheckboxConfig> {
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-checkbox',
-      components: [this.button, this.label]
+      components: [this.button, this.label],
     }, this.config);
   }
 
@@ -43,9 +42,9 @@ export class Checkbox extends Container<CheckboxConfig> {
     // Listen for the click event on the element and
     // trigger the corresponding events on the button component
     this.getDomElement().on('click', () => {
-      this.button.toggle()
-      this.onClickEvent()
-      this.onChangeEvent()
+      this.button.toggle();
+      this.onClickEvent();
+      this.onChangeEvent();
     });
   }
 
@@ -82,6 +81,6 @@ export class Checkbox extends Container<CheckboxConfig> {
   }
 
   get isOn(): boolean {
-    return this.button.isOn()
+    return this.button.isOn();
   }
 }

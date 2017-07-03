@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.0]
+
+### Added
+- Add support for FCC compliant closed captions. Adds options on how captions are displayed, and a SubtitleSettingsPanel with the possibility to update the settings while playing the video.
+- Add UI version property to global namespace (`bitmovin.playerui.version`)
+- Add `UIConfig#container` config property to specify a custom place in the DOM where the UI will be put into. Can be used to place it somewhere else beside the default player figure.
+
+## [2.6.0]
+
+### Added
+- Add an option to keep the UI always visible by setting the `UIContainerConfig#hideTimeout` to -1
+
+### Changed
+- Thumbnail size is no longer determined by the physical image size and can now be arbitrarily set by CSS
+
+## [2.5.1]
+
+No functional changes. Improves player API declarations, code linting configuration, and adds [contribution guidelines](CONTRIBUTING.md).
+
+## [2.5.0]
+
+### Added
+- Add `UIConditionContext#adClientType` to be able to switch to different UI variants for different ad types
+- Add `UIConditionContext#isPlaying` and resolve UI variants on `ON_PLAY` and `ON_PAUSED` to be able to switch between different UI variants for playing and paused states
+
+### Changed
+- NPM entry point changed from browserified standalone distributable file to CommonJS module (NPM package can now be used with Node and Browserify out-of-the-box)
+- Deprecated `UIConditionContext#isAdWithUI`, use `adClientType` instead (`isAdWithUI` equals `context.adClientType === 'vast'`)
+
+### Fixed
+- Stop rendering loop of the `ErrorMessageOverlay` background canvas when UI is released
+- Fix wrapped control bar in modern skin on iOS 8.2
+
+## [2.4.0]
+
+### Changed
+- Resolve UI variants on `ON_READY`
+- Improved UI variant switching by detecting the end of an ad when loading a new source during ad playback
+
+### Fixed
+- Fix subtitle line breaking
+
 ## [2.3.0]
 
 UI does not crash any more when used with player 7.0, all other restrictions explained in [2.0.0](#200) still apply.
@@ -140,6 +182,11 @@ Version 2.0 of the UI framework is built for player 7.1. If absolutely necessary
 ## 1.0.0 - 2017-02-03
 - First release
 
+[2.7.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.6.0...v2.7.0
+[2.6.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.5.1...v2.6.0
+[2.5.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.5.0...v2.5.1
+[2.5.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.4.0...v2.5.0
+[2.4.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.1.0...v2.1.1

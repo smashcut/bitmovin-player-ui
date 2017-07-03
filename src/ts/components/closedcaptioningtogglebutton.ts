@@ -18,17 +18,15 @@ export class ClosedCaptioningToggleButton extends ToggleButton<ClosedCaptioningT
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-closedcaptioning-togglebutton',
-      text: 'Closed Captioning'
+      text: 'Closed Captioning',
     }, <ClosedCaptioningToggleButtonConfig>this.config);
   }
 
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
-    let config = <ClosedCaptioningToggleButtonConfig>this.getConfig(); // TODO fix generics type inference
-
     this.onClick.subscribe(() => {
-      console.log('closed captioning button clicked')
+      console.log('closed captioning button clicked');
     });
   }
 }

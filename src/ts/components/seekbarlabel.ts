@@ -4,6 +4,7 @@ import {Component, ComponentConfig} from './component';
 import {UIInstanceManager, SeekPreviewArgs, TimelineMarker} from '../uimanager';
 import {StringUtils} from '../utils';
 import {DOM} from "../dom";
+import {ImageLoader} from '../imageloader';
 
 /**
  * Configuration interface for a {@link SeekBarLabel}.
@@ -28,6 +29,8 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   private currentMarker: TimelineMarker;
   private markerTypeClass: string;
+  private thumbnailImageLoader: ImageLoader;
+
   private timeFormat: string;
 
   constructor(config: SeekBarLabelConfig = {}) {
@@ -40,6 +43,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
     this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
+    this.thumbnailImageLoader = new ImageLoader();
 
     this.metadata = new Container({
       components: [
@@ -67,11 +71,11 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         components: [
           this.thumbnail,
           this.logo,
-          this.metadata
+          this.metadata,
         ],
         cssClass: 'seekbar-label-inner',
       })],
-      hidden: true
+      hidden: true,
     }, this.config);
   }
 
@@ -146,6 +150,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.setTimeText(StringUtils.secondsToTime(seconds, this.timeFormat));
   }
 
+  /**
+   * Sets the text on the title label.
+   * @param text the text to show on the label
+   */
+  setTitleText(text: string) {
+    this.titleLabel.setText(text);
+  }
+
   setSmashcutData(marker: any) {
     if (marker) {
       if (marker.isAutoShowMarker) {
@@ -202,18 +214,40 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     if (thumbnail == null) {
       thumbnailElement.css({
         'background-image': null,
-        'display': 'null',
+        'display': null,
         'width': width + 'px',
-        'height': 'null'
+        'height': null,
       });
     }
     else {
-      thumbnailElement.css({
-        'display': 'inherit',
-        'background-image': `url(${thumbnail.url})`,
-        'width': thumbnail.w + 'px',
-        'height': thumbnail.h + 'px',
-        'background-position': `-${thumbnail.x}px -${thumbnail.y}px`
+      // We use the thumbnail image loader to make sure the thumbnail is loaded and it's size is known before be can
+      // calculate the CSS properties and set them on the element.
+      this.thumbnailImageLoader.load(thumbnail.url, (url, width, height) => {
+        let thumbnailCountX = width / thumbnail.w;
+        let thumbnailCountY = height / thumbnail.h;
+
+        let thumbnailIndexX = thumbnail.x / thumbnail.w;
+        let thumbnailIndexY = thumbnail.y / thumbnail.h;
+
+        let sizeX = 100 * thumbnailCountX;
+        let sizeY = 100 * thumbnailCountY;
+
+        let offsetX = 100 * thumbnailIndexX;
+        let offsetY = 100 * thumbnailIndexY;
+
+        let aspectRatio = 1 / thumbnail.w * thumbnail.h;
+
+        // The thumbnail size is set by setting the CSS 'width' and 'padding-bottom' properties. 'padding-bottom' is
+        // used because it is relative to the width and can be used to set the aspect ratio of the thumbnail.
+        // A default value for width is set in the stylesheet and can be overwritten from there or anywhere else.
+        thumbnailElement.css({
+          'display': 'inherit',
+          'background-image': `url(${thumbnail.url})`,
+          'width':  thumbnail.w + 'px',
+          'padding-bottom': `${100 * aspectRatio}%`,
+          'background-size': `${sizeX}% ${sizeY}%`,
+          'background-position': `-${offsetX}% -${offsetY}%`,
+        });
       });
     }
   }

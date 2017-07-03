@@ -6,15 +6,13 @@ import {SeekBar} from './seekbar';
  * Configuration interface for the {@link CommentsToggleButton}.
  */
 export interface CommentsToggleButtonConfig extends ToggleButtonConfig {
-  seekBar: SeekBar
+  seekBar: SeekBar;
 }
 
 /**
  * A button that toggles visibility of a embedVideo panel.
  */
 export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfig> {
-
-  private seekBar: SeekBar
 
   constructor(config: CommentsToggleButtonConfig) {
     super(config);
@@ -26,7 +24,7 @@ export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfi
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-comments-togglebutton',
       text: 'Comments',
-      seekBar: null
+      seekBar: null,
     }, <CommentsToggleButtonConfig>this.config);
   }
 
@@ -34,10 +32,10 @@ export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfi
     super.configure(player, uimanager);
 
     let config = <CommentsToggleButtonConfig>this.getConfig(); // TODO fix generics type inference
-    let seekBar = config.seekBar
+    let seekBar = config.seekBar;
 
     this.onClick.subscribe(() => {
-      seekBar.toggleCommentsOn()
+      seekBar.toggleCommentsOn();
     });
 
     let updateOnOff = () => {
@@ -46,7 +44,7 @@ export class CommentsToggleButton extends ToggleButton<CommentsToggleButtonConfi
       } else {
         this.off();
       }
-    }
+    };
 
     seekBar.onChangeCommentsOn.subscribe((e, on) => {
       updateOnOff();

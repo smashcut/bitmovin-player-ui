@@ -48,11 +48,11 @@ export class EmbedVideoPanel extends Container<EmbedVideoPanelConfig> {
             components: [
               this.title,
               this.closeButton,
-            ]
+            ],
           }),
           this.showCommentsCheckbox,
-          this.codeField
-        ]
+          this.codeField,
+        ],
       },
       this.config
     )
@@ -86,18 +86,18 @@ export class EmbedVideoPanel extends Container<EmbedVideoPanelConfig> {
         // Clear timeout when hidden from outside
         this.hideTimeout.clear();
       });
-    };
+    }
 
     let init = () => {
       if (uiconfig && uiconfig.metadata && uiconfig.metadata.embedVideo) {
-        let ev = uiconfig.metadata.embedVideo
+        let ev = uiconfig.metadata.embedVideo;
         if (this.showCommentsCheckbox.isOn && ev.withComments) {
           this.setEmbedVideo(ev.withComments);
         } else {
           this.setEmbedVideo(ev.default);
         }
       } else if (player.getConfig().source && player.getConfig().source.embedVideo) {
-        let ev = player.getConfig().source.embedVideo
+        let ev = player.getConfig().source.embedVideo;
         if (this.showCommentsCheckbox.isOn && ev.withComments) {
           this.setEmbedVideo(ev.withComments);
         } else {
@@ -134,16 +134,16 @@ export class EmbedVideoPanel extends Container<EmbedVideoPanelConfig> {
 
   setEmbedVideo(htmlCode: string): void {
     if (htmlCode) {
-      let code = this.toHtmlEntities(htmlCode)
-      this.setHtmlCode(code)
-      this.copyTextToClipboard(htmlCode)
+      let code = this.toHtmlEntities(htmlCode);
+      this.setHtmlCode(code);
+      this.copyTextToClipboard(htmlCode);
     } else {
-      this.setHtmlCode(null)
+      this.setHtmlCode(null);
     }
   }
 
   setHtmlCode(code: string): void {
-    this.codeField.setText(code)
+    this.codeField.setText(code);
   }
 
   toHtmlEntities(s: string): string {
@@ -153,15 +153,15 @@ export class EmbedVideoPanel extends Container<EmbedVideoPanelConfig> {
   }
 
   copyTextToClipboard(text: string): void {
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    document.body.appendChild(textArea)
-    textArea.select()
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
     try {
-      document.execCommand('copy')
+      document.execCommand('copy');
     } catch (err) {
     }
-    document.body.removeChild(textArea)
+    document.body.removeChild(textArea);
   }
 }
 

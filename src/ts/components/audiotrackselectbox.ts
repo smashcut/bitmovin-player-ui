@@ -24,9 +24,9 @@ export class AudioTrackSelectBox extends SelectBox {
         case 'en_surround':
           return 'English - Surround';
         default:
-          return id
+          return id;
       }
-    }
+    };
 
     let updateAudioTracks = () => {
       let audioTracks = player.getAvailableAudio();
