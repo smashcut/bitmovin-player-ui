@@ -148,7 +148,6 @@ export class SeekBar extends Component<SeekBarConfig> {
     let isSeeking = false;
 
     let dispatchMarkerEvent = (type: string, marker: TimelineMarker) => {
-      console.log('dispatchMarkerEvent', type, marker)
       this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker});
     }
 
@@ -176,18 +175,18 @@ export class SeekBar extends Component<SeekBarConfig> {
         let endTime = marker.time + marker.autoShowDuration / 2;
         if (currentTime >= startTime && currentTime <= endTime) {
           if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
+            this.currentAutoShowTimelineMarkers.push(marker);
             dispatchMarkerEvent('show', marker)
             this.setLabelPosition(marker.timePercentage);
             if (this.hasLabel() && this.getLabel().isHidden()) {
               this.getLabel().show();
-              this.isShowingAutoShowMarker = true
-              this.seekBarEvents.onSeekPreview.dispatch(this, {
-                scrubbing: false,
-                position: marker.timePercentage,
-                marker,
-              });
-              this.currentAutoShowTimelineMarkers.push(marker);
             }
+            this.isShowingAutoShowMarker = true
+            this.seekBarEvents.onSeekPreview.dispatch(this, {
+              scrubbing: false,
+              position: marker.timePercentage,
+              marker,
+            });
           }
         }
       }
