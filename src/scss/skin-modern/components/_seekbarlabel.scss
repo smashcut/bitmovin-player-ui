@@ -7,7 +7,7 @@
 
   bottom: 100%;
   left: 0;
-  margin-bottom: 1em;
+  margin-bottom: 1.5em; //distance of label from timeline
   pointer-events: none;
   position: absolute;
   text-align: center;
@@ -49,6 +49,15 @@
 
   .#{$prefix}-seekbar-thumbnail {
     width: 6em;
+  }
+
+  .#{$prefix}-seekbar-label-logo {
+    @include hidden;
+    width: 40px;
+    height: 40px;
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    background-image: svg('assets/skin-modern/images/smashcut/edited/footer_logo.svg');
   }
 
   .#{$prefix}-seekbar-label-metadata {

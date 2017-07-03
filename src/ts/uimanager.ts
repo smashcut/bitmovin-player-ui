@@ -64,13 +64,15 @@ export interface UIEmbedVideoConfig {
 }
 
 export interface TimelineMarker {
-  time: number;
-  timePercentage?: number
-  title?: string;
-  markerType?: string;
-  comment?: string;
+  autoShowDuration?: number;
   avatar?: string;
+  comment?: string;
+  isAutoShowMarker?: boolean;
+  markerType?: string;
   number?: string;
+  time: number;
+  timePercentage?: number;
+  title?: string;
 }
 
 export interface UIConfig {

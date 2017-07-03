@@ -117,6 +117,20 @@
         height: 8px;
         margin-left: -6px;
       }
+
+      > .#{$prefix}-seekbar-marker-type-smashcut-note {
+        border-radius: 50%;
+        top: 4px;
+        position: absolute;
+        background-color: $color-smashcut-orange;
+        //border: $marker-width solid $color-smashcut-orange;
+        // don't consider the border for width, else it does not overlap at edges
+        box-sizing: content-box;
+        // offset position marker to center it on its actual position
+        width: 8px;
+        height: 8px;
+        margin-left: -6px;
+      }
     }
   }
 

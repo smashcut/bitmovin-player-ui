@@ -1,7 +1,7 @@
 import {Container, ContainerConfig} from './container';
 import {Label, LabelConfig} from './label';
 import {Component, ComponentConfig} from './component';
-import {UIInstanceManager, SeekPreviewArgs} from '../uimanager';
+import {UIInstanceManager, SeekPreviewArgs, TimelineMarker} from '../uimanager';
 import {StringUtils} from '../utils';
 import {DOM} from "../dom";
 
@@ -19,12 +19,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   private avatarLabel: Label<LabelConfig>;
   private commentLabel: Label<LabelConfig>;
+  private logo: Component<ComponentConfig>;
   private markerType: Component<ComponentConfig>;
   private metadata: Component<ComponentConfig>;
   private thumbnail: Component<ComponentConfig>;
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
 
+  private currentMarker: TimelineMarker;
   private markerTypeClass: string;
   private timeFormat: string;
 
@@ -33,6 +35,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
+    this.logo = new Component({cssClasses: ['seekbar-label-logo']});
     this.markerType = new Component({cssClasses: ['seekbar-label-marker-type']});
     this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
@@ -63,6 +66,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       components: [new Container({
         components: [
           this.thumbnail,
+          this.logo,
           this.metadata
         ],
         cssClass: 'seekbar-label-inner',
@@ -75,27 +79,35 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     super.configure(player, uimanager);
 
     uimanager.onSeekPreview.subscribe((sender, args: SeekPreviewArgs) => {
+      this.currentMarker = args.marker
       if (player.isLive()) {
         let time = player.getMaxTimeShift() - player.getMaxTimeShift() * (args.position / 100);
         this.setTime(time);
       } else {
         if (args.marker) {
-          this.setTitleText(args.marker.title);
           this.setSmashcutData(args.marker);
           this.setTimeText(null);
-          this.setThumbnail(null);
-          this.setBackground(true);
+          this.setThumbnail(null, args.marker.isAutoShowMarker ? 40 : 180);
         } else {
-          let percentage = args.position;
-          this.setTitleText(null);
           this.setSmashcutData(null);
+          let percentage = args.position;
           let time = player.getDuration() * (percentage / 100);
           this.setTime(time);
           this.setThumbnail(player.getThumb(time));
-          this.setBackground(false);
         }
       }
     });
+
+    let elem = this.getDomElement()
+
+    elem.on('touchend mouseup', (e: MouseEvent | TouchEvent) => {
+      elem.dispatchSmashcutPlayerUiEvent({
+        action: 'marker-click',
+        e,
+        marker: this.currentMarker
+      })
+
+    })
 
     let init = () => {
       // Set time format depending on source duration
@@ -105,6 +117,17 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
+  }
+
+  hide() {
+    let checkHovered = () => {
+      if (this.isHovered()) {
+        setTimeout(checkHovered, 2000)
+      } else {
+        super.hide()
+      }
+    }
+    setTimeout(checkHovered, 2000)
   }
 
   /**
@@ -123,34 +146,49 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.setTimeText(StringUtils.secondsToTime(seconds, this.timeFormat));
   }
 
-  /**
-   * Sets the text on the title label.
-   * @param text the text to show on the label
-   */
-  setTitleText(text: string) {
-    this.titleLabel.setText(text);
-  }
-
   setSmashcutData(marker: any) {
     if (marker) {
-      this.commentLabel.setText('"' + marker.comment + '"');
-      this.avatarLabel.setText(marker.avatar);
-      this.setMarkerType(marker.markerType)
+      if (marker.isAutoShowMarker) {
+        this.titleLabel.setText(null);
+        this.commentLabel.setText(null);
+        this.avatarLabel.setText(null);
+        this.setMarkerType(null)
+        this.setBackground(false);
+        this.setLogo(true)
+      } else {
+        this.titleLabel.setText(marker.title);
+        this.commentLabel.setText('"' + marker.comment + '"');
+        this.avatarLabel.setText(marker.avatar);
+        this.setMarkerType(marker.markerType)
+        this.setBackground(true);
+        this.setLogo(false)
+      }
     } else {
+      this.titleLabel.setText(null);
       this.commentLabel.setText(null);
       this.avatarLabel.setText(null);
       this.setMarkerType(null)
+      this.setBackground(false);
+      this.setLogo(false)
     }
   }
 
-  setMarkerType(type:string){
+  setMarkerType(type: string) {
     let dom = this.markerType.getDomElement()
-    if(this.markerTypeClass) {
+    if (this.markerTypeClass) {
       dom.removeClass(this.markerTypeClass)
     }
     this.markerTypeClass = type
-    if(this.markerTypeClass) {
+    if (this.markerTypeClass) {
       dom.addClass(type)
+    }
+  }
+
+  setLogo(onOff: boolean) {
+    if(onOff){
+      this.logo.show()
+    } else {
+      this.logo.hide()
     }
   }
 
@@ -158,14 +196,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
    * Sets or removes a thumbnail on the label.
    * @param thumbnail the thumbnail to display on the label or null to remove a displayed thumbnail
    */
-  setThumbnail(thumbnail: bitmovin.PlayerAPI.Thumbnail = null) {
+  setThumbnail(thumbnail: bitmovin.PlayerAPI.Thumbnail = null, width: number = 180) {
     let thumbnailElement = this.thumbnail.getDomElement();
 
     if (thumbnail == null) {
       thumbnailElement.css({
         'background-image': null,
         'display': 'null',
-        'width': '180px',
+        'width': width + 'px',
         'height': 'null'
       });
     }
