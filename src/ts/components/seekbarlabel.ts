@@ -3,7 +3,7 @@ import {Label, LabelConfig} from './label';
 import {Component, ComponentConfig} from './component';
 import {UIInstanceManager, SeekPreviewArgs, TimelineMarker} from '../uimanager';
 import {StringUtils} from '../utils';
-import {DOM} from "../dom";
+import {DOM} from '../dom';
 import {ImageLoader} from '../imageloader';
 
 /**
@@ -51,7 +51,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
           components: [
             this.avatarLabel,
             this.titleLabel,
-            this.markerType
+            this.markerType,
           ],
           cssClass: 'seekbar-label-metadata-title',
         }),
@@ -62,7 +62,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
           cssClass: 'seekbar-label-metadata-content',
         }),
       ],
-      cssClass: 'seekbar-label-metadata'
+      cssClass: 'seekbar-label-metadata',
     });
 
     this.config = this.mergeConfig(config, {
@@ -83,7 +83,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     super.configure(player, uimanager);
 
     uimanager.onSeekPreview.subscribe((sender, args: SeekPreviewArgs) => {
-      this.currentMarker = args.marker
+      this.currentMarker = args.marker;
       if (player.isLive()) {
         let time = player.getMaxTimeShift() - player.getMaxTimeShift() * (args.position / 100);
         this.setTime(time);
@@ -102,16 +102,16 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       }
     });
 
-    let elem = this.getDomElement()
+    let elem = this.getDomElement();
 
     elem.on('touchend mouseup', (e: MouseEvent | TouchEvent) => {
       elem.dispatchSmashcutPlayerUiEvent({
         action: 'marker-click',
         e,
-        marker: this.currentMarker
-      })
+        marker: this.currentMarker,
+      });
 
-    })
+    });
 
     let init = () => {
       // Set time format depending on source duration
@@ -121,17 +121,20 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
+
+    // hide initially without delay
+    super.hide();
   }
 
   hide() {
     let checkHovered = () => {
       if (this.isHovered()) {
-        setTimeout(checkHovered, 2000)
+        setTimeout(checkHovered, 2000);
       } else {
-        super.hide()
+        super.hide();
       }
-    }
-    setTimeout(checkHovered, 2000)
+    };
+    setTimeout(checkHovered, 2000);
   }
 
   /**
@@ -164,43 +167,43 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         this.titleLabel.setText(null);
         this.commentLabel.setText(null);
         this.avatarLabel.setText(null);
-        this.setMarkerType(null)
+        this.setMarkerType(null);
         this.setBackground(false);
-        this.setLogo(true)
+        this.setLogo(true);
       } else {
         this.titleLabel.setText(marker.title);
         this.commentLabel.setText('"' + marker.comment + '"');
         this.avatarLabel.setText(marker.avatar);
-        this.setMarkerType(marker.markerType)
+        this.setMarkerType(marker.markerType);
         this.setBackground(true);
-        this.setLogo(false)
+        this.setLogo(false);
       }
     } else {
       this.titleLabel.setText(null);
       this.commentLabel.setText(null);
       this.avatarLabel.setText(null);
-      this.setMarkerType(null)
+      this.setMarkerType(null);
       this.setBackground(false);
-      this.setLogo(false)
+      this.setLogo(false);
     }
   }
 
   setMarkerType(type: string) {
-    let dom = this.markerType.getDomElement()
+    let dom = this.markerType.getDomElement();
     if (this.markerTypeClass) {
-      dom.removeClass(this.markerTypeClass)
+      dom.removeClass(this.markerTypeClass);
     }
-    this.markerTypeClass = type
+    this.markerTypeClass = type;
     if (this.markerTypeClass) {
-      dom.addClass(type)
+      dom.addClass(type);
     }
   }
 
   setLogo(onOff: boolean) {
-    if(onOff){
-      this.logo.show()
+    if (onOff) {
+      this.logo.show();
     } else {
-      this.logo.hide()
+      this.logo.hide();
     }
   }
 
@@ -243,7 +246,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         thumbnailElement.css({
           'display': 'inherit',
           'background-image': `url(${thumbnail.url})`,
-          'width':  thumbnail.w + 'px',
+          'width': thumbnail.w + 'px',
           'padding-bottom': `${100 * aspectRatio}%`,
           'background-size': `${sizeX}% ${sizeY}%`,
           'background-position': `-${offsetX}% -${offsetY}%`,
@@ -258,13 +261,13 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     if (onOff) {
       metadataElement.css({
         'background': '#fff',
-        'color': '#000'
+        'color': '#000',
       });
     }
     else {
       metadataElement.css({
         'background': 'initial',
-        'color': '#fff'
+        'color': '#fff',
       });
     }
   }
