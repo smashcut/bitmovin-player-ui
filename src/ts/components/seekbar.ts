@@ -149,7 +149,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     let dispatchMarkerEvent = (type: string, marker: TimelineMarker) => {
       this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker});
-    }
+    };
 
     let checkAutoShowMarkers = (currentTime: number, percentage: number) => {
       let filteredCurrentMarkers = [];
@@ -157,7 +157,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         let startTime = marker.time - marker.autoShowDuration / 2;
         let endTime = marker.time + marker.autoShowDuration / 2;
         if (currentTime < startTime || currentTime > endTime) {
-          dispatchMarkerEvent('hide', marker)
+          dispatchMarkerEvent('hide', marker);
           if (this.isShowingAutoShowMarker) {
             this.isShowingAutoShowMarker = false;
             if (this.hasLabel() && !this.getLabel().isHidden()) {
@@ -176,12 +176,12 @@ export class SeekBar extends Component<SeekBarConfig> {
         if (currentTime >= startTime && currentTime <= endTime) {
           if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
             this.currentAutoShowTimelineMarkers.push(marker);
-            dispatchMarkerEvent('show', marker)
+            dispatchMarkerEvent('show', marker);
             this.setLabelPosition(marker.timePercentage);
             if (this.hasLabel() && this.getLabel().isHidden()) {
               this.getLabel().show();
             }
-            this.isShowingAutoShowMarker = true
+            this.isShowingAutoShowMarker = true;
             this.seekBarEvents.onSeekPreview.dispatch(this, {
               scrubbing: false,
               position: marker.timePercentage,
@@ -190,7 +190,7 @@ export class SeekBar extends Component<SeekBarConfig> {
           }
         }
       }
-    }
+    };
 
     // Update playback and buffer positions
     let playbackPositionHandler = (event: PlayerEvent = null, forceUpdate: boolean = false) => {
@@ -218,7 +218,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       else {
         let currentTime = player.getCurrentTime();
         let playbackPositionPercentage = 100 / player.getDuration() * currentTime;
-        checkAutoShowMarkers(currentTime, playbackPositionPercentage)
+        checkAutoShowMarkers(currentTime, playbackPositionPercentage);
 
         let videoBufferLength = player.getVideoBufferLength();
         let audioBufferLength = player.getAudioBufferLength();
@@ -468,7 +468,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       // Generate timeline markers from the config if we have markers and if we have a duration
       // The duration check is for buggy platforms where the duration is not available instantly (Chrome on Android 4.3)
       if (markers && player.getDuration() !== Infinity) {
-        let duration = player.getDuration()
+        let duration = player.getDuration();
         for (let o of markers) {
           let marker = {
             autoShowDuration: o.autoShowDuration || 10, // seconds
@@ -480,8 +480,8 @@ export class SeekBar extends Component<SeekBarConfig> {
             time: o.time,
             timePercentage: 100 / duration * o.time, // convert time to percentage
             title: o.title,
-          }
-          this.timelineMarkers.push(marker)
+          };
+          this.timelineMarkers.push(marker);
           if (marker.isAutoShowMarker) {
             this.autoShowTimelineMarkers.push(marker);
           }
@@ -576,7 +576,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         e,
         position: targetPercentage,
         originator: 'SeekBar'
-      })
+      });
       this.setSeekPosition(targetPercentage);
       this.setPlaybackPosition(targetPercentage);
       this.onSeekPreviewEvent(targetPercentage, true);
@@ -589,20 +589,28 @@ export class SeekBar extends Component<SeekBarConfig> {
       new DOM(document).off('touchend mouseup', mouseTouchUpHandler);
 
       let targetPercentage = 100 * this.getOffset(e);
-      let snappedChapter = this.getMarkerAtPosition(targetPercentage);
+      let snappedMarker = this.getMarkerAtPosition(targetPercentage);
 
       seekBar.dispatchSmashcutPlayerUiEvent({
         action: 'seeking-end',
         e,
         position: targetPercentage,
         originator: 'SeekBar'
-      })
+      });
+
+      if (snappedMarker) {
+        seekBar.dispatchSmashcutPlayerUiEvent({
+          action: 'marker-click',
+          e,
+          marker: snappedMarker,
+        });
+      }
 
       this.setSeeking(false);
       seeking = false;
 
       // Fire seeked event
-      this.onSeekedEvent(snappedChapter ? snappedChapter.timePercentage : targetPercentage);
+      this.onSeekedEvent(snappedMarker ? snappedMarker.timePercentage : targetPercentage);
     };
 
     // A seek always start with a touchstart or mousedown directly on the seekbar.
@@ -618,8 +626,8 @@ export class SeekBar extends Component<SeekBarConfig> {
       // Avoid propagation to VR handler
       e.stopPropagation();
 
-      this.isHoveringTimeline = true
-      seekBar.dispatchSmashcutPlayerUiEvent({action: 'seeking-start', e, originator: 'SeekBar'})
+      this.isHoveringTimeline = true;
+      seekBar.dispatchSmashcutPlayerUiEvent({action: 'seeking-start', e, originator: 'SeekBar'});
 
       this.setSeeking(true); // Set seeking class on DOM element
       seeking = true; // Set seek tracking flag
@@ -632,35 +640,35 @@ export class SeekBar extends Component<SeekBarConfig> {
       new DOM(document).on(isTouchEvent ? 'touchend' : 'mouseup', mouseTouchUpHandler);
     });
 
-    let lastPosition = {x: 0, y: 0}
+    let lastPosition = {x: 0, y: 0};
 
     let isMovingUp = (e: MouseEvent | TouchEvent) => {
-      let pos, returnValue = false
+      let pos, returnValue = false;
 
       if (!this.config.vertical) {
         if (this.touchSupported && e instanceof TouchEvent) {
           pos = {
             x: e.type === 'touchend' ? e.changedTouches[0].pageX : e.touches[0].pageX,
             y: e.type === 'touchend' ? e.changedTouches[0].pageY : e.touches[0].pageY
-          }
+          };
         } else if (e instanceof MouseEvent) {
-          pos = {x: e.pageX, y: e.pageY}
+          pos = {x: e.pageX, y: e.pageY};
         }
         if (pos.y < lastPosition.y) {
-          let verticalDistance = Math.abs(pos.y - lastPosition.y)
-          let horizontalDistance = Math.abs(pos.x - lastPosition.x)
-          returnValue = verticalDistance > horizontalDistance
+          let verticalDistance = Math.abs(pos.y - lastPosition.y);
+          let horizontalDistance = Math.abs(pos.x - lastPosition.x);
+          returnValue = verticalDistance > horizontalDistance;
         }
-        lastPosition = pos
+        lastPosition = pos;
       }
-      return returnValue
-    }
+      return returnValue;
+    };
 
     // Display seek target indicator when mouse hovers or finger slides over seekbar
     seekBar.on('touchmove mousemove', (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
-      this.isHoveringTimeline = true
+      this.isHoveringTimeline = true;
 
       if (seeking) {
         // During a seek (when mouse is down or touch move active), we need to stop propagation to avoid
@@ -686,7 +694,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     seekBar.on('touchend mouseleave', (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
-      this.isHoveringTimeline = false
+      this.isHoveringTimeline = false;
       this.setSeekPosition(0);
 
       if (this.hasLabel()) {
@@ -719,8 +727,8 @@ export class SeekBar extends Component<SeekBarConfig> {
         'data-marker-title': String(marker.title),
       }).css({
         'left': marker.timePercentage + '%',
-      })
-      this.seekBarMarkersContainer.append(markerDom)
+      });
+      this.seekBarMarkersContainer.append(markerDom);
     }
   }
 
@@ -932,7 +940,7 @@ export class SeekBar extends Component<SeekBarConfig> {
   protected onSeekPreviewEvent(percentage: number, scrubbing: boolean) {
     let snappedMarker = this.getMarkerAtPosition(percentage);
 
-    this.setLabelPosition(snappedMarker ? snappedMarker.timePercentage : percentage)
+    this.setLabelPosition(snappedMarker ? snappedMarker.timePercentage : percentage);
 
     this.seekBarEvents.onSeekPreview.dispatch(this, {
       scrubbing: scrubbing,
@@ -986,7 +994,7 @@ export class SeekBar extends Component<SeekBarConfig> {
   }
 
   get commentsOn(): boolean {
-    return this._commentsOn
+    return this._commentsOn;
   }
 
   protected onShowEvent(): void {
