@@ -83,7 +83,8 @@ export interface TimelineMarker {
   comment?: string;
   isAutoShowMarker?: boolean;
   markerType?: string;
-  number?: string;
+  msg: string;
+  originalData: any;
   time: number;
   timePercentage?: number;
   title?: string;
@@ -545,7 +546,7 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-    ));
+      ));
 
     let subtitleSettingsCloseButton = new SubtitleSettingsCloseButton({
       subtitleSettingsPanel: subtitleSettingsPanel,
@@ -607,7 +608,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -656,7 +657,7 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-    ));
+      ));
 
     let subtitleSettingsCloseButton = new SubtitleSettingsCloseButton({
       subtitleSettingsPanel: subtitleSettingsPanel,
@@ -664,16 +665,16 @@ export namespace UIManager.Factory {
     });
     subtitleSettingsPanel.addComponent(new SettingsPanelItem(null, subtitleSettingsCloseButton));
 
-    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
-    subtitleSettingsPanel.addComponent(new CloseButton({ target: subtitleSettingsPanel }));
+    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
+    subtitleSettingsPanel.addComponent(new CloseButton({target: subtitleSettingsPanel}));
 
     let controlBar = new ControlBar({
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({label: new SeekBarLabel()}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -721,7 +722,7 @@ export namespace UIManager.Factory {
         }),
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -752,7 +753,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         new Watermark(),
         controlBar,
-        new TitleBar({ keepHiddenWithoutMetadata: true }),
+        new TitleBar({keepHiddenWithoutMetadata: true}),
         new ErrorMessageOverlay(),
       ],
       cssClasses: ['ui-skin-modern', 'ui-skin-cast-receiver'],
@@ -1201,7 +1202,7 @@ class PlayerWrapper {
     let wrapper = <any>{};
     // Add function wrappers for all API methods that do nothing but calling the base method on the player
     for (let method of methods) {
-      wrapper[method] = function() {
+      wrapper[method] = function () {
         // console.log('called ' + member); // track method calls on the player
         return (<any>player)[method].apply(player, arguments);
       };

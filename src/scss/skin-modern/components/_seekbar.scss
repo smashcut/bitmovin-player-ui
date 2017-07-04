@@ -118,11 +118,11 @@
         margin-left: -6px;
       }
 
-      > .#{$prefix}-seekbar-marker-type-smashcut-note {
+      > .#{$prefix}-seekbar-marker-type-note {
         border-radius: 50%;
         top: 4px;
         position: absolute;
-        background-color: $color-smashcut-orange;
+        background-color: $color-white;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;

@@ -476,7 +476,8 @@ export class SeekBar extends Component<SeekBarConfig> {
             comment: o.comment || '',
             isAutoShowMarker: o.isAutoShowMarker || false,
             markerType: o.markerType || 'default',
-            number: o.number || '',
+            msg: o.msg || '',
+            originalData: o,
             time: o.time,
             timePercentage: 100 / duration * o.time, // convert time to percentage
             title: o.title,
