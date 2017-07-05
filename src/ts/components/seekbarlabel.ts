@@ -28,10 +28,12 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   private titleLabel: Label<LabelConfig>;
 
   private currentMarker: TimelineMarker;
+  private hideTimeoutHandle: any;
   private markerTypeClass: string;
   private thumbnailImageLoader: ImageLoader;
 
   private timeFormat: string;
+
 
   constructor(config: SeekBarLabelConfig = {}) {
     super(config);
@@ -124,22 +126,29 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   }
 
   /**
-   * When a delay is supplied, the function waits until the component is not hovered
+   * When a delay is supplied, the function waits until
+   * the component is not hovered
    * @param delay
    */
   hide(delay: number = 0) {
     if (delay > 0) {
       let checkHovered = () => {
         if (this.isHovered()) {
-          setTimeout(checkHovered, delay);
+          this.hide(delay);
         } else {
           super.hide();
         }
       };
-      setTimeout(checkHovered, delay);
+      clearTimeout(this.hideTimeoutHandle);
+      this.hideTimeoutHandle = setTimeout(checkHovered, delay);
     } else {
       super.hide();
     }
+  }
+
+  show() {
+    clearTimeout(this.hideTimeoutHandle)
+    super.show();
   }
 
   /**
