@@ -479,7 +479,7 @@ export namespace UIManager.Factory {
         new Spacer(),
         new VolumeSlider(),
         new VolumeToggleButton(),
-        new CommentsToggleButton({seekBar: seekBar}),
+        // new CommentsToggleButton({seekBar: seekBar}),
         new ClosedCaptioningToggleButton(),
         new SettingsToggleButton({settingsPanel: settingsPanel}),
         // new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
