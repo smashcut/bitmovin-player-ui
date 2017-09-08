@@ -195,7 +195,6 @@ export class SeekBar extends Component<SeekBarConfig> {
         if (currentTime >= startTime && currentTime <= endTime) {
           if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
             this.currentAutoShowTimelineMarkers.push(marker);
-            dispatchMarkerEvent('show', marker);
             this.setLabelPosition(marker.timePercentage);
             if (this.hasLabel() && this.getLabel().isHidden()) {
               this.getLabel().show();
@@ -207,6 +206,7 @@ export class SeekBar extends Component<SeekBarConfig> {
               marker,
             });
           }
+          dispatchMarkerEvent('show', marker);
         }
       }
     };
