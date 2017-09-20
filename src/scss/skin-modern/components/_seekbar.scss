@@ -120,15 +120,15 @@
 
       > .#{$prefix}-seekbar-marker-type-note {
         border-radius: 50%;
-        top: 4px;
+        top: 2px;
         position: absolute;
-        background-color: $color-white;
+        background-color: $color-smashcut-orange;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        width: 8px;
-        height: 8px;
+        width: 11px;
+        height: 11px;
         margin-left: -6px;
       }
     }
