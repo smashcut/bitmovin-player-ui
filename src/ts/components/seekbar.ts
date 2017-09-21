@@ -663,39 +663,6 @@ export class SeekBar extends Component<SeekBarConfig> {
       new DOM(document).on(isTouchEvent ? 'touchend' : 'mouseup', mouseTouchUpHandler);
     });
 
-    let lastPosition = {x: 0, y: 0};
-
-    let isMovingBelowAutoShowMarker = (e: MouseEvent | TouchEvent) => {
-      let pos, returnValue = false;
-      if (!this.config.vertical) {
-        if (this.touchSupported && e instanceof TouchEvent) {
-          pos = {
-            x: e.type === 'touchend' ? e.changedTouches[0].pageX : e.touches[0].pageX,
-            y: e.type === 'touchend' ? e.changedTouches[0].pageY : e.touches[0].pageY,
-          };
-        }
-        else if (e instanceof MouseEvent) {
-          pos = {x: e.pageX, y: e.pageY};
-        }
-
-        if (this.snappedMarker && this.snappedMarker.isAutoShowMarker) {
-          let l = this.getLabel().getDomElement();
-          let w = l.width();
-          let left = l.offset().left - w / 2;
-          let right = left + w;
-          // console.log(left <= pos.x, pos.x <= right, left, pos.x, right);
-          if (left <= pos.x && pos.x <= right) {
-            returnValue = true;
-          }
-        }
-      }
-      return returnValue;
-    };
-
-    let isPlayingAndShowingAutoShowMarker = () => {
-      return this.isShowingAutoShowMarker;
-    };
-
     // Display seek target indicator when mouse hovers or finger slides over seekbar
     seekBar.on('touchmove mousemove', (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
@@ -708,16 +675,12 @@ export class SeekBar extends Component<SeekBarConfig> {
         mouseTouchMoveHandler(e);
       }
 
-      // For making it easier to click the label, we don't update, when
-      // the mouse is within the horizontal boundaries of the autoShowMarker
-      if (!isMovingBelowAutoShowMarker(e)) {
-        let position = 100 * this.getOffset(e);
-        this.setSeekPosition(position);
-        this.onSeekPreviewEvent(position, false);
+      let position = 100 * this.getOffset(e);
+      this.setSeekPosition(position);
+      this.onSeekPreviewEvent(position, false);
 
-        if (this.hasLabel() && this.getLabel().isHidden()) {
-          this.getLabel().show();
-        }
+      if (this.hasLabel()) {
+        this.getLabel().show();
       }
     });
 
@@ -765,9 +728,9 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   protected getMarkerAtPosition(percentage: number): TimelineMarker | null {
     let snappedMarker: TimelineMarker = null;
-    let snappingRange = 1;
     if (this.timelineMarkers.length > 0) {
       for (let marker of this.timelineMarkers) {
+        let snappingRange = marker.isAutoShowMarker ? 3 : 1;
         if (percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange) {
           snappedMarker = marker;
           break;
