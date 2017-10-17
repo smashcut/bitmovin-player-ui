@@ -512,7 +512,7 @@ export namespace UIManager.Factory {
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
         controlBar,
-        new TitleBar(),
+        // new TitleBar(),
         new RecommendationOverlay(),
         new ErrorMessageOverlay(),
       ],
