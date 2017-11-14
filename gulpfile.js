@@ -32,6 +32,8 @@ var browserSync = require('browser-sync');
 var merge = require('merge2');
 var nativeTslint = require('tslint');
 var npmPackage = require('./package.json');
+var path = require('path');
+var combine = require('stream-combiner2');
 
 var paths = {
   source: {
@@ -44,23 +46,36 @@ var paths = {
     html: './dist',
     js: './dist/js',
     jsframework: './dist/js/framework',
+    jsmain: 'bitmovinplayer-ui.js',
     css: './dist/css'
   }
 };
+
+var replacements = [
+  ['{{VERSION}}', npmPackage.version],
+];
 
 var browserifyInstance = browserify({
   basedir: '.',
   debug: true,
   entries: paths.source.tsmain,
   cache: {},
-  packageCache: {}
+  packageCache: {},
+  standalone: 'bitmovin.playerui',
 }).plugin(tsify);
 
 var catchBrowserifyErrors = false;
 var production = false;
 
+function replaceAll() {
+  var replacementStreams = replacements.map(function(replacement) { return replace(replacement[0], replacement[1]); });
+  return combine.apply(this, replacementStreams);
+}
+
 // Deletes the target directory containing all generated files
-gulp.task('clean', del.bind(null, [paths.target.html]));
+gulp.task('clean', function() {
+  return del([paths.target.html]);
+});
 
 // TypeScript linting
 gulp.task('lint-ts', function() {
@@ -115,8 +130,8 @@ gulp.task('browserify', function() {
 
   // Compile output JS file
   var stream = browserifyBundle
-  .pipe(source('bitmovinplayer-ui.js'))
-  .pipe(replace('{{VERSION}}', npmPackage.version))
+  .pipe(source(paths.target.jsmain))
+  .pipe(replaceAll())
   .pipe(buffer()) // required for production/sourcemaps
   .pipe(gulp.dest(paths.target.js));
 
@@ -129,14 +144,21 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest(paths.target.js));
   }
 
-  stream.pipe(browserSync.reload({stream: true}));
+  return stream.pipe(browserSync.reload({stream: true}));
 });
 
 // Compiles SASS stylesheets to CSS stylesheets in the target directory, adds autoprefixes and creates sourcemaps
 gulp.task('sass', function() {
   var stream = gulp.src(paths.source.sass)
   .pipe(sourcemaps.init())
-  .pipe(sass().on('error', sass.logError))
+  .pipe(sass({
+    includePaths: [
+      // Includes node_modules of the current module
+      path.join(__dirname, 'node_modules'),
+      // Includes node_modules of the current module, or, if used as a dependency in a supermodule where this
+      // gulpfile is reused, includes node_modules of the supermodule
+      './node_modules'],
+  }).on('error', sass.logError))
   .pipe(postcss([
     autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}),
     postcssSVG()
@@ -156,7 +178,7 @@ gulp.task('sass', function() {
     .pipe(gulp.dest(paths.target.css));
   }
 
-  stream.pipe(browserSync.reload({stream: true}));
+  return stream.pipe(browserSync.reload({stream: true}));
 });
 
 // Builds the complete project from the sources into the target directory
@@ -221,6 +243,10 @@ gulp.task('npm-prepare', ['build-prod'], function() {
 
   return merge([
     tsResult.dts.pipe(gulp.dest(paths.target.jsframework)),
-    tsResult.js.pipe(gulp.dest(paths.target.jsframework))
+    tsResult.js.pipe(replaceAll()).pipe(gulp.dest(paths.target.jsframework))
   ]);
 });
+
+// Export the paths object to allow customization (e.g. js output filename) from other gulpfiles that import
+// and reuse the tasks from here.
+module.exports.paths = paths;

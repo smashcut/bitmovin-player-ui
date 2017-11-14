@@ -24,6 +24,7 @@ declare namespace bitmovin {
       ON_AUDIO_CHANGED: EVENT;
       ON_AUDIO_ADDED: EVENT;
       ON_AUDIO_REMOVED: EVENT;
+      ON_AUDIO_QUALITY_CHANGED: EVENT;
       ON_AUDIO_DOWNLOAD_QUALITY_CHANGE: EVENT;
       ON_AUDIO_DOWNLOAD_QUALITY_CHANGED: EVENT;
       ON_AUDIO_PLAYBACK_QUALITY_CHANGED: EVENT;
@@ -37,6 +38,7 @@ declare namespace bitmovin {
       ON_CAST_PLAYBACK_FINISHED: EVENT;
       ON_CAST_TIME_UPDATED: EVENT;
       ON_CUE_ENTER: EVENT;
+      ON_CUE_UPDATE: EVENT;
       ON_CUE_EXIT: EVENT;
       ON_DOWNLOAD_FINISHED: EVENT;
       ON_DVR_WINDOW_EXCEEDED: EVENT;
@@ -70,6 +72,7 @@ declare namespace bitmovin {
       ON_TIME_SHIFTED: EVENT;
       ON_UNMUTED: EVENT;
       ON_VIDEO_ADAPTATION: EVENT;
+      ON_VIDEO_QUALITY_CHANGED: EVENT;
       ON_VIDEO_DOWNLOAD_QUALITY_CHANGE: EVENT;
       ON_VIDEO_DOWNLOAD_QUALITY_CHANGED: EVENT;
       ON_VIDEO_PLAYBACK_QUALITY_CHANGED: EVENT;
@@ -103,7 +106,15 @@ declare namespace bitmovin {
       time: number;
     }
 
-    interface SeekEvent extends PlayerEvent {
+    interface UserInteractionEvent extends PlayerEvent {
+
+      /**
+       * The issuer who lead to the triggering of this event
+       */
+      issuer?: string;
+    }
+
+    interface SeekEvent extends UserInteractionEvent {
       /**
        * The current position (in seconds)
        */
@@ -114,7 +125,7 @@ declare namespace bitmovin {
       seekTarget: number;
     }
 
-    interface VolumeChangedEvent extends PlayerEvent {
+    interface VolumeChangedEvent extends UserInteractionEvent {
       /**
        * The volume before the event has been triggered
        */
@@ -176,7 +187,7 @@ declare namespace bitmovin {
       targetSubtitle: Subtitle;
     }
 
-    interface MediaDownloadQualityChangeEvent<Q extends Quality> extends PlayerEvent {
+    interface MediaQualityChangeEvent<Q extends Quality> extends PlayerEvent {
       /**
        * Previous quality or null if no quality was set before.
        */
@@ -195,16 +206,22 @@ declare namespace bitmovin {
       targetQualityId: string;
     }
 
-    interface VideoDownloadQualityChangeEvent extends MediaDownloadQualityChangeEvent<VideoQuality> {
+    interface VideoQualityChangeEvent extends MediaQualityChangeEvent<VideoQuality> {
     }
 
-    interface AudioDownloadQualityChangeEvent extends MediaDownloadQualityChangeEvent<AudioQuality> {
+    interface AudioQualityChangeEvent extends MediaQualityChangeEvent<AudioQuality> {
     }
 
-    interface VideoDownloadQualityChangedEvent extends MediaDownloadQualityChangeEvent<VideoQuality> {
+    interface VideoDownloadQualityChangeEvent extends MediaQualityChangeEvent<VideoQuality> {
     }
 
-    interface AudioDownloadQualityChangedEvent extends MediaDownloadQualityChangeEvent<AudioQuality> {
+    interface AudioDownloadQualityChangeEvent extends MediaQualityChangeEvent<AudioQuality> {
+    }
+
+    interface VideoDownloadQualityChangedEvent extends MediaQualityChangeEvent<VideoQuality> {
+    }
+
+    interface AudioDownloadQualityChangedEvent extends MediaQualityChangeEvent<AudioQuality> {
     }
 
     interface MediaPlaybackQualityChangeEvent<Q extends Quality> extends PlayerEvent {
@@ -466,6 +483,14 @@ declare namespace bitmovin {
       stereo: boolean;
     }
 
+    interface VRViewingDirectionChangeEvent extends PlayerEvent {
+      direction: bitmovin.PlayerAPI.VR.ViewingDirection;
+    }
+
+    interface VRViewingDirectionChangedEvent extends VRViewingDirectionChangeEvent {
+      //
+    }
+
     interface SubtitleCueEvent extends PlayerEvent {
       start: number;
       end: number;
@@ -473,7 +498,10 @@ declare namespace bitmovin {
       html?: string;
       region?: string;
       regionStyle?: string;
-      position?: string;
+      position?: {
+        row: number;
+        column: number;
+      };
     }
 
     interface PlayerEventCallback {

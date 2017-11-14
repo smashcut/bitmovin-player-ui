@@ -302,8 +302,10 @@ declare namespace bitmovin {
     load(source: PlayerAPI.SourceConfig, forceTechnology?: string, disableSeeking?: boolean): Promise<PlayerAPI>;
     /**
      * Mutes the player if an audio track is available. Has no effect if the player is already muted.
+     *
+     * @param issuer the source of the mute command
      */
-    mute(): PlayerAPI;
+    mute(issuer?: string): PlayerAPI;
     /**
      * Pauses the video if it is playing. Has no effect if the player is already paused.
      */
@@ -346,8 +348,9 @@ declare namespace bitmovin {
      * not possible.
      *
      * @param time The time to seek to
+     * @param issuer the source of the seek command
      */
-    seek(time: number): boolean;
+    seek(time: number, issuer?: string): boolean;
     /**
      * Sets the audio track to the ID specified by trackID.
      * Available tracks can be retrieved with {@link #getAvailableAudio}.
@@ -363,6 +366,10 @@ declare namespace bitmovin {
      * @param audioQualityID The ID of the desired audio quality or 'auto' for dynamic switching
      */
     setAudioQuality(audioQualityID: string): PlayerAPI;
+    /**
+     * Gets the currently set audio quality.
+     */
+    getAudioQuality(): PlayerAPI.AudioQuality;
     /**
      * Sets authentication data which is sent along with the licensing call. Can be used to add more
      * information for a 3rd party licensing backend. The data be any type or object as needed by the
@@ -432,11 +439,16 @@ declare namespace bitmovin {
      */
     setVideoQuality(videoQualityID: string): PlayerAPI;
     /**
+     * Gets the currently set video quality.
+     */
+    getVideoQuality(): PlayerAPI.VideoQuality;
+    /**
      * Sets the player’s volume in the range of 0 (silent) to 100 (max volume). Unmutes a muted player.
      *
      * @param volume The volume to set between 0 and 100
+     * @param issuer the source of the setVolume command
      */
-    setVolume(volume: number): PlayerAPI;
+    setVolume(volume: number, issuer?: string): PlayerAPI;
     /**
      * Enables or disables stereo mode for VR content.
      *
@@ -455,16 +467,19 @@ declare namespace bitmovin {
      * value has to be within the timeShift window as specified by {@link #getMaxTimeShift}.
      *
      * @param offset The offset to timeshift to
+     * @param issuer The issuer of the timeShift command
      */
-    timeShift(offset: number): PlayerAPI;
+    timeShift(offset: number, issuer?: string): PlayerAPI;
     /**
      * Unloads the current video source.
      */
     unload(): PlayerAPI;
     /**
      * Unmutes the player if muted.
+     *
+     * @param issuer the issuer of the unmute command
      */
-    unmute(): PlayerAPI;
+    unmute(issuer?: string): PlayerAPI;
 
     fireEvent(event: PlayerAPI.EVENT, data: {}): void;
     /**
@@ -499,6 +514,10 @@ declare namespace bitmovin {
      * Exit picture in picture mode.
      */
     exitPictureInPicture(): PlayerAPI;
+    /**
+     * Starts preloading the content of the currently loaded source.
+     */
+    preload(): PlayerAPI;
 
     VR: {
       CONTENT_TYPE: {
@@ -606,6 +625,16 @@ declare namespace bitmovin {
     }
 
     /**
+     * Describes the role of a media track, e.g. an {@link AudioTrack}.
+     */
+    interface MediaTrackRole {
+      schemeIdUri: string;
+      value?: string;
+      id?: string;
+      [key: string]: string;
+    }
+
+    /**
      * Definition of an audio track.
      */
     interface AudioTrack {
@@ -621,6 +650,10 @@ declare namespace bitmovin {
        * The text used to represent this track to the user (e.g. in the UI).
        */
       label: string;
+      /**
+       * The optional roles of the track.
+       */
+      role?: MediaTrackRole[];
     }
 
     /**

@@ -1,7 +1,7 @@
 import {ToggleButton, ToggleButtonConfig} from './togglebutton';
 import {UIInstanceManager} from '../uimanager';
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
-import {PlayerUtils} from '../utils';
+import {PlayerUtils} from '../playerutils';
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
 
 /**
@@ -43,6 +43,10 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
     // Call handler upon these events
     player.addEventHandler(player.EVENT.ON_PLAY, playbackStateHandler);
     player.addEventHandler(player.EVENT.ON_PAUSED, playbackStateHandler);
+    if (player.EVENT.ON_PLAYING) {
+      // Since player 7.3. Not really necessary but just in case we ever miss the ON_PLAY event.
+      player.addEventHandler(player.EVENT.ON_PLAYING, playbackStateHandler);
+    }
     // when playback finishes, player turns to paused mode
     player.addEventHandler(player.EVENT.ON_PLAYBACK_FINISHED, playbackStateHandler);
     player.addEventHandler(player.EVENT.ON_CAST_STARTED, playbackStateHandler);
@@ -70,10 +74,10 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
       this.onClick.subscribe((e) => {
         if (player.isPlaying()) {
           this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'pause', e, originator: 'PlaybackToggleButton'})
-          player.pause('ui-button');
+          player.pause('ui');
         } else {
           this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', e, originator: 'PlaybackToggleButton'})
-          player.play('ui-button');
+          player.play('ui');
         }
       });
     }

@@ -25,10 +25,10 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
     let togglePlayback = () => {
       if (player.isPlaying()) {
         this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'pause', originator: 'HugePlaybackToggleButton'})
-        player.pause('ui-overlay');
+        player.pause('ui');
       } else {
         this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', originator: 'HugePlaybackToggleButton'})
-        player.play('ui-overlay');
+        player.play('ui');
       }
     };
 

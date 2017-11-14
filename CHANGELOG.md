@@ -4,6 +4,101 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.10.4]
+
+### Changed
+- Remove `nowrap` from CEA-608 style to correctly render multiline cues
+- `PlaybackToggleButton` now also listens to `ON_PLAYING` in addition to `ON_PLAY`
+
+## [2.10.3]
+
+### Fixed
+- Handling of whitespaces in CEA-608 texts
+
+## [2.10.2]
+
+### Changed
+- Rewritten CEA-608 text layouting
+- Greatly simplified CEA-608 CSS style (`.{prefix}-ui-subtitle-overlay.{prefix}-cea608`)
+- Calculate CEA-608 font size only with active CEA-608 cues
+
+### Fixed
+- Overlapping CEA-608 texts with large player aspect ratios
+
+## [2.10.1]
+
+### Changed
+- Removed `VolumeControlButton`'s `VolumeSlider` slide-in animation in the legacy skin to fix the slider knob at 100% bug
+
+### Fixed
+- Vertical `VolumeSlider` knob in legacy skin was not visible when set to a low volume 
+- Legacy skin's `VolumeSlider` knob was always rendered at 100% when appearing after being hidden
+- Avoid `ItemSelectionList` DOM recreation on item selection to avoid unexpected events (e.g. `mouseenter`)
+
+## [2.10.0]
+
+### Added
+- Update `AudioQualitySelectBox`/`VideoQualitySelectBox` entries when the period of a source changes
+
+### Changed
+- Export bundled UI (`bitmovinplayer-ui.js`) as UMD module (instead of global module)
+
+### Fixed
+- Fix `Uncaught TypeError` when `require`ing UI before player
+- Don't write UI into global namespace (`bitmovin.playerui`) when loaded as module with `require`
+
+## [2.9.0]
+
+### Added
+- Support CEA-608 subtitle positioning
+- Added `ui` issuer parameter to all applicable player API calls (seek, timeshift, mute, unmute, setVolume)
+
+### Changed
+- Unified player API issuer parameter to always be `ui` instead of `ui-{componentName}`
+
+### Fixed
+- Select correct audio track after updating the items in `AudioTrackSelectBox`
+
+## [2.8.3]
+
+### Changed
+- Use new quality change API in `AudioQualitySelectBox` and `VideoQualitySelectBox` for player >= 7.3.1 (selection is now synced with player-API `set[Audio|Video]Quality` calls)
+
+## [2.8.2]
+
+Release of this version went wrong and it was unpublished from NPM.
+
+### Fixed
+- Fix `animate-slide-in-from-bottom` SCSS mixin (fixes missing `VolumeSlider` slide-in animation of `VolumeControlButton` in the legacy skin)
+- Fire `ON_READY` event if UI is loaded after player is ready to initialize all components correctly
+
+## [2.8.1]
+
+### Fixed
+- Early quality selection in `AudioQualitySelectBox`/`VideoQualitySelectBox` before `ON_READY` broke players <= 7.2.5
+
+## [2.8.0]
+
+### Added
+- Adds a `VolumeToggleButton` to the small screen UI
+
+### Changed
+- Moved all subtitle styling to CSS (default subtitle style is not overwritten any longer)
+
+### Fixed
+- Fix clearing of container components with `Container#removeComponents` (fixes sticky/duplicate subtitle issue)
+- Fix updating container components with `Container#updateComponents` (fixes empty subtitles in IE11)
+- Fix handling of duplicate subtitle cues (same text at same time) in `SubtitleOverlay` (fixes another sticky subtitle issue)
+- Fix clearing of recommendations in `RecommendationOverlay` (fixes duplicate recommendations issue)
+- Reset selected value in `ListSelector` when the items are cleared
+- Updating selected value in `PlaybackSpeedSelectBox` when player is ready
+- Fix video quality options for progressive streams (removed 'auto' option, preferred quality preselected)
+
+## [2.7.1]
+
+### Changed
+- Throttled high-frequency API calls to the player from the `VolumeSlider` and `SeekBarLabel`
+
 ## [2.7.0]
 
 ### Added
@@ -182,6 +277,17 @@ Version 2.0 of the UI framework is built for player 7.1. If absolutely necessary
 ## 1.0.0 - 2017-02-03
 - First release
 
+[2.10.4]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.10.3...v2.10.4
+[2.10.3]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.10.2...v2.10.3
+[2.10.2]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.10.1...v2.10.2
+[2.10.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.10.0...v2.10.1
+[2.10.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.9.0...v2.10.0
+[2.9.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.8.3...v2.9.0
+[2.8.3]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.8.2...v2.8.3
+[2.8.2]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.8.1...v2.8.2
+[2.8.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.8.0...v2.8.1
+[2.8.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.7.1...v2.8.0
+[2.7.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/bitmovin/bitmovin-player-ui/compare/v2.5.0...v2.5.1

@@ -1,89 +1,56 @@
 import {Container, ContainerConfig} from './container';
-import {UIInstanceManager, UISubtitleConfig} from '../uimanager';
+import {UIInstanceManager} from '../uimanager';
 import SubtitleCueEvent = bitmovin.PlayerAPI.SubtitleCueEvent;
 import {Label, LabelConfig} from './label';
 import {ComponentConfig, Component} from './component';
 import {ControlBar} from './controlbar';
-import {ColorUtils, StorageUtils} from '../utils';
-import {DOM} from '../dom';
-
-export interface SubtitleOverlayConfig extends ContainerConfig {
-  subtitleConfig?: UISubtitleConfig;
-}
 
 /**
  * Overlays the player to display subtitles.
  */
-export class SubtitleOverlay extends Container<SubtitleOverlayConfig> {
-
-  public config: SubtitleOverlayConfig;
+export class SubtitleOverlay extends Container<ContainerConfig> {
 
   private subtitleManager: ActiveSubtitleManager;
   private previewSubtitleActive: boolean;
   private previewSubtitle: SubtitleLabel;
 
   private static readonly CLASS_CONTROLBAR_VISIBLE = 'controlbar-visible';
+  private static readonly CLASS_CEA_608 = 'cea608';
+  // The number of rows in a cea608 grid
+  private static readonly CEA608_NUM_ROWS = 15;
+  // The number of columns in a cea608 grid
+  private static readonly CEA608_NUM_COLUMNS = 32;
+  // The offset in percent for one row (which is also the height of a row)
+  private static readonly CEA608_ROW_OFFSET = 100 / SubtitleOverlay.CEA608_NUM_ROWS;
+  // The offset in percent for one column (which is also the width of a column)
+  private static readonly CEA608_COLUMN_OFFSET = 100 / SubtitleOverlay.CEA608_NUM_COLUMNS;
 
-  private fontColor?: ColorUtils.Color;
-  private backgroundColor?: ColorUtils.Color;
-  private windowColor?: ColorUtils.Color;
-  private fontFamily?: string;
-  private fontStyle?: string;
-  private fontVariant?: string;
-  private characterEdge?: string;
-  /**
-   * Font size is defined by a base size
-   * and a multiplicating coefficient depending
-   * on user preferences
-   **/
-  private fontCoefficient?: number;
-  private fontSize?: number;
-
-  constructor(config: SubtitleOverlayConfig = {}) {
+  constructor(config: ContainerConfig = {}) {
     super(config);
 
     this.previewSubtitleActive = false;
-    this.previewSubtitle = new SubtitleLabel({text: 'example subtitle'});
+    this.previewSubtitle = new SubtitleLabel({ text: 'example subtitle' });
 
-    this.config = this.mergeConfig( config, {
-        cssClass: 'ui-subtitle-overlay',
-      }, this.config);
+    this.config = this.mergeConfig(config, {
+      cssClass: 'ui-subtitle-overlay',
+    }, this.config);
   }
 
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
-    let config = <SubtitleOverlayConfig>this.config;
-
-    this.fontColor = ColorUtils.foreground;
-    this.backgroundColor = ColorUtils.background;
-    this.windowColor = ColorUtils.background;
-    this.fontFamily = '';
-    this.fontStyle = '';
-    this.fontVariant = 'normal';
-    this.characterEdge = '';
-    this.fontCoefficient = 1;
-    this.fontSize = 1.2;
-
-    // Update the config first loading info from UImanager config
-    // then overwrites it with config given to the component if it applies
-    // finally loads user preferences from local storage
-    this.updateSubtitleOverlayFromUIconfig(config.subtitleConfig);
-    this.updateSubtitleOverlayFromUIconfig(uimanager.getConfig().subtitles);
-    this.updateSubtitleOverlayFromLocalStorage();
-
-    // This css property isn't applied to the subtitle cue
-    // and therefore shoud be applied now
-    this.getDomElement().css('background', this.windowColor.toCSS());
-    this.updateSubtitleLabelCss();
-
     let subtitleManager = new ActiveSubtitleManager();
     this.subtitleManager = subtitleManager;
 
     player.addEventHandler(player.EVENT.ON_CUE_ENTER, (event: SubtitleCueEvent) => {
-      let labelToAdd = subtitleManager.cueEnter(event);
+      // Sanitize cue data (must be done before the cue ID is generated in subtitleManager.cueEnter)
+      if (event.position) {
+        // Sometimes the positions are undefined, we assume them to be zero
+        event.position.row = event.position.row || 0;
+        event.position.column = event.position.column || 0;
+      }
 
-      this.applyConfToDom(labelToAdd.getDomElement());
+      let labelToAdd = subtitleManager.cueEnter(event);
 
       if (this.previewSubtitleActive) {
         this.removeComponent(this.previewSubtitle);
@@ -123,6 +90,7 @@ export class SubtitleOverlay extends Container<SubtitleOverlayConfig> {
     player.addEventHandler(player.EVENT.ON_SEEK, subtitleClearHandler);
     player.addEventHandler(player.EVENT.ON_TIME_SHIFT, subtitleClearHandler);
     player.addEventHandler(player.EVENT.ON_PLAYBACK_FINISHED, subtitleClearHandler);
+    player.addEventHandler(player.EVENT.ON_SOURCE_UNLOADED, subtitleClearHandler);
 
     uimanager.onComponentShow.subscribe((component: Component<ComponentConfig>) => {
       if (component instanceof ControlBar) {
@@ -135,91 +103,139 @@ export class SubtitleOverlay extends Container<SubtitleOverlayConfig> {
       }
     });
 
+    this.configureCea608Captions(player, uimanager);
     // Init
     subtitleClearHandler();
   }
 
-  /**
-   * Updates the setting used to display subtitles based on config information
-   **/
-  private updateSubtitleOverlayFromUIconfig(subtitlesConfig: UISubtitleConfig): void {
-    if (subtitlesConfig == null) {
-      return;
-    }
-    if (subtitlesConfig.backgroundColor != null) {
-      this.backgroundColor = ColorUtils.colorFromCss(subtitlesConfig.backgroundColor);
-    }
-    if (subtitlesConfig.fontColor != null) {
-      this.fontColor = ColorUtils.colorFromCss(subtitlesConfig.fontColor);
-    }
-    if (subtitlesConfig.windowColor != null) {
-      this.windowColor = ColorUtils.colorFromCss(subtitlesConfig.windowColor);
-    }
-    if (this.fontFamily != null) {
-      this.fontFamily = subtitlesConfig.fontFamily;
-    }
-    if (this.fontVariant != null) {
-      this.fontVariant = subtitlesConfig.fontVariant;
-    }
-    if (this.fontStyle != null) {
-      this.fontStyle = subtitlesConfig.fontStyle;
-    }
-    if (this.fontCoefficient != null) {
-      this.fontCoefficient = subtitlesConfig.fontCoefficient;
-    }
-    if (this.characterEdge != null) {
-      this.characterEdge = subtitlesConfig.characterEdge;
-    }
-    if (this.characterEdge != null) {
-      this.characterEdge = subtitlesConfig.characterEdge;
-    }
-  }
+  configureCea608Captions(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
+    // The calculated font size
+    let fontSize = 0;
+    // The required letter spacing spread the text characters evenly across the grid
+    let fontLetterSpacing = 0;
+    // Flag telling if a font size calculation is required of if the current values are valid
+    let fontSizeCalculationRequired = true;
+    // Flag telling if the CEA-608 mode is enabled
+    let enabled = false;
 
-  /**
-   *  update the settings used to diplay subtitles based on local storage values
-   **/
-  private updateSubtitleOverlayFromLocalStorage(): void {
-    if (StorageUtils.hasLocalStorage()) {
-      let store = window.localStorage;
+    const updateCEA608FontSize = () => {
+      const dummyLabel = new SubtitleLabel({ text: 'X' });
+      dummyLabel.getDomElement().css({
+        // By using a large font size we do not need to use multiple letters and can get still an
+        // accurate measurement even though the returned size is an integer value
+        'font-size': '200px',
+        'line-height': '200px',
+        'visibility': 'hidden',
+      });
+      this.addComponent(dummyLabel);
+      this.updateComponents();
+      this.show();
 
-      let fontColor = store.getItem('fontColor');
-      if (fontColor != null) {
-        this.fontColor = ColorUtils.colorFromCss(fontColor, ColorUtils.foreground);
-      }
-      let backgroundColor = store.getItem('backgroundColor');
-      if (backgroundColor != null) {
-        this.backgroundColor = ColorUtils.colorFromCss(backgroundColor, ColorUtils.background);
-      }
-      let windowColor = store.getItem('windowColor');
-      if (windowColor != null) {
-        this.windowColor = ColorUtils.colorFromCss(windowColor, ColorUtils.background);
-      }
-      let fontFamily = store.getItem('fontFamily');
-      if (fontFamily != null) {
-        this.fontFamily = fontFamily;
-      }
-      let fontStyle = store.getItem('fontStyle');
-      if (fontStyle != null) {
-        this.fontStyle = fontStyle;
-      }
-      let fontVariant = store.getItem('fontVariant');
-      if (fontVariant != null) {
-        this.fontVariant = fontVariant;
-      }
-      let characterEdge = store.getItem('characterEdge');
-      if (characterEdge != null) {
-        this.characterEdge = characterEdge;
-      }
-      let fontCoefficient = store.getItem('fontCoefficient');
-      if (fontCoefficient != null) {
-        this.fontCoefficient = Number(fontCoefficient);
-      }
-    }
-  }
+      const dummyLabelCharWidth = dummyLabel.getDomElement().width();
+      const dummyLabelCharHeight = dummyLabel.getDomElement().height();
+      const fontSizeRatio = dummyLabelCharWidth / dummyLabelCharHeight;
 
-  private updateSubtitleLabelCss(): void {
-    this.applyConfToDom(this.getDomElement().find('.bmpui-ui-subtitle-label'));
-    this.applyConfToDom(this.previewSubtitle.getDomElement());
+      this.removeComponent(dummyLabel);
+      this.updateComponents();
+      if (!this.subtitleManager.hasCues) {
+        this.hide();
+      }
+
+      // We subtract 1px here to avoid line breaks at the right border of the subtitle overlay that can happen
+      // when texts contain whitespaces. It's probably some kind of pixel rounding issue in the browser's
+      // layouting, but the actual reason could not be determined. Aiming for a target width - 1px solves the issue.
+      const subtitleOverlayWidth = this.getDomElement().width() - 1;
+      const subtitleOverlayHeight = this.getDomElement().height();
+
+      // The size ratio of the letter grid
+      const fontGridSizeRatio = (dummyLabelCharWidth * SubtitleOverlay.CEA608_NUM_COLUMNS) /
+        (dummyLabelCharHeight * SubtitleOverlay.CEA608_NUM_ROWS);
+      // The size ratio of the available space for the grid
+      const subtitleOverlaySizeRatio = subtitleOverlayWidth / subtitleOverlayHeight;
+
+      if (subtitleOverlaySizeRatio > fontGridSizeRatio) {
+        // When the available space is wider than the text grid, the font size is simply
+        // determined by the height of the available space.
+        fontSize = subtitleOverlayHeight / SubtitleOverlay.CEA608_NUM_ROWS;
+
+        // Calculate the additional letter spacing required to evenly spread the text across the grid's width
+        const gridSlotWidth = subtitleOverlayWidth / SubtitleOverlay.CEA608_NUM_COLUMNS;
+        const fontCharWidth = fontSize * fontSizeRatio;
+        fontLetterSpacing = gridSlotWidth - fontCharWidth;
+      } else {
+        // When the available space is not wide enough, texts would vertically overlap if we take
+        // the height as a base for the font size, so we need to limit the height. We do that
+        // by determining the font size by the width of the available space.
+        fontSize = subtitleOverlayWidth / SubtitleOverlay.CEA608_NUM_COLUMNS / fontSizeRatio;
+        fontLetterSpacing = 0;
+      }
+
+      // Update font-size of all active subtitle labels
+      for (let label of this.getComponents()) {
+        if (label instanceof SubtitleLabel) {
+          label.getDomElement().css({
+            'font-size': `${fontSize}px`,
+            'letter-spacing': `${fontLetterSpacing}px`,
+          });
+        }
+      }
+    };
+
+    player.addEventHandler(player.EVENT.ON_PLAYER_RESIZE, () => {
+      if (enabled) {
+        updateCEA608FontSize();
+      } else {
+        fontSizeCalculationRequired = true;
+      }
+    });
+
+    player.addEventHandler(player.EVENT.ON_CUE_ENTER, (event: SubtitleCueEvent) => {
+      const isCEA608 = event.position != null;
+      if (!isCEA608) {
+        // Skip all non-CEA608 cues
+        return;
+      }
+
+      const labels = this.subtitleManager.getCues(event);
+
+      if (!enabled) {
+        enabled = true;
+        this.getDomElement().addClass(this.prefixCss(SubtitleOverlay.CLASS_CEA_608));
+
+        // We conditionally update the font size by this flag here to avoid updating every time a subtitle
+        // is added into an empty overlay. Because we reset the overlay when all subtitles are gone, this
+        // would trigger an unnecessary update every time, but it's only required under certain conditions,
+        // e.g. after the player size has changed.
+        if (fontSizeCalculationRequired) {
+          updateCEA608FontSize();
+          fontSizeCalculationRequired = false;
+        }
+      }
+      for (let label of labels) {
+        label.getDomElement().css({
+          'left': `${event.position.column * SubtitleOverlay.CEA608_COLUMN_OFFSET}%`,
+          'top': `${event.position.row * SubtitleOverlay.CEA608_ROW_OFFSET}%`,
+          'font-size': `${fontSize}px`,
+          'letter-spacing': `${fontLetterSpacing}px`,
+        });
+      }
+    });
+
+    const reset = () => {
+      this.getDomElement().removeClass(this.prefixCss(SubtitleOverlay.CLASS_CEA_608));
+      enabled = false;
+    };
+
+    player.addEventHandler(player.EVENT.ON_CUE_EXIT, () => {
+      if (!this.subtitleManager.hasCues) {
+        // Disable CEA-608 mode when all subtitles are gone (to allow correct formatting and
+        // display of other types of subtitles, e.g. the formatting preview subtitle)
+        reset();
+      }
+    });
+
+    player.addEventHandler(player.EVENT.ON_SOURCE_UNLOADED, reset);
+    player.addEventHandler(player.EVENT.ON_SUBTITLE_CHANGED, reset);
   }
 
   enablePreviewSubtitleLabel(): void {
@@ -236,109 +252,6 @@ export class SubtitleOverlay extends Container<SubtitleOverlayConfig> {
     this.removeComponent(this.previewSubtitle);
     this.updateComponents();
   }
-
-  // Methods used to define custom styling on subtitles labels
-  setColor(color: string): void {
-    let col = ColorUtils.colorFromCss(color);
-    col.a = this.fontColor.a;
-    this.fontColor = col;
-    this.updateSubtitleLabelCss();
-    this.setItem('fontColor', this.fontColor.toCSS());
-  }
-
-  setBackgroundColor(color: string): void {
-    let backgroundColor = ColorUtils.colorFromCss(color);
-    backgroundColor.a = this.backgroundColor.a;
-    this.backgroundColor = backgroundColor;
-    this.updateSubtitleLabelCss();
-    this.setItem('backgroundColor', this.backgroundColor.toCSS());
-  }
-
-  setWindowColor(color: string): void {
-    let windowColor = ColorUtils.colorFromCss(color);
-    windowColor.a = this.windowColor.a;
-    this.windowColor = windowColor;
-    this.getDomElement().css('background', this.windowColor.toCSS());
-    this.setItem('windowColor', this.windowColor.toCSS());
-  }
-
-  setFontOpacity(alpha: number): void {
-    this.fontColor.a = alpha;
-    this.updateSubtitleLabelCss();
-    this.setItem('fontColor', this.fontColor.toCSS());
-  }
-
-  setBackgroundOpacity(alpha: number): void {
-    this.backgroundColor.a = alpha;
-    this.updateSubtitleLabelCss();
-    this.setItem('backgroundColor', this.backgroundColor.toCSS());
-  }
-
-  setWindowOpacity(alpha: number): void {
-    this.windowColor.a = alpha;
-    this.getDomElement().css('background', this.windowColor.toCSS());
-    this.setItem('windowColor', this.windowColor.toCSS());
-  }
-
-  setFontFamily(fontFamily: string): void {
-    this.fontFamily = fontFamily;
-    this.setItem('fontFamily', this.fontFamily);
-    this.updateSubtitleLabelCss();
-  }
-
-  setFontStyle(fontStyle: string): void {
-    this.fontStyle = fontStyle;
-    this.setItem('fontStyle', this.fontStyle);
-    this.updateSubtitleLabelCss();
-  }
-
-  setFontVariant(fontVariant: string): void {
-    this.fontVariant = fontVariant;
-    this.setItem('fontVariant', this.fontVariant);
-    this.updateSubtitleLabelCss();
-  }
-
-  /**
-   * A helper method to avoid updating the CSS label 3 times in a row
-   * since family, style and variant are normally updated together
-   **/
-  setFont(fontFamily: string, fontStyle: string, fontVariant: string): void {
-    this.fontFamily = fontFamily;
-    this.setItem('fontFamily', this.fontFamily);
-    this.fontStyle = fontStyle;
-    this.setItem('fontStyle', this.fontStyle);
-    this.fontVariant = fontVariant;
-    this.setItem('fontVariant', this.fontVariant);
-    this.updateSubtitleLabelCss();
-  }
-
-  setCharacterEdge(characterEdge: string): void {
-    this.characterEdge = characterEdge;
-    this.updateSubtitleLabelCss();
-    this.setItem('characterEdge', this.characterEdge);
-  }
-
-  setFontSize(coefficient: number): void {
-    this.fontCoefficient = coefficient;
-    this.updateSubtitleLabelCss();
-    this.setItem('fontCoefficient', this.fontCoefficient.toString());
-  }
-
-  private applyConfToDom(dom: DOM): void {
-    dom.css('color', this.fontColor.toCSS());
-    dom.css('background', this.backgroundColor.toCSS());
-    dom.css('font-variant', this.fontVariant);
-    dom.css('font-family', this.fontFamily);
-    dom.css('font-style', this.fontStyle);
-    dom.css('text-shadow', this.characterEdge);
-    dom.css('font-size', `${this.fontSize * this.fontCoefficient}em`);
-  }
-
-  private setItem(item: string, value: string): void {
-    if (StorageUtils.hasLocalStorage()) {
-      window.localStorage.setItem(item, value);
-    }
-  }
 }
 
 interface ActiveSubtitleCue {
@@ -347,7 +260,7 @@ interface ActiveSubtitleCue {
 }
 
 interface ActiveSubtitleCueMap {
-  [id: string]: ActiveSubtitleCue;
+  [id: string]: ActiveSubtitleCue[];
 }
 
 class SubtitleLabel extends Label<LabelConfig> {
@@ -364,23 +277,31 @@ class SubtitleLabel extends Label<LabelConfig> {
 class ActiveSubtitleManager {
 
   private activeSubtitleCueMap: ActiveSubtitleCueMap;
+  private activeSubtitleCueCount: number;
 
   constructor() {
     this.activeSubtitleCueMap = {};
+    this.activeSubtitleCueCount = 0;
   }
 
   /**
    * Calculates a unique ID for a subtitle cue, which is needed to associate an ON_CUE_ENTER with its ON_CUE_EXIT
    * event so we can remove the correct subtitle in ON_CUE_EXIT when multiple subtitles are active at the same time.
    * The start time plus the text should make a unique identifier, and in the only case where a collision
-   * can happen, two similar texts will displayed at a similar time so it does not matter which one we delete.
+   * can happen, two similar texts will be displayed at a similar time and a similar position (or without position).
    * The start time should always be known, because it is required to schedule the ON_CUE_ENTER event. The end time
    * must not necessarily be known and therefore cannot be used for the ID.
    * @param event
    * @return {string}
    */
   private static calculateId(event: SubtitleCueEvent): string {
-    return event.start + event.text;
+    let id = event.start + '-' + event.text;
+
+    if (event.position) {
+      id += '-' + event.position.row + '-' + event.position.column;
+    }
+
+    return id;
   }
 
   /**
@@ -396,9 +317,29 @@ class ActiveSubtitleManager {
       text: event.html || event.text,
     });
 
-    this.activeSubtitleCueMap[id] = { event, label };
+    // Create array for id if it does not exist
+    this.activeSubtitleCueMap[id] = this.activeSubtitleCueMap[id] || [];
+
+    // Add cue
+    this.activeSubtitleCueMap[id].push({ event, label });
+    this.activeSubtitleCueCount++;
 
     return label;
+  }
+
+  /**
+   * Returns the label associated with an already added cue.
+   * @param event
+   * @return {SubtitleLabel}
+   */
+  getCues(event: SubtitleCueEvent): SubtitleLabel[] {
+    let id = ActiveSubtitleManager.calculateId(event);
+    let activeSubtitleCues = this.activeSubtitleCueMap[id];
+    if (activeSubtitleCues && activeSubtitleCues.length > 0) {
+      return activeSubtitleCues.map((cue) => cue.label);
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -409,10 +350,20 @@ class ActiveSubtitleManager {
    */
   cueExit(event: SubtitleCueEvent): SubtitleLabel {
     let id = ActiveSubtitleManager.calculateId(event);
-    let activeSubtitleCue = this.activeSubtitleCueMap[id];
+    let activeSubtitleCues = this.activeSubtitleCueMap[id];
 
-    if (activeSubtitleCue) {
-      delete this.activeSubtitleCueMap[id];
+    if (activeSubtitleCues && activeSubtitleCues.length > 0) {
+      // Remove cue
+      /* We apply the FIFO approach here and remove the oldest cue from the associated id. When there are multiple cues
+       * with the same id, there is no way to know which one of the cues is to be deleted, so we just hope that FIFO
+       * works fine. Theoretically it can happen that two cues with colliding ids are removed at different times, in
+       * the wrong order. This rare case has yet to be observed. If it ever gets an issue, we can take the unstable
+       * cue end time (which can change between ON_CUE_ENTER and ON_CUE_EXIT IN ON_CUE_UPDATE) and use it as an
+       * additional hint to try and remove the correct one of the colliding cues.
+       */
+      let activeSubtitleCue = activeSubtitleCues.shift();
+      this.activeSubtitleCueCount--;
+
       return activeSubtitleCue.label;
     } else {
       return null;
@@ -424,7 +375,8 @@ class ActiveSubtitleManager {
    * @return {number}
    */
   get cueCount(): number {
-    return Object.keys(this.activeSubtitleCueMap).length;
+    // We explicitly count the cues to save an Array.reduce on every cueCount call (which can happen frequently)
+    return this.activeSubtitleCueCount;
   }
 
   /**
@@ -440,5 +392,6 @@ class ActiveSubtitleManager {
    */
   clear(): void {
     this.activeSubtitleCueMap = {};
+    this.activeSubtitleCueCount = 0;
   }
 }

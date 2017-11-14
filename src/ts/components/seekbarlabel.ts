@@ -2,8 +2,7 @@ import {Container, ContainerConfig} from './container';
 import {Label, LabelConfig} from './label';
 import {Component, ComponentConfig} from './component';
 import {UIInstanceManager, SeekPreviewArgs, TimelineMarker} from '../uimanager';
-import {StringUtils} from '../utils';
-import {DOM} from '../dom';
+import {StringUtils} from '../stringutils';
 import {ImageLoader} from '../imageloader';
 
 /**
@@ -38,6 +37,10 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   constructor(config: SeekBarLabelConfig = {}) {
     super(config);
 
+    this.timeLabel = new Label({ cssClasses: ['seekbar-label-time'] });
+    this.titleLabel = new Label({ cssClasses: ['seekbar-label-title'] });
+    this.thumbnail = new Component({ cssClasses: ['seekbar-thumbnail'] });
+    this.thumbnailImageLoader = new ImageLoader();
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
     this.logo = new Component({cssClasses: ['seekbar-label-logo']});
@@ -69,7 +72,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-seekbar-label',
-      hidden: true,
       components: [new Container({
         components: [
           this.thumbnail,
@@ -78,16 +80,18 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         ],
         cssClass: 'seekbar-label-inner',
       })],
+      hidden: true,
     }, this.config);
   }
 
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
-    uimanager.onSeekPreview.subscribe((sender, args: SeekPreviewArgs) => {
+    uimanager.onSeekPreview.subscribeRateLimited((sender, args: SeekPreviewArgs) => {
       this.currentMarker = args.marker;
       if (player.isLive()) {
-        let time = player.getMaxTimeShift() - player.getMaxTimeShift() * (args.position / 100);
+        let maxTimeShift = player.getMaxTimeShift();
+        let time = maxTimeShift - maxTimeShift * (args.position / 100);
         this.setTime(time);
       } else {
         if (args.marker) {
@@ -102,7 +106,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
           this.setThumbnail(player.getThumb(time));
         }
       }
-    });
+    }, 100);
 
     let elem = this.getDomElement();
 
@@ -147,7 +151,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   }
 
   show() {
-    clearTimeout(this.hideTimeoutHandle)
+    clearTimeout(this.hideTimeoutHandle);
     super.show();
   }
 

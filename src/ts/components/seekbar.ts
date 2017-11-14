@@ -4,7 +4,7 @@ import {Event, EventDispatcher, NoArgs} from '../eventdispatcher';
 import {SeekBarLabel} from './seekbarlabel';
 import {UIInstanceManager, TimelineMarker, SeekPreviewArgs} from '../uimanager';
 import {Timeout} from '../timeout';
-import {PlayerUtils} from '../utils';
+import {PlayerUtils} from '../playerutils';
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
 import LiveStreamDetectorEventArgs = PlayerUtils.LiveStreamDetectorEventArgs;
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
@@ -103,7 +103,6 @@ export class SeekBar extends Component<SeekBarConfig> {
   private playbackPositionPercentage = 0;
 
   private smoothPlaybackPositionUpdater: Timeout;
-
 
   // https://hacks.mozilla.org/2013/04/detecting-touch-its-the-why-not-the-how/
   private touchSupported = ('ontouchstart' in window);
@@ -298,9 +297,9 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     let seek = (percentage: number) => {
       if (player.isLive()) {
-        player.timeShift(player.getMaxTimeShift() - (player.getMaxTimeShift() * (percentage / 100)));
+        player.timeShift(player.getMaxTimeShift() - (player.getMaxTimeShift() * (percentage / 100)), 'ui');
       } else {
-        player.seek(player.getDuration() * (percentage / 100));
+        player.seek(player.getDuration() * (percentage / 100), 'ui');
       }
     };
 
@@ -315,7 +314,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       // Pause playback while seeking
       if (isPlaying) {
-        player.pause('ui-seek');
+        player.pause('ui');
       }
     });
 
@@ -339,7 +338,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       // Continue playback after seek if player was playing when seek started
       if (isPlaying) {
-        player.play('ui-seek');
+        player.play('ui');
       }
 
       // Notify UI manager of finished seek
@@ -832,9 +831,10 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.setPosition(this.seekBarPlaybackPosition, percent);
 
     // Set position of the marker
-    let px = (this.config.vertical ? this.seekBar.height() : this.seekBar.width()) / 100 * percent;
+    let totalSize = (this.config.vertical ? (this.seekBar.height() - this.seekBarPlaybackPositionMarker.height()) : this.seekBar.width());
+    let px = (totalSize) / 100 * percent;
     if (this.config.vertical) {
-      px = this.seekBar.height() - px;
+      px = this.seekBar.height() - px - this.seekBarPlaybackPositionMarker.height();
     }
     let style = this.config.vertical ?
       // -ms-transform required for IE9
