@@ -176,7 +176,8 @@ export class SettingsPanelItem extends Container<ContainerConfig> {
           return;
         }
 
-        console.log('settingspanel', this.setting.itemCount())
+        let o:any = this.label.getConfig()
+        console.log('settingspanel', o.text, this.setting.itemCount())
 
         // The minimum number of items that must be available for the setting to be displayed
         // By default, at least two items must be available, else a selection is not possible
