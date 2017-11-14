@@ -467,6 +467,12 @@ export namespace UIManager.Factory {
       settingsPanel: settingsPanel,
     });
 
+    let subtitleSettingsCloseButton = new SubtitleSettingsCloseButton({
+      subtitleSettingsPanel: subtitleSettingsPanel,
+      settingsPanel: settingsPanel,
+    });
+    subtitleSettingsPanel.addComponent(new SettingsPanelItem(null, subtitleSettingsCloseButton));
+
     let subtitleSettingsOpenButton = new SubtitleSettingsOpenButton({
       subtitleSettingsPanel: subtitleSettingsPanel,
       settingsPanel: settingsPanel,
@@ -477,11 +483,6 @@ export namespace UIManager.Factory {
         new SubtitleSelectBox()
       ));
 
-    let subtitleSettingsCloseButton = new SubtitleSettingsCloseButton({
-      subtitleSettingsPanel: subtitleSettingsPanel,
-      settingsPanel: settingsPanel,
-    });
-    subtitleSettingsPanel.addComponent(new SettingsPanelItem(null, subtitleSettingsCloseButton));
 
     let embedVideoPanel = new EmbedVideoPanel({
       hidden: true,
