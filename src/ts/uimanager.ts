@@ -1,59 +1,60 @@
-import {UIContainer} from './components/uicontainer';
-import {DOM} from './dom';
-import {Component, ComponentConfig} from './components/component';
-import {Container} from './components/container';
-import {PlaybackToggleButton} from './components/playbacktogglebutton';
-import {FullscreenToggleButton} from './components/fullscreentogglebutton';
-import {VRToggleButton} from './components/vrtogglebutton';
-import {VolumeToggleButton} from './components/volumetogglebutton';
-import {SeekBar} from './components/seekbar';
-import {PlaybackTimeLabel, PlaybackTimeLabelMode} from './components/playbacktimelabel';
-import {ControlBar} from './components/controlbar';
-import {NoArgs, EventDispatcher, CancelEventArgs} from './eventdispatcher';
-import {EmbedVideoPanel} from './components/embedvideopanel';
-import {SettingsToggleButton} from './components/settingstogglebutton';
-import {SettingsPanel, SettingsPanelItem} from './components/settingspanel';
-import {SubtitleSettingsPanel} from './components/subtitlesettings/subtitlesettingspanel';
-import {SubtitleSettingsLabel} from './components/subtitlesettings/subtitlesettingslabel';
-import {SubtitleSettingsOpenButton} from './components/subtitlesettings/subtitlesettingsopenbutton';
-import {SubtitleSettingsCloseButton} from './components/subtitlesettings/subtitlesettingsclosebutton';
-import {VideoQualitySelectBox} from './components/videoqualityselectbox';
-import {Watermark} from './components/watermark';
-import {AudioQualitySelectBox} from './components/audioqualityselectbox';
-import {AudioTrackSelectBox} from './components/audiotrackselectbox';
-import {SeekBarLabel} from './components/seekbarlabel';
-import {VolumeSlider} from './components/volumeslider';
-import {SubtitleSelectBox} from './components/subtitleselectbox';
-import {SubtitleOverlay} from './components/subtitleoverlay';
-import {VolumeControlButton} from './components/volumecontrolbutton';
-import {CastToggleButton} from './components/casttogglebutton';
-import {CastStatusOverlay} from './components/caststatusoverlay';
-import {ErrorMessageOverlay} from './components/errormessageoverlay';
-import {TitleBar} from './components/titlebar';
+import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
+import EVENT = bitmovin.PlayerAPI.EVENT;
 import PlayerAPI = bitmovin.PlayerAPI;
-import {RecommendationOverlay} from './components/recommendationoverlay';
+import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
+import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
+import {AdClickOverlay} from './components/adclickoverlay';
 import {AdMessageLabel} from './components/admessagelabel';
 import {AdSkipButton} from './components/adskipbutton';
-import {AdClickOverlay} from './components/adclickoverlay';
-import EVENT = bitmovin.PlayerAPI.EVENT;
-import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
-import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
-import {PlaybackSpeedSelectBox} from './components/playbackspeedselectbox';
-import {BufferingOverlay} from './components/bufferingoverlay';
-import {CastUIContainer} from './components/castuicontainer';
-import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';
-import {CloseButton} from './components/closebutton';
-import {MetadataLabel, MetadataLabelContent} from './components/metadatalabel';
-import {Label} from './components/label';
-import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
-import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
-import {Spacer} from './components/spacer';
-import {UIUtils} from './uiutils';
 import {ArrayUtils} from './arrayutils';
+import {AudioQualitySelectBox} from './components/audioqualityselectbox';
+import {AudioTrackSelectBox} from './components/audiotrackselectbox';
 import {BrowserUtils} from './browserutils';
-import {CommentsToggleButton} from './components/commentstogglebutton';
+import {BufferingOverlay} from './components/bufferingoverlay';
+import {CastStatusOverlay} from './components/caststatusoverlay';
+import {CastToggleButton} from './components/casttogglebutton';
+import {CastUIContainer} from './components/castuicontainer';
+import {CloseButton} from './components/closebutton';
 import {ClosedCaptioningToggleButton} from './components/closedcaptioningtogglebutton';
+import {CommentsToggleButton} from './components/commentstogglebutton';
+import {Component, ComponentConfig} from './components/component';
+import {Container} from './components/container';
+import {ControlBar} from './components/controlbar';
+import {DOM} from './dom';
+import {EmbedVideoPanel} from './components/embedvideopanel';
+import {ErrorMessageOverlay} from './components/errormessageoverlay';
+import {FullscreenToggleButton} from './components/fullscreentogglebutton';
+import {Label} from './components/label';
+import {MetadataLabel, MetadataLabelContent} from './components/metadatalabel';
+import {NoArgs, EventDispatcher, CancelEventArgs} from './eventdispatcher';
+import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
+import {PlaybackSpeedSelectBox} from './components/playbackspeedselectbox';
+import {PlaybackTimeLabel, PlaybackTimeLabelMode} from './components/playbacktimelabel';
+import {PlaybackToggleButton} from './components/playbacktogglebutton';
+import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';
+import {RecommendationOverlay} from './components/recommendationoverlay';
+import {SeekBarLabel} from './components/seekbarlabel';
+import {SeekBar} from './components/seekbar';
+import {SettingsPanel, SettingsPanelItem} from './components/settingspanel';
+import {SettingsToggleButton} from './components/settingstogglebutton';
+import {SkipButtonsOverlay} from './components/skipbuttonsoverlay';
+import {Spacer} from './components/spacer';
+import {SubtitleOverlay} from './components/subtitleoverlay';
+import {SubtitleSelectBox} from './components/subtitleselectbox';
+import {SubtitleSettingsCloseButton} from './components/subtitlesettings/subtitlesettingsclosebutton';
+import {SubtitleSettingsLabel} from './components/subtitlesettings/subtitlesettingslabel';
+import {SubtitleSettingsOpenButton} from './components/subtitlesettings/subtitlesettingsopenbutton';
+import {SubtitleSettingsPanel} from './components/subtitlesettings/subtitlesettingspanel';
+import {TitleBar} from './components/titlebar';
+import {UIContainer} from './components/uicontainer';
+import {UIUtils} from './uiutils';
+import {VideoQualitySelectBox} from './components/videoqualityselectbox';
+import {VolumeControlButton} from './components/volumecontrolbutton';
+import {VolumeSlider} from './components/volumeslider';
+import {VolumeToggleButton} from './components/volumetogglebutton';
+import {VRToggleButton} from './components/vrtogglebutton';
+import {Watermark} from './components/watermark';
 
 
 export interface UIRecommendationConfig {
@@ -542,6 +543,7 @@ export namespace UIManager.Factory {
         subtitleOverlay,
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
+        new SkipButtonsOverlay(),
         controlBar,
         // new TitleBar(),
         new RecommendationOverlay(),
