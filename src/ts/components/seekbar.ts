@@ -492,21 +492,23 @@ export class SeekBar extends Component<SeekBarConfig> {
       if (markers && player.getDuration() !== Infinity) {
         let duration = player.getDuration();
         for (let o of markers) {
-          let marker = {
-            autoShowDuration: o.autoShowDuration || 10, // seconds
-            avatar: o.avatar,
-            comment: o.comment || '',
-            isAutoShowMarker: o.isAutoShowMarker || false,
-            markerType: o.markerType || 'default',
-            msg: o.msg || '',
-            originalData: o,
-            time: o.time,
-            timePercentage: 100 / duration * o.time, // convert time to percentage
-            title: o.title,
-          };
-          this.timelineMarkers.push(marker);
-          if (marker.isAutoShowMarker) {
-            this.autoShowTimelineMarkers.push(marker);
+          if (o.time <= duration) {
+            let marker = {
+              autoShowDuration: o.autoShowDuration || 10, // seconds
+              avatar: o.avatar,
+              comment: o.comment || '',
+              isAutoShowMarker: o.isAutoShowMarker || false,
+              markerType: o.markerType || 'default',
+              msg: o.msg || '',
+              originalData: o,
+              time: o.time,
+              timePercentage: 100 / duration * o.time, // convert time to percentage
+              title: o.title,
+            };
+            this.timelineMarkers.push(marker);
+            if (marker.isAutoShowMarker) {
+              this.autoShowTimelineMarkers.push(marker);
+            }
           }
         }
       }
