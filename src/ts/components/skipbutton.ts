@@ -53,11 +53,16 @@ export class SkipButton extends Button<SkipButtonConfig> {
     // When a button event triggers a player API call, events are fired which in turn call the event handler
     // above that updated the button state.
     this.onClick.subscribe(e => {
-      console.log('skipbutton on click', e, isSeeking)
       if (isSeeking) {
         return;
       }
-      player.seek(player.getCurrentTime() + (<SkipButtonConfig>this.config).duration);
+      let currentTime = player.getCurrentTime();
+      let duration = player.getDuration();
+      let nextTime = Math.min(duration, Math.max(0, currentTime + (<SkipButtonConfig>this.config).duration));
+
+      if (nextTime !== currentTime) {
+        player.seek(nextTime);
+      }
     });
 
     // Track UI seeking status
