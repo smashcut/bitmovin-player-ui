@@ -413,17 +413,23 @@ export class UIManager {
     // might not be fully configured and e.g. do not have a size.
     // https://swizec.com/blog/how-to-properly-wait-for-dom-elements-to-show-up-in-modern-browsers/swizec/6663
     if (window.requestAnimationFrame) {
-      requestAnimationFrame(() => { ui.onConfigured.dispatch(ui.getUI()); });
+      requestAnimationFrame(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      });
     } else {
       // IE9 fallback
-      setTimeout(() => { ui.onConfigured.dispatch(ui.getUI()); }, 0);
+      setTimeout(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      }, 0);
     }
   }
 
   private releaseUi(ui: InternalUIInstanceManager): void {
     ui.releaseControls();
+    if (ui.getPlayer()) {
+      ui.clearEventHandlers();
+    }
     ui.getUI().getDomElement().remove();
-    ui.clearEventHandlers();
   }
 
   release(): void {
@@ -581,7 +587,7 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-    ));
+      ));
 
     let controlBar = new ControlBar({
       components: [
@@ -589,9 +595,9 @@ export namespace UIManager.Factory {
         subtitleSettingsPanel,
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({label: new SeekBarLabel()}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -605,7 +611,7 @@ export namespace UIManager.Factory {
             new AirPlayToggleButton(),
             new CastToggleButton(),
             new VRToggleButton(),
-            new SettingsToggleButton({ settingsPanel: settingsPanel }),
+            new SettingsToggleButton({settingsPanel: settingsPanel}),
             new FullscreenToggleButton(),
           ],
           cssClasses: ['controlbar-bottom'],
@@ -637,7 +643,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -691,18 +697,18 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-    ));
+      ));
 
-    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
-    subtitleSettingsPanel.addComponent(new CloseButton({ target: subtitleSettingsPanel }));
+    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
+    subtitleSettingsPanel.addComponent(new CloseButton({target: subtitleSettingsPanel}));
 
     let controlBar = new ControlBar({
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({label: new SeekBarLabel()}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -718,11 +724,11 @@ export namespace UIManager.Factory {
         controlBar,
         new TitleBar({
           components: [
-            new MetadataLabel({ content: MetadataLabelContent.Title }),
+            new MetadataLabel({content: MetadataLabelContent.Title}),
             new CastToggleButton(),
             new VRToggleButton(),
             new VolumeToggleButton(),
-            new SettingsToggleButton({ settingsPanel: settingsPanel }),
+            new SettingsToggleButton({settingsPanel: settingsPanel}),
             new FullscreenToggleButton(),
           ],
         }),
@@ -745,13 +751,13 @@ export namespace UIManager.Factory {
         new TitleBar({
           components: [
             // dummy label with no content to move buttons to the right
-            new Label({ cssClass: 'label-metadata-title' }),
+            new Label({cssClass: 'label-metadata-title'}),
             new FullscreenToggleButton(),
           ],
         }),
         new Container({
           components: [
-            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
+            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -766,9 +772,9 @@ export namespace UIManager.Factory {
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
-            new SeekBar({ smoothPlaybackPositionUpdateIntervalMs: -1 }),
-            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
+            new SeekBar({smoothPlaybackPositionUpdateIntervalMs: -1}),
+            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -782,7 +788,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         new Watermark(),
         controlBar,
-        new TitleBar({ keepHiddenWithoutMetadata: true }),
+        new TitleBar({keepHiddenWithoutMetadata: true}),
         new ErrorMessageOverlay(),
       ],
       cssClasses: ['ui-skin-modern', 'ui-skin-cast-receiver'],
@@ -844,11 +850,11 @@ export namespace UIManager.Factory {
       components: [
         settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({ label: new SeekBarLabel() }),
+        new SeekBar({label: new SeekBarLabel()}),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeControlButton(),
-        new SettingsToggleButton({ settingsPanel: settingsPanel }),
+        new SettingsToggleButton({settingsPanel: settingsPanel}),
         new CastToggleButton(),
         new FullscreenToggleButton(),
       ],
@@ -922,14 +928,14 @@ export namespace UIManager.Factory {
     let controlBar = new ControlBar({
       components: [settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({ label: new SeekBarLabel() }),
+        new SeekBar({label: new SeekBarLabel()}),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeToggleButton(),
         new VolumeSlider(),
         new VolumeControlButton(),
-        new VolumeControlButton({ vertical: false }),
-        new SettingsToggleButton({ settingsPanel: settingsPanel }),
+        new VolumeControlButton({vertical: false}),
+        new SettingsToggleButton({settingsPanel: settingsPanel}),
         new CastToggleButton(),
         new FullscreenToggleButton(),
       ],
@@ -1233,7 +1239,7 @@ class PlayerWrapper {
 
     // Add function wrappers for all API methods that do nothing but calling the base method on the player
     for (let method of methods) {
-      wrapper[method] = function() {
+      wrapper[method] = function () {
         // console.log('called ' + member); // track method calls on the player
         return (<any>player)[method].apply(player, arguments);
       };
