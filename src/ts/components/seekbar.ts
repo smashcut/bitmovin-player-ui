@@ -875,7 +875,7 @@ export class SeekBar extends Component<SeekBarConfig> {
    * @param percent a number between 0 and 100
    */
   private setPosition(element: DOM, percent: number) {
-    let scale = percent / 100;
+    let scale = Math.min(100, Math.max(0, percent)) / 100;
     let style = this.config.vertical ?
       // -ms-transform required for IE9
       {'transform': 'scaleY(' + scale + ')', '-ms-transform': 'scaleY(' + scale + ')'} :
