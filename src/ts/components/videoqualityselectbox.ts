@@ -24,7 +24,7 @@ export class VideoQualitySelectBox extends SelectBox {
         // Backwards compatibility for players <= 7.3.0
         // TODO remove in next major release
         let data = player.getDownloadedVideoData();
-        this.selectItem(data.isAuto ? 'Auto' : data.id);
+        this.selectItem(data.isAuto ? 'auto' : data.id);
       }
     };
 
@@ -38,7 +38,7 @@ export class VideoQualitySelectBox extends SelectBox {
 
       if (this.hasAuto) {
         // Add entry for automatic quality switching (default setting)
-        this.addItem('auto', 'Auto');
+        this.addItem('auto', 'auto');
       }
 
       // Add video qualities

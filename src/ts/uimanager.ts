@@ -1,8 +1,3 @@
-import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
-import EVENT = bitmovin.PlayerAPI.EVENT;
-import PlayerAPI = bitmovin.PlayerAPI;
-import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
-import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
 import {AdClickOverlay} from './components/adclickoverlay';
 import {AdMessageLabel} from './components/admessagelabel';
 import {AdSkipButton} from './components/adskipbutton';
@@ -56,6 +51,11 @@ import {VolumeToggleButton} from './components/volumetogglebutton';
 import {VRToggleButton} from './components/vrtogglebutton';
 import {Watermark} from './components/watermark';
 
+import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
+import EVENT = bitmovin.PlayerAPI.EVENT;
+import PlayerAPI = bitmovin.PlayerAPI;
+import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
+import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
 
 export interface UIRecommendationConfig {
   title: string;
@@ -413,14 +413,10 @@ export class UIManager {
     // might not be fully configured and e.g. do not have a size.
     // https://swizec.com/blog/how-to-properly-wait-for-dom-elements-to-show-up-in-modern-browsers/swizec/6663
     if (window.requestAnimationFrame) {
-      requestAnimationFrame(() => {
-        ui.onConfigured.dispatch(ui.getUI());
-      });
+      requestAnimationFrame(() => { ui.onConfigured.dispatch(ui.getUI()); });
     } else {
       // IE9 fallback
-      setTimeout(() => {
-        ui.onConfigured.dispatch(ui.getUI());
-      }, 0);
+      setTimeout(() => { ui.onConfigured.dispatch(ui.getUI()); }, 0);
     }
   }
 
@@ -697,10 +693,10 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-      ));
+    ));
 
-    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
-    subtitleSettingsPanel.addComponent(new CloseButton({target: subtitleSettingsPanel}));
+    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
+    subtitleSettingsPanel.addComponent(new CloseButton({ target: subtitleSettingsPanel }));
 
     let controlBar = new ControlBar({
       components: [
@@ -816,7 +812,7 @@ export namespace UIManager.Factory {
       },
     }, {
       ui: smashcutUi(),
-      //ui: modernUI(),
+      // ui: modernUI(),
     }], config);
   }
 

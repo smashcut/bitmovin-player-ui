@@ -175,7 +175,6 @@ export class SettingsPanelItem extends Container<ContainerConfig> {
         if (! (this.setting instanceof SelectBox)) {
           return;
         }
-
         // The minimum number of items that must be available for the setting to be displayed
         // By default, at least two items must be available, else a selection is not possible
         let minItemsToDisplay = 2;

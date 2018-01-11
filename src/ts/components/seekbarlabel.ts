@@ -17,38 +17,37 @@ export interface SeekBarLabelConfig extends ContainerConfig {
  */
 export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
+
+  private timeLabel: Label<LabelConfig>;
+  private titleLabel: Label<LabelConfig>;
+  private thumbnail: Component<ComponentConfig>;
+
+  private thumbnailImageLoader: ImageLoader;
+
   private avatarLabel: Label<LabelConfig>;
   private commentLabel: Label<LabelConfig>;
   private logo: Component<ComponentConfig>;
   private markerType: Component<ComponentConfig>;
   private metadata: Component<ComponentConfig>;
-  private thumbnail: Component<ComponentConfig>;
-  private timeLabel: Label<LabelConfig>;
-  private titleLabel: Label<LabelConfig>;
 
   private currentMarker: TimelineMarker;
   private hideTimeoutHandle: any;
   private markerTypeClass: string;
-  private thumbnailImageLoader: ImageLoader;
 
   private timeFormat: string;
-
 
   constructor(config: SeekBarLabelConfig = {}) {
     super(config);
 
-    this.timeLabel = new Label({ cssClasses: ['seekbar-label-time'] });
-    this.titleLabel = new Label({ cssClasses: ['seekbar-label-title'] });
-    this.thumbnail = new Component({ cssClasses: ['seekbar-thumbnail'] });
+    this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
+    this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
+    this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
     this.thumbnailImageLoader = new ImageLoader();
+
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
     this.logo = new Component({cssClasses: ['seekbar-label-logo']});
     this.markerType = new Component({cssClasses: ['seekbar-label-marker-type']});
-    this.thumbnail = new Component({cssClasses: ['seekbar-thumbnail']});
-    this.timeLabel = new Label({cssClasses: ['seekbar-label-time']});
-    this.titleLabel = new Label({cssClasses: ['seekbar-label-title']});
-    this.thumbnailImageLoader = new ImageLoader();
 
     this.metadata = new Container({
       components: [

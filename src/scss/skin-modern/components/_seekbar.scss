@@ -8,7 +8,6 @@
   cursor: pointer;
   font-size: 1em;
   height: 1em;
-  margin: .2em;
   position: relative;
   width: 100%;
 
@@ -22,6 +21,7 @@
       // sass-lint:disable no-vendor-prefixes
       -ms-transform-origin: 0 0; // required for IE9
       bottom: 0;
+      height: .2em;
       left: 0;
       position: absolute;
       right: auto;

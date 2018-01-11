@@ -87,8 +87,9 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   private label: SeekBarLabel;
 
-  private _commentsOn: boolean = true;
   private timelineMarkers: TimelineMarker[];
+
+  private _commentsOn: boolean = true;
   private autoShowTimelineMarkers: TimelineMarker[];
   private currentAutoShowTimelineMarkers: TimelineMarker[];
   private isShowingAutoShowMarker: boolean = false;
@@ -161,7 +162,6 @@ export class SeekBar extends Component<SeekBarConfig> {
       return;
     }
 
-    let playbackNotInitialized = true;
     let isPlaying = false;
     let isSeeking = false;
 
@@ -194,7 +194,11 @@ export class SeekBar extends Component<SeekBarConfig> {
         if (currentTime >= startTime && currentTime <= endTime) {
           if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
             this.currentAutoShowTimelineMarkers.push(marker);
-            this.setLabelPosition(marker.timePercentage);
+            if (this.label) {
+              this.label.getDomElement().css({
+                'left': (marker.timePercentage) + '%',
+              });
+            }
             if (this.hasLabel() && this.getLabel().isHidden()) {
               this.getLabel().show();
             }
@@ -212,9 +216,6 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     // Update playback and buffer positions
     let playbackPositionHandler = (event: PlayerEvent = null, forceUpdate: boolean = false) => {
-      // Once this handler os called, playback has been started and we set the flag to false
-      playbackNotInitialized = false;
-
       if (isSeeking) {
         // We caught a seek preview seek, do not update the seekbar
         return;
@@ -280,6 +281,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     // update playback position of Cast playback
     player.addEventHandler(player.EVENT.ON_CAST_TIME_UPDATED, playbackPositionHandler);
 
+    this.configureLivePausedTimeshiftUpdater(player, uimanager, playbackPositionHandler);
 
     // Seek handling
     player.addEventHandler(player.EVENT.ON_SEEK, () => {
@@ -403,6 +405,26 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.configureMarkers(player, uimanager);
   }
 
+  /**
+   * Update seekbar while a live stream with DVR window is paused.
+   * The playback position stays still and the position indicator visually moves towards the back.
+   */
+  private configureLivePausedTimeshiftUpdater(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager,
+                                              playbackPositionHandler: () => void): void {
+    // Regularly update the playback position while the timeout is active
+    const pausedTimeshiftUpdater = new Timeout(1000, playbackPositionHandler, true);
+
+    // Start updater when a live stream with timeshift window is paused
+    player.addEventHandler(player.EVENT.ON_PAUSED, () => {
+      if (player.isLive() && player.getMaxTimeShift() < 0) {
+        pausedTimeshiftUpdater.start();
+      }
+    });
+
+    // Stop updater when playback continues (no matter if the updater was started before)
+    player.addEventHandler(player.EVENT.ON_PLAY, () => pausedTimeshiftUpdater.clear());
+  }
+
   private configureSmoothPlaybackPositionUpdater(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     /*
      * Playback position update
@@ -458,6 +480,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     player.addEventHandler(player.EVENT.ON_CAST_PLAYING, startSmoothPlaybackPositionUpdater);
     player.addEventHandler(player.EVENT.ON_PAUSED, stopSmoothPlaybackPositionUpdater);
     player.addEventHandler(player.EVENT.ON_CAST_PAUSED, stopSmoothPlaybackPositionUpdater);
+    player.addEventHandler(player.EVENT.ON_PLAYBACK_FINISHED, stopSmoothPlaybackPositionUpdater);
     player.addEventHandler(player.EVENT.ON_SEEKED, () => {
       currentTimeSeekBar = player.getCurrentTime();
     });
@@ -584,8 +607,8 @@ export class SeekBar extends Component<SeekBarConfig> {
     });
     this.seekBarMarkersContainer = seekBarChapterMarkersContainer;
 
-    seekBar.append(seekBarBackdrop, seekBarBufferLevel, seekBarSeekPosition,
-      seekBarPlaybackPosition, seekBarChapterMarkersContainer, seekBarPlaybackPositionMarker);
+    seekBar.append(this.seekBarBackdrop, this.seekBarBufferPosition, this.seekBarSeekPosition,
+      this.seekBarPlaybackPosition, this.seekBarMarkersContainer, this.seekBarPlaybackPositionMarker);
 
     let seeking = false;
 
@@ -680,7 +703,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.setSeekPosition(position);
       this.onSeekPreviewEvent(position, false);
 
-      if (this.hasLabel()) {
+      if (this.hasLabel() && this.getLabel().isHidden()) {
         this.getLabel().show();
       }
     });
@@ -925,19 +948,15 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.seekBarEvents.onSeek.dispatch(this);
   }
 
-  protected setLabelPosition(percentage: number) {
-    if (this.label) {
-      this.label.getDomElement().css({
-        'left': percentage + '%',
-      });
-    }
-  }
-
   protected onSeekPreviewEvent(percentage: number, scrubbing: boolean) {
     let snappedMarker = this.getMarkerAtPosition(percentage);
     this.snappedMarker = snappedMarker;
 
-    this.setLabelPosition(snappedMarker ? snappedMarker.timePercentage : percentage);
+    if (this.label) {
+      this.label.getDomElement().css({
+        'left': (snappedMarker ? snappedMarker.timePercentage : percentage) + '%',
+      });
+    }
 
     this.seekBarEvents.onSeekPreview.dispatch(this, {
       scrubbing: scrubbing,
