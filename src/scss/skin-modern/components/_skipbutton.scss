@@ -1,0 +1,40 @@
+@import '../variables';
+@import '../mixins';
+
+.#{$prefix}-ui-skipbutton-backward {
+  @extend %ui-button;
+
+  background-image: svg('assets/skin-modern/images/smashcut/edited/rewind-10.svg', '[color]:white');
+
+  margin-left: 10px;
+  margin-top: 15px;
+
+  &:hover {
+    @include svg-icon-shadow;
+  }
+
+  &.#{$prefix}-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+}
+
+.#{$prefix}-ui-skipbutton-forward {
+  @extend %ui-button;
+
+  background-image: svg('assets/skin-modern/images/smashcut/edited/forward-10.svg', '[color]:white');
+
+  margin-left: 5px;
+  margin-top: 15px;
+
+  &:hover {
+    @include svg-icon-shadow;
+  }
+
+  &.#{$prefix}-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+}

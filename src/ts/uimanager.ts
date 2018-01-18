@@ -33,7 +33,7 @@ import {SeekBarLabel} from './components/seekbarlabel';
 import {SeekBar} from './components/seekbar';
 import {SettingsPanel, SettingsPanelItem} from './components/settingspanel';
 import {SettingsToggleButton} from './components/settingstogglebutton';
-import {SkipButtonsOverlay} from './components/skipbuttonsoverlay';
+import {SkipButton} from './components/skipbutton';
 import {Spacer} from './components/spacer';
 import {SubtitleOverlay} from './components/subtitleoverlay';
 import {SubtitleSelectBox} from './components/subtitleselectbox';
@@ -56,6 +56,7 @@ import EVENT = bitmovin.PlayerAPI.EVENT;
 import PlayerAPI = bitmovin.PlayerAPI;
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import PlayerEventCallback = bitmovin.PlayerAPI.PlayerEventCallback;
+
 
 export interface UIRecommendationConfig {
   title: string;
@@ -413,10 +414,14 @@ export class UIManager {
     // might not be fully configured and e.g. do not have a size.
     // https://swizec.com/blog/how-to-properly-wait-for-dom-elements-to-show-up-in-modern-browsers/swizec/6663
     if (window.requestAnimationFrame) {
-      requestAnimationFrame(() => { ui.onConfigured.dispatch(ui.getUI()); });
+      requestAnimationFrame(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      });
     } else {
       // IE9 fallback
-      setTimeout(() => { ui.onConfigured.dispatch(ui.getUI()); }, 0);
+      setTimeout(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      }, 0);
     }
   }
 
@@ -494,8 +499,14 @@ export namespace UIManager.Factory {
     let controlBarTop = new Container({
       cssClasses: ['controlbar-top'],
       components: [
-        new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
-        new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
+        new PlaybackTimeLabel({
+          timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
+          hideInLivePlayback: true,
+        }),
+        new PlaybackTimeLabel({
+          timeLabelMode: PlaybackTimeLabelMode.TotalTime,
+          cssClasses: ['text-right'],
+        }),
       ],
     });
 
@@ -524,6 +535,8 @@ export namespace UIManager.Factory {
     let controlBar = new ControlBar({
       components: [
         new PlaybackToggleButton(),
+        new SkipButton({duration: -10}),
+        new SkipButton({duration: 10}),
         new Container({
           cssClasses: ['controlbar-inner'],
           components: [
@@ -545,9 +558,7 @@ export namespace UIManager.Factory {
         subtitleOverlay,
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        new SkipButtonsOverlay(),
         controlBar,
-        // new TitleBar(),
         new RecommendationOverlay(),
         new ErrorMessageOverlay(),
       ],
@@ -693,10 +704,10 @@ export namespace UIManager.Factory {
       new SettingsPanelItem(
         new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
         new SubtitleSelectBox()
-    ));
+      ));
 
-    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
-    subtitleSettingsPanel.addComponent(new CloseButton({ target: subtitleSettingsPanel }));
+    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
+    subtitleSettingsPanel.addComponent(new CloseButton({target: subtitleSettingsPanel}));
 
     let controlBar = new ControlBar({
       components: [
