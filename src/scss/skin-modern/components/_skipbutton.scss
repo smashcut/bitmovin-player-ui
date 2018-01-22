@@ -1,15 +1,13 @@
 @import '../variables';
 @import '../mixins';
 
-.#{$prefix}-ui-skipbutton-backward {
+.#{$prefix}-ui-skipbutton-backward,
+.#{$prefix}-ui-skipbutton-forward {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/smashcut/edited/rewind-10.svg', '[color]:white');
-
-  margin-left: 10px;
+  margin-left: 5px;
   margin-top: 16px;
   height: 22px;
-  width: 22px;
 
   &:hover {
     @include svg-icon-shadow;
@@ -25,20 +23,11 @@
 .#{$prefix}-ui-skipbutton-forward {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/smashcut/edited/forward-10.svg', '[color]:white');
+  background-image: svg('assets/skin-modern/images/smashcut/edited/skip-forward.svg', '[color]:white');
+}
 
-  margin-left: 3px;
-  margin-top: 16px;
-  height: 22px;
-  width: 22px;
+.#{$prefix}-ui-skipbutton-backward {
+  @extend %ui-button;
 
-  &:hover {
-    @include svg-icon-shadow;
-  }
-
-  &.#{$prefix}-disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
+  background-image: svg('assets/skin-modern/images/smashcut/edited/skip-backward.svg', '[color]:white');
 }
