@@ -128,6 +128,8 @@ export class SeekBar extends Component<SeekBarConfig> {
     onChangeCommentsOn: new EventDispatcher<SeekBar, boolean>(),
   };
 
+  private hideDelay = 500
+
   constructor(config: SeekBarConfig = {}) {
     super(config);
 
@@ -179,7 +181,7 @@ export class SeekBar extends Component<SeekBarConfig> {
           if (this.isShowingAutoShowMarker) {
             this.isShowingAutoShowMarker = false;
             if (this.hasLabel() && !this.getLabel().isHidden()) {
-              this.getLabel().hide(2000);
+              this.getLabel().hide(this.hideDelay);
             }
           }
         } else {
@@ -716,7 +718,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.snappedMarker = null;
 
       if (this.hasLabel()) {
-        this.getLabel().hide(2000);
+        this.getLabel().hide(this.hideDelay);
       }
     });
 
