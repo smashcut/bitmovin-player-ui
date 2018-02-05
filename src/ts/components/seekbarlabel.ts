@@ -130,11 +130,13 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   /**
    * When a delay is supplied, the function waits until
-   * the component is not hovered
+   * the component is not hovered, but only for notes
    * @param delay
    */
   hide(delay: number = 0) {
-    if (delay > 0) {
+    if (delay > 0 &&
+      this.currentMarker &&
+      this.currentMarker.markerType === 'note') {
       let checkHovered = () => {
         if (this.isHovered()) {
           this.hide(delay);
