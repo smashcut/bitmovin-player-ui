@@ -752,6 +752,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (this.hasLabel() && this.getLabel().isHidden()) {
         this.getLabel().show();
+        this.getShowSuggestionsButton().hide();
       }
     });
 
@@ -764,10 +765,6 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (this.hasLabel()) {
         this.getLabel().hide(this.hideDelay);
-      }
-
-      if (this.hasShowSuggestionButton()) {
-        this.getShowSuggestionsButton().hide();
       }
     });
 
