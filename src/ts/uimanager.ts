@@ -11,6 +11,7 @@ import {CastStatusOverlay} from './components/caststatusoverlay';
 import {CastToggleButton} from './components/casttogglebutton';
 import {CastUIContainer} from './components/castuicontainer';
 import {CloseButton} from './components/closebutton';
+import {ShowSuggestionsButton} from './components/showsuggestionsbutton';
 import {ClosedCaptioningToggleButton} from './components/closedcaptioningtogglebutton';
 import {CommentsToggleButton} from './components/commentstogglebutton';
 import {Component, ComponentConfig} from './components/component';
@@ -459,6 +460,7 @@ export namespace UIManager.Factory {
 
     let subtitleOverlay = new SubtitleOverlay();
 
+    let showSuggestionButton = new ShowSuggestionsButton({});
     let settingsPanel = new SettingsPanel({
       components: [
         new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),
@@ -510,7 +512,7 @@ export namespace UIManager.Factory {
       ],
     });
 
-    let seekBar = new SeekBar({label: new SeekBarLabel()});
+    let seekBar = new SeekBar({label: new SeekBarLabel(), showSuggestionButton: showSuggestionButton});
 
     let controlBarMiddle = new Container({
       cssClasses: ['controlbar-middle'],
@@ -558,6 +560,7 @@ export namespace UIManager.Factory {
         subtitleOverlay,
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
+        showSuggestionButton,
         controlBar,
         new RecommendationOverlay(),
         new ErrorMessageOverlay(),

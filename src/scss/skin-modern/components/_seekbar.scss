@@ -85,51 +85,63 @@
       > .#{$prefix}-seekbar-marker-type-default {
         @extend %bar;
 
-        border-right: $marker-width solid green;
+        border-radius: 50%;
+        background-color: green;
+        top: -3px;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
         margin-left: -$marker-width / 2 - 2;
-        width: 0;
+        width: 7px;
+        height: 7px;
+
+        @include vertical-bar-marker(green);
       }
 
       > .#{$prefix}-seekbar-marker-type-mentor {
         @extend %bar;
 
-        border-right: $marker-width solid $color-smashcut-orange;
-        // don't consider the border for width, else it does not overlap at edges
+        top: -3px;
+        border-radius: 50%;
+        background-color: $color-smashcut-blue;
         box-sizing: content-box;
         // offset position marker to center it on its actual position
         margin-left: -$marker-width / 2 - 2;
-        width: 0;
+        width: 7px;
+        height: 7px;
+
+        @include vertical-bar-marker($color-smashcut-blue);
       }
 
       > .#{$prefix}-seekbar-marker-type-student {
         border-radius: 50%;
-        top: 4px;
+        top: -3px;
         position: absolute;
-        background-color: $color-smashcut-orange;
+        background-color: $color-smashcut-yellow;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         margin-left: -6px;
+
+        @include vertical-bar-marker($color-smashcut-yellow);
       }
 
       > .#{$prefix}-seekbar-marker-type-note {
-        border-radius: 50%;
-        top: 2px;
+        top: 12px;
         position: absolute;
         background-color: $color-smashcut-orange;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        width: 11px;
-        height: 11px;
+        width: 7px;
+        height: 7px;
         margin-left: -6px;
+
+        @include vertical-bar-marker($color-smashcut-orange, "top");
       }
     }
   }

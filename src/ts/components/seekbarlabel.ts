@@ -54,15 +54,21 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         new Container({
           components: [
             this.avatarLabel,
-            this.titleLabel,
-            this.markerType,
+            new Container({
+              components: [
+                this.titleLabel,
+                this.markerType,
+              ],
+              cssClass: 'seekbar-label-metadata-title-marker',
+            }),
           ],
           cssClass: 'seekbar-label-metadata-title',
         }),
         new Container({
           components: [
             this.commentLabel,
-            this.timeLabel],
+            this.timeLabel,
+          ],
           cssClass: 'seekbar-label-metadata-content',
         }),
       ],
@@ -115,7 +121,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         e,
         marker: this.currentMarker,
       });
-
     });
 
     let init = () => {
@@ -232,8 +237,10 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
    */
   setThumbnail(thumbnail: bitmovin.PlayerAPI.Thumbnail = null, width: number = 180) {
     let thumbnailElement = this.thumbnail.getDomElement();
+    let metadataElement = this.metadata.getDomElement();
 
     if (thumbnail == null) {
+      metadataElement.addClass('marker');
       thumbnailElement.css({
         'background-image': null,
         'display': null,
@@ -242,6 +249,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       });
     }
     else {
+      metadataElement.removeClass('marker');
       // We use the thumbnail image loader to make sure the thumbnail is loaded and it's size is known before be can
       // calculate the CSS properties and set them on the element.
       this.thumbnailImageLoader.load(thumbnail.url, (url, width, height) => {

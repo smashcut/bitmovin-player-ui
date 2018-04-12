@@ -41,6 +41,7 @@ import {BufferingOverlay} from './components/bufferingoverlay';
 import {CastUIContainer} from './components/castuicontainer';
 import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';
 import {CloseButton} from './components/closebutton';
+import {ShowSuggestionsButton} from './components/showsuggestionsbutton';
 import {MetadataLabel, MetadataLabelContent} from './components/metadatalabel';
 import {AirPlayToggleButton} from './components/airplaytogglebutton';
 import {VolumeSlider} from './components/volumeslider';
@@ -121,6 +122,7 @@ const playerui = {
   CastUIContainer,
   ClickOverlay,
   CloseButton,
+  ShowSuggestionsButton,
   Component,
   Container,
   ControlBar,

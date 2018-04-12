@@ -24,14 +24,11 @@
   }
 
   .#{$prefix}-seekbar-label-inner {
-    border-bottom: .15em solid $color-smashcut-orange;
-
+    border: 1px solid $color-smashcut-gray;
     // bottom arrow from http://www.cssarrowplease.com/
     &::after {
-      border: solid transparent;
-      border-color: transparent;
-      border-top-color: $color-smashcut-orange;
-      border-width: .3em;
+      border: .5em solid transparent;
+      border-top-color: $color-smashcut-gray;
       content: ' ';
       height: 0;
       left: 50%;
@@ -68,6 +65,16 @@
 
     > .#{$prefix}-container-wrapper {
       padding: .7em;
+      color: $color-white;
+      font-family: Roboto, serif;
+    }
+
+    &.marker {
+      > .#{$prefix}-container-wrapper {
+        background: $color-smashcut-gray;
+        width: 300px;
+        height: 162px;
+      }
     }
   }
 
@@ -86,32 +93,46 @@
     .#{$prefix}-seekbar-label-avatar {
       display: block;
       margin-right: 8px;
-    }
-
-    .#{$prefix}-seekbar-label-marker-type {
-      display: block;
-      position: absolute;
-      right: 0;
-      top: 0;
-
-      &.student {
-        background-color: $color-smashcut-orange;
-        border-radius: 50%;
-        height: 8px;
-        width: 8px;
-      }
-
-      &.mentor {
-        background-color: $color-smashcut-orange;
-        height: 14px;
-        width: 3px;
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
       }
     }
 
-    .#{$prefix}-seekbar-label-title {
-      display: block;
-      white-space: normal;
-      font-weight: bold;
+    .#{$prefix}-seekbar-label-metadata-title-marker {
+      > .#{$prefix}-container-wrapper {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+
+        .#{$prefix}-seekbar-label-marker-type {
+          display: block;
+          text-align: left;
+          font-size: 12px;
+
+          &.student {
+            color: $color-smashcut-yellow;
+            &:before {
+              content: 'Student';
+            }
+          }
+
+          &.mentor {
+            color: $color-smashcut-blue;
+            &:before {
+              content: 'Mentor';
+            }
+          }
+        }
+
+        .#{$prefix}-seekbar-label-title {
+          display: block;
+          white-space: normal;
+          font-weight: bold;
+          font-size: 16px;
+        }
+      }
     }
   }
 
@@ -125,10 +146,11 @@
 
     .#{$prefix}-seekbar-label-comment {
       display: block;
-      font-size: .7em;
+      font-size: 14px;
       margin-bottom: .3em;
       text-align: left;
       white-space: normal;
+      line-height: 1.29;
     }
   }
 

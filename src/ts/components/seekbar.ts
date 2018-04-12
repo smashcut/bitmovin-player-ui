@@ -8,6 +8,7 @@ import {PlayerUtils} from '../playerutils';
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
 import LiveStreamDetectorEventArgs = PlayerUtils.LiveStreamDetectorEventArgs;
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
+import {ShowSuggestionsButton} from './showsuggestionsbutton';
 
 /**
  * The integration of autoShowLabels works like this
@@ -35,6 +36,10 @@ export interface SeekBarConfig extends ComponentConfig {
    * The label above the seek position.
    */
   label?: SeekBarLabel;
+  /**
+   * The button used for showing suggestions
+   */
+  showSuggestionButton?: ShowSuggestionsButton;
   /**
    * Bar will be vertical instead of horizontal if set to true.
    */
@@ -86,6 +91,7 @@ export class SeekBar extends Component<SeekBarConfig> {
   private seekBarMarkersContainer: DOM;
 
   private label: SeekBarLabel;
+  private showSuggestionButton: ShowSuggestionsButton;
 
   private timelineMarkers: TimelineMarker[];
 
@@ -140,6 +146,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     }, this.config);
 
     this.label = this.config.label;
+    this.showSuggestionButton = this.config.showSuggestionButton;
     this.timelineMarkers = [];
     this.autoShowTimelineMarkers = [];
     this.currentAutoShowTimelineMarkers = [];
@@ -150,6 +157,10 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     if (this.hasLabel()) {
       this.getLabel().initialize();
+    }
+
+    if (this.showSuggestionButton) {
+      this.showSuggestionButton.initialize();
     }
   }
 
@@ -178,11 +189,17 @@ export class SeekBar extends Component<SeekBarConfig> {
         let endTime = marker.time + marker.autoShowDuration / 2;
         if (currentTime < startTime || currentTime > endTime) {
           dispatchMarkerEvent('hide', marker);
+
           if (this.isShowingAutoShowMarker) {
             this.isShowingAutoShowMarker = false;
+
             if (this.hasLabel() && !this.getLabel().isHidden()) {
               this.getLabel().hide(this.hideDelay);
             }
+          }
+
+          if (this.hasShowSuggestionButton() && !this.getShowSuggestionsButton().isHidden()) {
+            this.getShowSuggestionsButton().hide();
           }
         } else {
           filteredCurrentMarkers.push(marker);
@@ -202,7 +219,14 @@ export class SeekBar extends Component<SeekBarConfig> {
               });
             }
             if (this.hasLabel() && this.getLabel().isHidden()) {
-              this.getLabel().show();
+              if (marker.markerType !== 'note') {
+                this.getLabel().show();
+              } else {
+                this.getShowSuggestionsButton().configWithoutArgs({
+                  currentMarker: marker,
+                });
+                this.getShowSuggestionsButton().show();
+              }
             }
             this.isShowingAutoShowMarker = true;
             this.seekBarEvents.onSeekPreview.dispatch(this, {
@@ -702,8 +726,29 @@ export class SeekBar extends Component<SeekBarConfig> {
       }
 
       let position = 100 * this.getOffset(e);
+
+      const snappedMarker = this.getMarkerAtPosition(position);
+
       this.setSeekPosition(position);
       this.onSeekPreviewEvent(position, false);
+
+      if (!snappedMarker || snappedMarker.markerType === 'note') {
+        if (snappedMarker) {
+          this.getLabel().hide();
+
+          this.getShowSuggestionsButton().configWithoutArgs({
+            currentMarker: snappedMarker,
+          });
+
+          if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
+            this.getShowSuggestionsButton().show();
+          }
+
+          return ;
+        } else {
+          this.getShowSuggestionsButton().hide();
+        }
+      }
 
       if (this.hasLabel() && this.getLabel().isHidden()) {
         this.getLabel().show();
@@ -719,6 +764,10 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (this.hasLabel()) {
         this.getLabel().hide(this.hideDelay);
+      }
+
+      if (this.hasShowSuggestionButton()) {
+        this.getShowSuggestionsButton().hide();
       }
     });
 
@@ -754,9 +803,11 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   protected getMarkerAtPosition(percentage: number): TimelineMarker | null {
     let snappedMarker: TimelineMarker = null;
+
     if (this.timelineMarkers.length > 0) {
       for (let marker of this.timelineMarkers) {
         let snappingRange = marker.isAutoShowMarker ? 3 : 1;
+
         if (percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange) {
           snappedMarker = marker;
           break;
@@ -946,6 +997,22 @@ export class SeekBar extends Component<SeekBarConfig> {
     return this.label;
   }
 
+  /**
+   * Check if the view has a {@link ShowSuggestionsButton}
+   * @returns {boolean}
+   */
+  hasShowSuggestionButton(): boolean {
+    return !!this.showSuggestionButton;
+  }
+
+  /**
+   * Gets the show suggestions button.
+   * @returns {ShowSuggestionsButton}
+   */
+  getShowSuggestionsButton(): ShowSuggestionsButton {
+    return this.showSuggestionButton;
+  }
+
   protected onSeekEvent() {
     this.seekBarEvents.onSeek.dispatch(this);
   }
@@ -960,11 +1027,13 @@ export class SeekBar extends Component<SeekBarConfig> {
       });
     }
 
-    this.seekBarEvents.onSeekPreview.dispatch(this, {
-      scrubbing: scrubbing,
-      position: percentage,
-      marker: snappedMarker,
-    });
+    if (!snappedMarker || snappedMarker.markerType !== 'note') {
+      this.seekBarEvents.onSeekPreview.dispatch(this, {
+        scrubbing: scrubbing,
+        position: percentage,
+        marker: snappedMarker,
+      });
+    }
   }
 
   protected onSeekedEvent(percentage: number) {
