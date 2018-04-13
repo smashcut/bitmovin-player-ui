@@ -734,7 +734,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (!snappedMarker || snappedMarker.markerType === 'note') {
         if (snappedMarker) {
-          this.getLabel().hide();
+          this.snappedMarker = null;
 
           this.getShowSuggestionsButton().configWithoutArgs({
             currentMarker: snappedMarker,
@@ -743,8 +743,6 @@ export class SeekBar extends Component<SeekBarConfig> {
           if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
             this.getShowSuggestionsButton().show();
           }
-
-          return ;
         } else {
           this.getShowSuggestionsButton().hide();
         }
@@ -1024,13 +1022,11 @@ export class SeekBar extends Component<SeekBarConfig> {
       });
     }
 
-    if (!snappedMarker || snappedMarker.markerType !== 'note') {
-      this.seekBarEvents.onSeekPreview.dispatch(this, {
-        scrubbing: scrubbing,
-        position: percentage,
-        marker: snappedMarker,
-      });
-    }
+    this.seekBarEvents.onSeekPreview.dispatch(this, {
+      scrubbing: scrubbing,
+      position: percentage,
+      marker: (snappedMarker && snappedMarker.markerType === 'note') ? null : snappedMarker,
+    });
   }
 
   protected onSeekedEvent(percentage: number) {
