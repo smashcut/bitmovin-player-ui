@@ -24,7 +24,7 @@ export class ShowSuggestionsButton extends Button<ShowSuggestionsButtonConfig> {
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-showsuggestions',
-      text: 'SHOW SUGGESTIONS',
+      text: 'i',
       hidden: true,
     }, this.config);
   }
