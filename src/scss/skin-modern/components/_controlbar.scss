@@ -88,7 +88,7 @@
 
 &.#{$prefix}-fullscreen {
   .#{$prefix}-ui-controlbar {
-    bottom: 0 !important;
+    bottom: -$controlbar-height !important;
     transition: bottom 1s;
   }
 
