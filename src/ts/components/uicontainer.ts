@@ -67,6 +67,7 @@ export class UIContainer extends Container<UIContainerConfig> {
       if (!isUiShown) {
         // Let subscribers know that they should reveal themselves
         uimanager.onControlsShow.dispatch(this);
+        player.fireEvent(player.EVENT.ON_SHOW_CONTROLS, {});
         isUiShown = true;
       }
       // Don't trigger timeout while seeking (it will be triggered once the seek is finished) or casting
@@ -85,6 +86,7 @@ export class UIContainer extends Container<UIContainerConfig> {
         if (!previewHideEventArgs.cancel) {
           // If the preview wasn't canceled, let subscribers know that they should now hide themselves
           uimanager.onControlsHide.dispatch(this);
+          player.fireEvent(player.EVENT.ON_HIDE_CONTROLS, {});
           isUiShown = false;
         } else {
           // If the hide preview was canceled, continue to show UI
