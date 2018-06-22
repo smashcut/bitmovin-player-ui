@@ -18,21 +18,6 @@ export class FullscreenToggleButton extends ToggleButton<ToggleButtonConfig> {
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
-    // TODO: Commenting this since we don't need to hide the control bar right now
-    /*let fullscreenStateHandler = () => {
-      if (player.isFullscreen()) {
-        this.on();
-      } else {
-        this.off();
-      }
-    };
-
-    player.addEventHandler(player.EVENT.ON_FULLSCREEN_ENTER, fullscreenStateHandler);
-    player.addEventHandler(player.EVENT.ON_FULLSCREEN_EXIT, fullscreenStateHandler);
-    // Startup init
-    fullscreenStateHandler();
-    */
-
     this.onClick.subscribe(() => {
       if (player.isFullscreen()) {
         player.exitFullscreen();

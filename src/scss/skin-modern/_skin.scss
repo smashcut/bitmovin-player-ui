@@ -71,7 +71,6 @@
   }
 
   &.#{$prefix}-player-state-finished {
-    .#{$prefix}-ui-controlbar,
     .#{$prefix}-ui-hugeplaybacktogglebutton {
       display: none;
     }
