@@ -31,7 +31,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   private metadata: Component<ComponentConfig>;
 
   private currentMarker: TimelineMarker;
-  private hideTimeoutHandle: any;
   private markerTypeClass: string;
 
   private timeFormat: string;
@@ -102,7 +101,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         if (args.marker) {
           this.setSmashcutData(args.marker);
           this.setTimeText(null);
-          this.setThumbnail(null, args.marker.isAutoShowMarker ? 40 : 180);
+          this.setThumbnail(null, 180);
         } else {
           this.setSmashcutData(null);
           let percentage = args.position;
@@ -113,16 +112,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       }
     }, 100);
 
-    let elem = this.getDomElement();
-
-    elem.on('touchend mouseup', (e: MouseEvent | TouchEvent) => {
-      elem.dispatchSmashcutPlayerUiEvent({
-        action: 'marker-click',
-        e,
-        marker: this.currentMarker,
-      });
-    });
-
     let init = () => {
       // Set time format depending on source duration
       this.timeFormat = Math.abs(player.isLive() ? player.getMaxTimeShift() : player.getDuration()) >= 3600 ?
@@ -131,34 +120,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
-  }
-
-  /**
-   * When a delay is supplied, the function waits until
-   * the component is not hovered, but only for notes
-   * @param delay
-   */
-  hide(delay: number = 0) {
-    if (delay > 0 &&
-      this.currentMarker &&
-      this.currentMarker.markerType === 'note') {
-      let checkHovered = () => {
-        if (this.isHovered()) {
-          this.hide(delay);
-        } else {
-          super.hide();
-        }
-      };
-      clearTimeout(this.hideTimeoutHandle);
-      this.hideTimeoutHandle = setTimeout(checkHovered, delay);
-    } else {
-      super.hide();
-    }
-  }
-
-  show() {
-    clearTimeout(this.hideTimeoutHandle);
-    super.show();
   }
 
   /**
@@ -187,21 +148,12 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   setSmashcutData(marker: any) {
     if (marker) {
-      if (marker.isAutoShowMarker) {
-        this.titleLabel.setText(null);
-        this.commentLabel.setText(null);
-        this.avatarLabel.setText(null);
-        this.setMarkerType(null);
-        this.setBackground(false);
-        this.setLogo(true);
-      } else {
-        this.titleLabel.setText(marker.title);
-        this.commentLabel.setText('"' + marker.comment + '"');
-        this.avatarLabel.setText(marker.avatar);
-        this.setMarkerType(marker.markerType);
-        this.setBackground(true);
-        this.setLogo(false);
-      }
+      this.titleLabel.setText(marker.title);
+      this.commentLabel.setText('"' + marker.text + '"');
+      this.avatarLabel.setText(marker.avatar);
+      this.setMarkerType(marker.markerType);
+      this.setBackground(true);
+      this.setLogo(false);
     } else {
       this.titleLabel.setText(null);
       this.commentLabel.setText(null);

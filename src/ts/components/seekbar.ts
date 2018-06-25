@@ -11,24 +11,6 @@ import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {ShowSuggestionsButton} from './showsuggestionsbutton';
 
 /**
- * The integration of autoShowLabels works like this
- * 1.Automatically showing:
- * When the play position is updated, the available autoShowMarkers are
- * shown/hidden
- * 2. Clicking
- * Originally the label was hidden when the mouse moves out of the timeline
- * To keep it around, i've added a delay of 2 seconds to the hiding
- * in seekbarlabel.hide
- * Also when the mouse position is below the label, the seekbar does
- * not update the current label
- *
- * Not yet implemented:
- * When the player is playing and shows an autoShowMarker, the user
- * has to rush the mouse to it, to get it. We could disable the
- * timeline-hovering when this is happening. Yet not implmented
- */
-
-/**
  * Configuration interface for the {@link SeekBar} component.
  */
 export interface SeekBarConfig extends ComponentConfig {
@@ -96,9 +78,6 @@ export class SeekBar extends Component<SeekBarConfig> {
   private timelineMarkers: TimelineMarker[];
 
   private _commentsOn: boolean = true;
-  private autoShowTimelineMarkers: TimelineMarker[];
-  private currentAutoShowTimelineMarkers: TimelineMarker[];
-  private isShowingAutoShowMarker: boolean = false;
   private snappedMarker: TimelineMarker;
 
 
@@ -134,8 +113,6 @@ export class SeekBar extends Component<SeekBarConfig> {
     onChangeCommentsOn: new EventDispatcher<SeekBar, boolean>(),
   };
 
-  private hideDelay = 500
-
   constructor(config: SeekBarConfig = {}) {
     super(config);
 
@@ -148,8 +125,6 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.label = this.config.label;
     this.showSuggestionButton = this.config.showSuggestionButton;
     this.timelineMarkers = [];
-    this.autoShowTimelineMarkers = [];
-    this.currentAutoShowTimelineMarkers = [];
   }
 
   initialize(): void {
@@ -182,64 +157,6 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker});
     };
 
-    let checkAutoShowMarkers = (currentTime: number, percentage: number) => {
-      let filteredCurrentMarkers = [];
-      for (let marker of this.currentAutoShowTimelineMarkers) {
-        let startTime = marker.time - marker.autoShowDuration / 2;
-        let endTime = marker.time + marker.autoShowDuration / 2;
-        if (currentTime < startTime || currentTime > endTime) {
-          dispatchMarkerEvent('hide', marker);
-
-          if (this.isShowingAutoShowMarker) {
-            this.isShowingAutoShowMarker = false;
-
-            if (this.hasLabel() && !this.getLabel().isHidden()) {
-              this.getLabel().hide(this.hideDelay);
-            }
-          }
-
-          if (this.hasShowSuggestionButton() && !this.getShowSuggestionsButton().isHidden()) {
-            this.getShowSuggestionsButton().hide();
-          }
-        } else {
-          filteredCurrentMarkers.push(marker);
-        }
-      }
-      this.currentAutoShowTimelineMarkers = filteredCurrentMarkers;
-
-      for (let marker of this.autoShowTimelineMarkers) {
-        let startTime = marker.time - marker.autoShowDuration / 2;
-        let endTime = marker.time + marker.autoShowDuration / 2;
-        if (currentTime >= startTime && currentTime <= endTime) {
-          if (this.currentAutoShowTimelineMarkers.indexOf(marker) === -1) {
-            this.currentAutoShowTimelineMarkers.push(marker);
-            if (this.label) {
-              this.label.getDomElement().css({
-                'left': (marker.timePercentage) + '%',
-              });
-            }
-            if (this.hasLabel() && this.getLabel().isHidden()) {
-              if (marker.markerType !== 'note') {
-                this.getLabel().show();
-              } else {
-                this.getShowSuggestionsButton().configWithoutArgs({
-                  currentMarker: marker,
-                });
-                this.getShowSuggestionsButton().show();
-              }
-            }
-            this.isShowingAutoShowMarker = true;
-            this.seekBarEvents.onSeekPreview.dispatch(this, {
-              scrubbing: false,
-              position: marker.timePercentage,
-              marker,
-            });
-          }
-          dispatchMarkerEvent('show', marker);
-        }
-      }
-    };
-
     // Update playback and buffer positions
     let playbackPositionHandler = (event: PlayerEvent = null, forceUpdate: boolean = false) => {
       if (isSeeking) {
@@ -263,7 +180,6 @@ export class SeekBar extends Component<SeekBarConfig> {
       else {
         let currentTime = player.getCurrentTime();
         let playbackPositionPercentage = 100 / player.getDuration() * currentTime;
-        checkAutoShowMarkers(currentTime, playbackPositionPercentage);
 
         let videoBufferLength = player.getVideoBufferLength();
         let audioBufferLength = player.getAudioBufferLength();
@@ -519,8 +435,6 @@ export class SeekBar extends Component<SeekBarConfig> {
   private configureMarkers(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     let clearMarkers = () => {
       this.timelineMarkers = [];
-      this.autoShowTimelineMarkers = [];
-      this.currentAutoShowTimelineMarkers = [];
       this.updateMarkers();
     };
 
@@ -543,21 +457,15 @@ export class SeekBar extends Component<SeekBarConfig> {
         for (let o of markers) {
           if (o.time <= duration) {
             let marker = {
-              autoShowDuration: o.autoShowDuration || 10, // seconds
               avatar: o.avatar,
-              comment: o.comment || '',
-              isAutoShowMarker: o.isAutoShowMarker || false,
+              text: o.text || o.comment || '',
               markerType: o.markerType || 'default',
-              msg: o.msg || '',
               originalData: o,
               time: o.time,
               timePercentage: 100 / duration * o.time, // convert time to percentage
               title: o.title,
             };
             this.timelineMarkers.push(marker);
-            if (marker.isAutoShowMarker) {
-              this.autoShowTimelineMarkers.push(marker);
-            }
           }
         }
       }
@@ -734,7 +642,6 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (!snappedMarker || snappedMarker.markerType === 'note') {
         if (snappedMarker) {
-          this.snappedMarker = null;
 
           this.getShowSuggestionsButton().configWithoutArgs({
             currentMarker: snappedMarker,
@@ -762,7 +669,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.snappedMarker = null;
 
       if (this.hasLabel()) {
-        this.getLabel().hide(this.hideDelay);
+        this.getLabel().hide();
       }
     });
 
@@ -800,16 +707,18 @@ export class SeekBar extends Component<SeekBarConfig> {
     let snappedMarker: TimelineMarker = null;
 
     if (this.timelineMarkers.length > 0) {
-      for (let marker of this.timelineMarkers) {
-        let snappingRange = marker.isAutoShowMarker ? 3 : 1;
-
-        if (percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange) {
-          snappedMarker = marker;
-          break;
+      const snappingRange = 1;
+      const snappedMarkers = this.timelineMarkers.filter(marker => percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange);
+      if (snappedMarkers.length > 0) {
+        snappedMarker = snappedMarkers.pop();
+        for (const marker of snappedMarkers) {
+          if (Math.abs(marker.timePercentage - percentage) <
+            Math.abs(snappedMarker.timePercentage - percentage)) {
+            snappedMarker = marker;
+          }
         }
       }
     }
-
     return snappedMarker;
   }
 
@@ -1025,7 +934,7 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.seekBarEvents.onSeekPreview.dispatch(this, {
       scrubbing: scrubbing,
       position: percentage,
-      marker: (snappedMarker && snappedMarker.markerType === 'note') ? null : snappedMarker,
+      marker: snappedMarker,
     });
   }
 
