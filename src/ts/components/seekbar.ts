@@ -157,6 +157,23 @@ export class SeekBar extends Component<SeekBarConfig> {
       this.seekBar.dispatchSmashcutPlayerUiEvent({action: 'marker-' + type, marker});
     };
 
+    const updateShowSuggestionButton = (currentTime: number, playbackPositionPercentage: number) => {
+      const snappedMarker = this.getMarkerAtPosition(playbackPositionPercentage);
+
+      if (snappedMarker && snappedMarker.markerType === 'note') {
+
+        this.getShowSuggestionsButton().configWithoutArgs({
+          currentMarker: snappedMarker,
+        });
+
+        if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
+          this.getShowSuggestionsButton().show();
+        }
+      } else {
+        this.getShowSuggestionsButton().hide();
+      }
+    };
+
     // Update playback and buffer positions
     let playbackPositionHandler = (event: PlayerEvent = null, forceUpdate: boolean = false) => {
       if (isSeeking) {
@@ -180,6 +197,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       else {
         let currentTime = player.getCurrentTime();
         let playbackPositionPercentage = 100 / player.getDuration() * currentTime;
+        updateShowSuggestionButton(currentTime, playbackPositionPercentage);
 
         let videoBufferLength = player.getVideoBufferLength();
         let audioBufferLength = player.getAudioBufferLength();
@@ -586,6 +604,10 @@ export class SeekBar extends Component<SeekBarConfig> {
           e,
           marker: snappedMarker,
         });
+        if (snappedMarker.markerType === 'note') {
+          this.snappedMarker = null;
+          this.getLabel().hide();
+        }
       }
 
       this.setSeeking(false);
