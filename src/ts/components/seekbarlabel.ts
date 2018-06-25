@@ -146,10 +146,21 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.titleLabel.setText(text);
   }
 
+
   setSmashcutData(marker: any) {
     if (marker) {
+      let text = marker.text || '';
+      if (text.length > 250) {
+        const words = text.split(' ');
+        let length = text.length;
+        while (length > 250) {
+          const word = words.pop();
+          length -= word.length + 1;
+        }
+        text = words.join(' ') + ' ...';
+      }
       this.titleLabel.setText(marker.title);
-      this.commentLabel.setText('"' + marker.text + '"');
+      this.commentLabel.setText('"' + text + '"');
       this.avatarLabel.setText(marker.avatar);
       this.setMarkerType(marker.markerType);
       this.setBackground(true);
