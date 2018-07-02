@@ -14,8 +14,7 @@
 
   // Center container on left edge to get it centered over timeline position
   %center-on-left-edge {
-    margin-left: -50%;
-    margin-right: 50%;
+    left: -15%;
     position: relative;
   }
 
@@ -31,12 +30,16 @@
       border-top-color: $color-smashcut-gray;
       content: ' ';
       height: 0;
-      left: 50%;
+      left: 15%;
       margin-left: -.5em;
       pointer-events: none;
       position: absolute;
       top: 100%;
       width: 0;
+    }
+
+    &.no-border {
+      border: none !important;
     }
 
     > .#{$prefix}-container-wrapper {
@@ -72,8 +75,8 @@
     &.marker {
       > .#{$prefix}-container-wrapper {
         background: $color-smashcut-gray;
-        width: 300px;
-        height: 162px;
+        width: 100%;
+        height: auto;
       }
     }
   }
@@ -128,6 +131,7 @@
 
         .#{$prefix}-seekbar-label-title {
           display: block;
+          word-break: break-all;
           white-space: normal;
           font-weight: bold;
           font-size: 16px;

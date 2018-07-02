@@ -18,6 +18,7 @@ export interface SeekBarLabelConfig extends ContainerConfig {
 export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
 
+  private innerSeekbar: Component<ComponentConfig>;
   private timeLabel: Label<LabelConfig>;
   private titleLabel: Label<LabelConfig>;
   private thumbnail: Component<ComponentConfig>;
@@ -74,16 +75,17 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       cssClass: 'seekbar-label-metadata',
     });
 
+    this.innerSeekbar = new Container({
+      components: [
+        this.thumbnail,
+        this.logo,
+        this.metadata,
+      ],
+      cssClass: 'seekbar-label-inner',
+    });
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-seekbar-label',
-      components: [new Container({
-        components: [
-          this.thumbnail,
-          this.logo,
-          this.metadata,
-        ],
-        cssClass: 'seekbar-label-inner',
-      })],
+      components: [this.innerSeekbar],
       hidden: true,
     }, this.config);
   }
@@ -162,6 +164,10 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       this.titleLabel.setText(marker.title);
       this.commentLabel.setText('"' + text + '"');
       this.avatarLabel.setText(marker.avatar);
+      // Removing margin if the user doesn't have an avatar
+      this.avatarLabel
+        .getDomElement()
+        .css('margin', marker.avatar ? null : '0');
       this.setMarkerType(marker.markerType);
       this.setBackground(true);
       this.setLogo(false);
@@ -210,9 +216,44 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         'width': width + 'px',
         'height': null,
       });
-    }
-    else {
+
+      // max width for the note is 280px
+      let newWidth = 280;
+
+      metadataElement.css('width', newWidth + 'px');
+
+      /*
+      Using a for statement to avoid infinite loop.
+      Usually the width won't be lower than 80px.
+      This loop tries to find the biggest width (max 280) for the note.
+       */
+      for (let i = 0; i < 200; i++) {
+        const oldHeight = metadataElement.css('height');
+
+        // We reduce the width by 10px each time
+        newWidth -= 10;
+
+        metadataElement.css('width', newWidth + 'px');
+
+        /*
+        If the height of the element changed it means there is enough text to fit the previous width,
+        which means we found the right width (the previous one)
+         */
+        if (oldHeight !== metadataElement.css('height')) {
+          newWidth += 10;
+          break;
+        }
+      }
+
+      // We remove the seekbar border (used only for thumbnails)
+      this.innerSeekbar.getDomElement().addClass('no-border');
+
+      // We set the new width of the metadata element
+      metadataElement.css('width', newWidth + 'px');
+    } else {
       metadataElement.removeClass('marker');
+      metadataElement.css('width', null);
+      this.innerSeekbar.getDomElement().removeClass('no-border');
       // We use the thumbnail image loader to make sure the thumbnail is loaded and it's size is known before be can
       // calculate the CSS properties and set them on the element.
       this.thumbnailImageLoader.load(thumbnail.url, (url, width, height) => {
