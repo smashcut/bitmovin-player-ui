@@ -6,9 +6,11 @@
   $bar-inset: .41em;
   $border-radius: 3px;
 
-  margin: 0 18px 4px !important;
-
   .#{$prefix}-seekbar {
+    position: relative;
+    top: 4px;
+    background: $color-white;
+    height: 3px;
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
       background-color: transparentize($color-white, .4);

@@ -83,12 +83,13 @@
       background-image: svg('assets/skin-modern/images/dot-play.svg');
       background-position: center;
       background-repeat: no-repeat;
-      background-size: 1.6em;
+      background-size: 1.7em;
       display: none;
       height: 1em;
       left: -.5em;
       position: absolute;
       width: 1em;
+      margin-top: -6px;
     }
 
     .#{$prefix}-seekbar-markers {

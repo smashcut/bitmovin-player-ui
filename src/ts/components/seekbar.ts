@@ -169,7 +169,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
           this.getShowSuggestionsButton().show();
         }
-      } else {
+      } else if (this.hasShowSuggestionButton()) {
         this.getShowSuggestionsButton().hide();
       }
     };
@@ -681,7 +681,7 @@ export class SeekBar extends Component<SeekBarConfig> {
           if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
             this.getShowSuggestionsButton().show();
           }
-        } else {
+        } else if (this.hasShowSuggestionButton()) {
           this.getShowSuggestionsButton().hide();
         }
       }
@@ -850,12 +850,13 @@ export class SeekBar extends Component<SeekBarConfig> {
   /**
    * Sets the position of the playback position indicator.
    * @param percent a number between 0 and 100 as returned by the player
+   * @param volume - if true that means that the function is called from the volume slider
    */
-  setPlaybackPosition(percent: number) {
+  setPlaybackPosition(percent: number, volume: boolean = false) {
     this.playbackPositionPercentage = percent;
 
     // Set position of the bar
-    this.setPosition(this.seekBarPlaybackPosition, percent);
+    this.setPosition(this.seekBarPlaybackPosition, percent, volume);
 
     // Set position of the marker
     let totalSize = (this.config.vertical ? (this.seekBar.height() - this.seekBarPlaybackPositionMarker.height()) : this.seekBar.width());
@@ -874,16 +875,17 @@ export class SeekBar extends Component<SeekBarConfig> {
    * Refreshes the playback position. Can be used by subclasses to refresh the position when
    * the size of the component changes.
    */
-  protected refreshPlaybackPosition() {
-    this.setPlaybackPosition(this.playbackPositionPercentage);
+  protected refreshPlaybackPosition(volume: boolean = false) {
+    this.setPlaybackPosition(this.playbackPositionPercentage, volume);
   }
 
   /**
    * Sets the position until which media is buffered.
    * @param percent a number between 0 and 100
+   * @param volume - if true that means that the function is called from the volume slider
    */
-  setBufferPosition(percent: number) {
-    this.setPosition(this.seekBarBufferPosition, percent);
+  setBufferPosition(percent: number, volume: boolean = false) {
+    this.setPosition(this.seekBarBufferPosition, percent, volume);
   }
 
   /**
@@ -898,15 +900,23 @@ export class SeekBar extends Component<SeekBarConfig> {
    * Set the actual position (width or height) of a DOM element that represent a bar in the seek bar.
    * @param element the element to set the position for
    * @param percent a number between 0 and 100
+   * @param volume - if true that means that the function is called from the volume slider
    */
-  private setPosition(element: DOM, percent: number) {
+  private setPosition(element: DOM, percent: number, volume: boolean = false) {
     const vertical = this.config.vertical;
     let scale = percent / 100 * (vertical ? this.seekBar.height() : this.seekBar.width());
     let style = vertical ?
       {'height': `${scale}px`} :
       {'width': `${scale}px`};
 
-    element.css(style);
+    scale = Math.min(100, Math.max(0, percent)) / 100;
+
+    let volumeStyle = vertical ?
+      // -ms-transform required for IE9
+      { 'transform': 'scaleY(' + scale + ')', '-ms-transform': 'scaleY(' + scale + ')' } :
+      { 'transform': 'scaleX(' + scale + ')', '-ms-transform': 'scaleX(' + scale + ')' };
+
+    element.css(volume ? volumeStyle : style);
   }
 
   /**

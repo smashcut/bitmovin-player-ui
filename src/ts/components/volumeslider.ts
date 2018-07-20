@@ -44,12 +44,12 @@ export class VolumeSlider extends SeekBar {
 
     let volumeChangeHandler = () => {
       if (player.isMuted()) {
-        this.setPlaybackPosition(0);
-        this.setBufferPosition(0);
+        this.setPlaybackPosition(0, true);
+        this.setBufferPosition(0, true);
       } else {
-        this.setPlaybackPosition(player.getVolume());
+        this.setPlaybackPosition(player.getVolume(), true);
 
-        this.setBufferPosition(player.getVolume());
+        this.setBufferPosition(player.getVolume(), true);
       }
     };
 
@@ -70,13 +70,13 @@ export class VolumeSlider extends SeekBar {
     // Update the volume slider marker when the player resized, a source is loaded and player is ready,
     // or the UI is configured. Check the seekbar for a detailed description.
     player.addEventHandler(player.EVENT.ON_PLAYER_RESIZE, () => {
-      this.refreshPlaybackPosition();
+      this.refreshPlaybackPosition(true);
     });
     player.addEventHandler(player.EVENT.ON_READY, () => {
-      this.refreshPlaybackPosition();
+      this.refreshPlaybackPosition(true);
     });
     uimanager.onConfigured.subscribe(() => {
-      this.refreshPlaybackPosition();
+      this.refreshPlaybackPosition(true);
     });
 
     // Init volume bar
