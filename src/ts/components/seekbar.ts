@@ -589,6 +589,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       new DOM(document).off('touchend mouseup', mouseTouchUpHandler);
 
       let targetPercentage = 100 * this.getOffset(e);
+      let snappedMarker = this.getMarkerAtPosition(targetPercentage);
 
       seekBar.dispatchSmashcutPlayerUiEvent({
         action: 'seeking-end',
@@ -597,11 +598,24 @@ export class SeekBar extends Component<SeekBarConfig> {
         originator: 'SeekBar',
       });
 
+      if (snappedMarker) {
+        seekBar.dispatchSmashcutPlayerUiEvent({
+          action: 'marker-click',
+          e,
+          marker: snappedMarker,
+        });
+
+        if (snappedMarker.markerType === 'note') {
+          this.snappedMarker = null;
+          this.getLabel().hide();
+        }
+      }
+
       this.setSeeking(false);
       seeking = false;
 
       // Fire seeked event
-      this.onSeekedEvent(targetPercentage);
+      this.onSeekedEvent(snappedMarker ? snappedMarker.timePercentage : targetPercentage);
     };
 
     // A seek always start with a touchstart or mousedown directly on the seekbar.
@@ -660,7 +674,6 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       if (!snappedMarker || snappedMarker.markerType === 'note') {
         if (snappedMarker) {
-
           this.getShowSuggestionsButton().configWithoutArgs({
             currentMarker: snappedMarker,
           });
@@ -673,7 +686,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         }
       }
 
-      if (!isOverMarker && this.hasLabel() && this.getLabel().isHidden()) {
+      if (this.hasLabel() && this.getLabel().isHidden()) {
         this.getLabel().show();
         this.getShowSuggestionsButton().hide();
       }
@@ -681,7 +694,9 @@ export class SeekBar extends Component<SeekBarConfig> {
       if (isOverMarker && snappedMarker) {
         const markerEl = this.seekBarMarkersContainer.find(`[data-marker-time="${snappedMarker.time}"]`);
 
+        this.removeBiggerMarkers();
         markerEl.addClass('bigger');
+
         this.getLabel().show();
         this.getLabel().setSmashcutData(snappedMarker);
         this.getLabel().setTimeText(null);
