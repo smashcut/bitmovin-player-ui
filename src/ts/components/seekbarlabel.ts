@@ -100,17 +100,11 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         let time = maxTimeShift - maxTimeShift * (args.position / 100);
         this.setTime(time);
       } else {
-        if (args.marker) {
-          this.setSmashcutData(args.marker);
-          this.setTimeText(null);
-          this.setThumbnail(null, 180);
-        } else {
-          this.setSmashcutData(null);
-          let percentage = args.position;
-          let time = player.getDuration() * (percentage / 100);
-          this.setTime(time);
-          this.setThumbnail(player.getThumb(time));
-        }
+        this.setSmashcutData(null);
+        let percentage = args.position;
+        let time = player.getDuration() * (percentage / 100);
+        this.setTime(time);
+        this.setThumbnail(player.getThumb(time));
       }
     }, 100);
 
@@ -148,19 +142,28 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.titleLabel.setText(text);
   }
 
-
   setSmashcutData(marker: any) {
     if (marker) {
       let text = marker.text || '';
+
       if (text.length > 250) {
         const words = text.split(' ');
         let length = text.length;
+
         while (length > 250) {
           const word = words.pop();
           length -= word.length + 1;
         }
+
         text = words.join(' ') + ' ...';
       }
+
+      if (marker.markerType === 'note') {
+        this.titleLabel.getDomElement().addClass('note');
+      } else {
+        this.titleLabel.getDomElement().removeClass('note');
+      }
+
       this.titleLabel.setText(marker.title);
       this.commentLabel.setText('"' + text + '"');
       this.avatarLabel.setText(marker.avatar);
@@ -172,6 +175,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       this.setBackground(true);
       this.setLogo(false);
     } else {
+      this.titleLabel.getDomElement().removeClass('note');
       this.titleLabel.setText(null);
       this.commentLabel.setText(null);
       this.avatarLabel.setText(null);
@@ -183,10 +187,13 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   setMarkerType(type: string) {
     let dom = this.markerType.getDomElement();
+
     if (this.markerTypeClass) {
       dom.removeClass(this.markerTypeClass);
     }
+
     this.markerTypeClass = type;
+
     if (this.markerTypeClass) {
       dom.addClass(type);
     }
@@ -203,12 +210,17 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   /**
    * Sets or removes a thumbnail on the label.
    * @param thumbnail the thumbnail to display on the label or null to remove a displayed thumbnail
+   * @param width
    */
   setThumbnail(thumbnail: bitmovin.PlayerAPI.Thumbnail = null, width: number = 180) {
     let thumbnailElement = this.thumbnail.getDomElement();
     let metadataElement = this.metadata.getDomElement();
 
     if (thumbnail == null) {
+      this.getDomElement().css({
+        'margin-bottom': '32px',
+      });
+
       metadataElement.addClass('marker');
       thumbnailElement.css({
         'background-image': null,
@@ -251,6 +263,9 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       // We set the new width of the metadata element
       metadataElement.css('width', newWidth + 'px');
     } else {
+      this.getDomElement().css({
+        'margin-bottom': '',
+      });
       metadataElement.removeClass('marker');
       metadataElement.css('width', null);
       this.innerSeekbar.getDomElement().removeClass('no-border');

@@ -559,8 +559,8 @@ export class SeekBar extends Component<SeekBarConfig> {
     });
     this.seekBarMarkersContainer = seekBarChapterMarkersContainer;
 
-    seekBar.append(this.seekBarBackdrop, this.seekBarBufferPosition, this.seekBarSeekPosition,
-      this.seekBarPlaybackPosition, this.seekBarMarkersContainer, this.seekBarPlaybackPositionMarker);
+    seekBar.append(this.seekBarBackdrop, this.seekBarBufferPosition, this.seekBarPlaybackPosition,
+      this.seekBarSeekPosition, this.seekBarMarkersContainer, this.seekBarPlaybackPositionMarker);
 
     let seeking = false;
 
@@ -589,7 +589,6 @@ export class SeekBar extends Component<SeekBarConfig> {
       new DOM(document).off('touchend mouseup', mouseTouchUpHandler);
 
       let targetPercentage = 100 * this.getOffset(e);
-      let snappedMarker = this.getMarkerAtPosition(targetPercentage);
 
       seekBar.dispatchSmashcutPlayerUiEvent({
         action: 'seeking-end',
@@ -598,23 +597,11 @@ export class SeekBar extends Component<SeekBarConfig> {
         originator: 'SeekBar',
       });
 
-      if (snappedMarker) {
-        seekBar.dispatchSmashcutPlayerUiEvent({
-          action: 'marker-click',
-          e,
-          marker: snappedMarker,
-        });
-        if (snappedMarker.markerType === 'note') {
-          this.snappedMarker = null;
-          this.getLabel().hide();
-        }
-      }
-
       this.setSeeking(false);
       seeking = false;
 
       // Fire seeked event
-      this.onSeekedEvent(snappedMarker ? snappedMarker.timePercentage : targetPercentage);
+      this.onSeekedEvent(targetPercentage);
     };
 
     // A seek always start with a touchstart or mousedown directly on the seekbar.
@@ -647,6 +634,12 @@ export class SeekBar extends Component<SeekBarConfig> {
     seekBar.on('touchmove mousemove', (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
+      let isOverMarker = false;
+
+      if (e.target instanceof Element && (e.target as Element).className.indexOf('seekbar-markers') === -1) {
+        isOverMarker = true;
+      }
+
       if (seeking) {
         // During a seek (when mouse is down or touch move active), we need to stop propagation to avoid
         // the VR viewport reacting to the moves.
@@ -659,8 +652,11 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       const snappedMarker = this.getMarkerAtPosition(position);
 
-      this.setSeekPosition(position);
-      this.onSeekPreviewEvent(position, false);
+      if (!isOverMarker) {
+        this.setSeekPosition(position);
+      }
+
+      this.onSeekPreviewEvent(position, false, isOverMarker);
 
       if (!snappedMarker || snappedMarker.markerType === 'note') {
         if (snappedMarker) {
@@ -677,9 +673,19 @@ export class SeekBar extends Component<SeekBarConfig> {
         }
       }
 
-      if (this.hasLabel() && this.getLabel().isHidden()) {
+      if (!isOverMarker && this.hasLabel() && this.getLabel().isHidden()) {
         this.getLabel().show();
         this.getShowSuggestionsButton().hide();
+      }
+
+      if (isOverMarker && snappedMarker) {
+        const markerEl = this.seekBarMarkersContainer.find(`[data-marker-time="${snappedMarker.time}"]`);
+
+        markerEl.addClass('bigger');
+        this.getLabel().show();
+        this.getLabel().setSmashcutData(snappedMarker);
+        this.getLabel().setTimeText(null);
+        this.getLabel().setThumbnail(null, 180);
       }
     });
 
@@ -693,6 +699,8 @@ export class SeekBar extends Component<SeekBarConfig> {
       if (this.hasLabel()) {
         this.getLabel().hide();
       }
+
+      this.removeBiggerMarkers();
     });
 
     seekBarContainer.append(seekBar);
@@ -877,11 +885,12 @@ export class SeekBar extends Component<SeekBarConfig> {
    * @param percent a number between 0 and 100
    */
   private setPosition(element: DOM, percent: number) {
-    let scale = Math.min(100, Math.max(0, percent)) / 100;
-    let style = this.config.vertical ?
-      // -ms-transform required for IE9
-      {'transform': 'scaleY(' + scale + ')', '-ms-transform': 'scaleY(' + scale + ')'} :
-      {'transform': 'scaleX(' + scale + ')', '-ms-transform': 'scaleX(' + scale + ')'};
+    const vertical = this.config.vertical;
+    let scale = percent / 100 * (vertical ? this.seekBar.height() : this.seekBar.width());
+    let style = vertical ?
+      {'height': `${scale}px`} :
+      {'width': `${scale}px`};
+
     element.css(style);
   }
 
@@ -943,13 +952,19 @@ export class SeekBar extends Component<SeekBarConfig> {
     this.seekBarEvents.onSeek.dispatch(this);
   }
 
-  protected onSeekPreviewEvent(percentage: number, scrubbing: boolean) {
+  protected removeBiggerMarkers() {
+    const markers = this.seekBarMarkersContainer.find('[data-marker-time]');
+
+    markers.removeClass('bigger');
+  }
+
+  protected onSeekPreviewEvent(percentage: number, scrubbing: boolean, isOverMarker: boolean = false) {
     let snappedMarker = this.getMarkerAtPosition(percentage);
     this.snappedMarker = snappedMarker;
 
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (snappedMarker ? snappedMarker.timePercentage : percentage) + '%',
+        'left': ((snappedMarker && isOverMarker) ? snappedMarker.timePercentage : percentage) + '%',
       });
     }
 

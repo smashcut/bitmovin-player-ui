@@ -495,20 +495,6 @@ export namespace UIManager.Factory {
       hidden: true,
     });
 
-    let controlBarTop = new Container({
-      cssClasses: ['controlbar-top'],
-      components: [
-        new PlaybackTimeLabel({
-          timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-          hideInLivePlayback: true,
-        }),
-        new PlaybackTimeLabel({
-          timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-          cssClasses: ['text-right'],
-        }),
-      ],
-    });
-
     let seekBar = new SeekBar({label: new SeekBarLabel(), showSuggestionButton: showSuggestionButton});
 
     let controlBarMiddle = new Container({
@@ -519,6 +505,17 @@ export namespace UIManager.Factory {
     let controlBarBottom = new Container({
       cssClasses: ['controlbar-bottom'],
       components: [
+        new PlaybackToggleButton(),
+        new SkipButton({duration: -10}),
+        new SkipButton({duration: 10}),
+        new PlaybackTimeLabel({
+          timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
+          hideInLivePlayback: true,
+        }),
+        new PlaybackTimeLabel({
+          timeLabelMode: PlaybackTimeLabelMode.TotalTime,
+          cssClasses: ['text-right'],
+        }),
         new Spacer(),
         new VolumeSlider(),
         new VolumeToggleButton(),
@@ -533,16 +530,12 @@ export namespace UIManager.Factory {
 
     let controlBar = new ControlBar({
       components: [
-        new PlaybackToggleButton(),
-        new SkipButton({duration: -10}),
-        new SkipButton({duration: 10}),
         new Container({
           cssClasses: ['controlbar-inner'],
           components: [
             settingsPanel,
             subtitleSettingsPanel,
             embedVideoPanel,
-            controlBarTop,
             controlBarMiddle,
             controlBarBottom,
           ],

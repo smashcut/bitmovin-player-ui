@@ -15,8 +15,11 @@
   $bar-inset: 0;
 
   .#{$prefix}-seekbar {
-    height: 100%;
+    height: 8px;
     position: relative;
+    background: #4b5058;
+    border: 0 solid transparent;
+    border-radius: 4px;
 
     %bar {
       // sass-lint:disable no-vendor-prefixes
@@ -30,35 +33,48 @@
       width: 100%;
     }
 
+    %biggerMarker {
+      transition: all 0.25s;
+      &.bigger {
+        top: -19px;
+        left: -2px;
+        transform: scale(1.5);
+      }
+    }
+
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
       background-color: transparent; //transparentize($color-white, .8);
-      border: 1px solid transparentize($color-white, .8);
       margin: $bar-inset 0;
       width: 100%;
     }
 
     .#{$prefix}-seekbar-bufferlevel {
       @extend %bar;
-      background-color: transparentize($color-white, .7);
+      background-color: #84878d;
       margin: $bar-inset 0;
-      opacity: .5;
       transition: .3s linear, .3s linear;
       transition-property: transform;
+      border: 0 solid transparent;
+      border-radius: 4px 0 0 4px;
     }
 
     .#{$prefix}-seekbar-seekposition {
       @extend %bar;
-      background-color: transparentize($color-white, .7);
+      background-color: rgba(255, 255, 255, 0.3);
       margin: $bar-inset 0;
+      border: 0 solid transparent;
+      border-radius: 4px 0 0 4px;
     }
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
-      background-color: transparentize($color-white, .7);
+      background-color: #dc4a28;
       margin: $bar-inset 0;
       transition: .1s linear, .1s linear;
       transition-property: transform;
+      border: 0 solid transparent;
+      border-radius: 4px 0 0 4px;
     }
 
     .#{$prefix}-seekbar-playbackposition-marker {
@@ -83,65 +99,64 @@
       margin: ($bar-inset / 1.3) 0;
 
       > .#{$prefix}-seekbar-marker-type-default {
-        @extend %bar;
+        @extend %biggerMarker;
 
+        position: absolute;
+        top: -17px;
         border-radius: 50%;
         background-color: green;
-        top: -3px;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        margin-left: -$marker-width / 2 - 2;
-        width: 7px;
-        height: 7px;
-
-        @include vertical-bar-marker(green);
+        margin-left: -6px;
+        width: 8px;
+        height: 8px;
       }
 
       > .#{$prefix}-seekbar-marker-type-mentor {
-        @extend %bar;
+        @extend %biggerMarker;
 
-        top: -3px;
+        position: absolute;
+        top: -17px;
         border-radius: 50%;
-        background-color: $color-smashcut-blue;
+        background-color: $new-color-smashcut-blue;
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        margin-left: -$marker-width / 2 - 2;
-        width: 7px;
-        height: 7px;
-
-        @include vertical-bar-marker($color-smashcut-blue);
+        width: 8px;
+        margin-left: -6px;
+        height: 8px;
       }
 
       > .#{$prefix}-seekbar-marker-type-student {
-        border-radius: 50%;
-        top: -3px;
+        @extend %biggerMarker;
+
         position: absolute;
-        background-color: $color-smashcut-yellow;
+        top: -17px;
+        border-radius: 50%;
+        background-color: $new-color-smashcut-yellow ;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        width: 7px;
-        height: 7px;
+        width: 8px;
+        height: 8px;
         margin-left: -6px;
-
-        @include vertical-bar-marker($color-smashcut-yellow);
       }
 
       > .#{$prefix}-seekbar-marker-type-note {
-        top: 12px;
+        @extend %biggerMarker;
+
+        border: 2px solid $new-color-smashcut-orange;
+        border-radius: 50%;
+        top: -17px;
         position: absolute;
-        background-color: $color-smashcut-orange;
         //border: $marker-width solid $color-smashcut-orange;
         // don't consider the border for width, else it does not overlap at edges
         box-sizing: content-box;
         // offset position marker to center it on its actual position
-        width: 7px;
-        height: 7px;
+        width: 4px;
+        height: 4px;
         margin-left: -6px;
-
-        @include vertical-bar-marker($color-smashcut-orange, "top");
       }
     }
   }

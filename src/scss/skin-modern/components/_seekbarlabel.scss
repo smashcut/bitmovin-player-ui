@@ -7,7 +7,7 @@
 
   bottom: 100%;
   left: 0;
-  margin-bottom: 1.5em; //distance of label from timeline
+  margin-bottom: 10.5px; //distance of label from timeline
   pointer-events: none;
   position: absolute;
   text-align: center;
@@ -27,11 +27,11 @@
     // bottom arrow from http://www.cssarrowplease.com/
     &::after {
       border: .5em solid transparent;
-      border-top-color: $color-smashcut-gray;
+      border-top-color: $new-color-smashcut-red;
       content: ' ';
       height: 0;
       left: 15%;
-      margin-left: -.5em;
+      margin-left: -.65em;
       pointer-events: none;
       position: absolute;
       top: 100%;
@@ -67,14 +67,16 @@
     width: 100%;
 
     > .#{$prefix}-container-wrapper {
-      padding: .7em;
-      color: $color-white;
+      padding: 20px;
       font-family: Roboto, serif;
+      border: solid #dc4a28;
+      border-width: 0 0 2px 0;
     }
 
     &.marker {
       > .#{$prefix}-container-wrapper {
-        background: $color-smashcut-gray;
+        background: $color-white;
+        color: $color-black;
         width: 100%;
         height: auto;
       }
@@ -115,14 +117,12 @@
           font-size: 12px;
 
           &.student {
-            color: $color-smashcut-yellow;
             &:before {
               content: 'Student';
             }
           }
 
           &.mentor {
-            color: $color-smashcut-blue;
             &:before {
               content: 'Mentor';
             }
@@ -135,6 +135,19 @@
           white-space: normal;
           font-weight: bold;
           font-size: 16px;
+
+          &.note {
+            &::before {
+              content: '';
+              position: relative;
+              top: 2px;
+              display: inline-block;
+              width: 12px;
+              height: 16px;
+              background-image: svg('assets/skin-modern/images/lightbulb-regular.svg', '[fill]: #{$color-black}');
+              margin-right: 12px;
+            }
+          }
         }
       }
     }
