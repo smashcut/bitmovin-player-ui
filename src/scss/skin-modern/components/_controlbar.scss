@@ -4,12 +4,12 @@
 .#{$prefix}-ui-controlbar {
   @extend %ui-container;
 
-  background: $color-black;
-  bottom: -$controlbar-height;
+  padding-top: 35px !important;
+  background: $new-color-smashcut-black;
+  bottom: calc((#{$controlbar-height} + 30px) * -1);
   min-height: $controlbar-height;
   left: 0;
   line-height: 1em;
-  padding: 0;
   position: absolute;
   right: 0;
 

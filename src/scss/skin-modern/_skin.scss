@@ -3,7 +3,7 @@
 //this class makes space for
 //the controlbar below the video
 .smashcut-custom-ui-bitmovin-player-holder {
-  margin-bottom: $controlbar-height;
+  margin-bottom: calc(#{$controlbar-height} + 30px);
 }
 
 

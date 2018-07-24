@@ -9,6 +9,7 @@ import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChang
 import LiveStreamDetectorEventArgs = PlayerUtils.LiveStreamDetectorEventArgs;
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {ShowSuggestionsButton} from './showsuggestionsbutton';
+import PlayerAPI = bitmovin.PlayerAPI;
 
 /**
  * Configuration interface for the {@link SeekBar} component.
@@ -64,6 +65,7 @@ export class SeekBar extends Component<SeekBarConfig> {
    */
   private static readonly CLASS_SEEKING = 'seeking';
 
+  private player: PlayerAPI;
   private seekBar: DOM;
   private seekBarPlaybackPosition: DOM;
   private seekBarPlaybackPositionMarker: DOM;
@@ -141,6 +143,8 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager, configureSeek: boolean = true): void {
     super.configure(player, uimanager);
+
+    this.player = player;
 
     if (!configureSeek) {
       // The configureSeek flag can be used by subclasses to disable configuration as seek bar. E.g. the volume
@@ -742,7 +746,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         'data-marker-time': String(marker.time),
         'data-marker-title': String(marker.title),
       }).css({
-        'left': marker.timePercentage + '%',
+        'left': `${marker.timePercentage}%`,
       });
       this.seekBarMarkersContainer.append(markerDom);
     }
@@ -750,20 +754,31 @@ export class SeekBar extends Component<SeekBarConfig> {
 
   protected getMarkerAtPosition(percentage: number): TimelineMarker | null {
     let snappedMarker: TimelineMarker = null;
+    // Current position of the player
+    const position = (percentage / 100 * this.player.getDuration());
 
     if (this.timelineMarkers.length > 0) {
-      const snappingRange = 1;
-      const snappedMarkers = this.timelineMarkers.filter(marker => percentage >= marker.timePercentage - snappingRange && percentage <= marker.timePercentage + snappingRange);
+      // 3.5 seconds to the left or right of the marker
+      const snappingRange = 3.5;
+      const snappedMarkers = this.timelineMarkers.filter(marker =>
+        position >= (marker.time - snappingRange) &&
+        position <= (marker.time + snappingRange)
+      );
+
       if (snappedMarkers.length > 0) {
         snappedMarker = snappedMarkers.pop();
+
         for (const marker of snappedMarkers) {
-          if (Math.abs(marker.timePercentage - percentage) <
-            Math.abs(snappedMarker.timePercentage - percentage)) {
+          if (
+            Math.abs(marker.time - position) <
+            Math.abs(snappedMarker.time - position)
+          ) {
             snappedMarker = marker;
           }
         }
       }
     }
+
     return snappedMarker;
   }
 
