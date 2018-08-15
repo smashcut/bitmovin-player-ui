@@ -96,8 +96,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     super.configure(player, uimanager);
 
     uimanager.onSeekPreview.subscribeRateLimited((sender, args: SeekPreviewEventArgs) => {
-      const previousMarker = this.currentMarker;
-
       this.currentMarker = args.marker;
       this.isOverMarker = args.isOverMarker;
 
@@ -105,7 +103,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         let maxTimeShift = player.getMaxTimeShift();
         let time = maxTimeShift - maxTimeShift * (args.position / 100);
         this.setTime(time);
-      } else if (!previousMarker || !this.isOverMarker) {
+      } else if (!this.isOverMarker) {
         this.setSmashcutData(null);
         let percentage = args.position;
         let time = player.getDuration() * (percentage / 100);
