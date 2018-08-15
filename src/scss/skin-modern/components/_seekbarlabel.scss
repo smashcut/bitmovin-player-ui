@@ -116,7 +116,7 @@
           text-align: left;
           font-size: 12px;
 
-          &.student {
+          &.student, &.default {
             &:before {
               content: 'Student';
             }
@@ -125,6 +125,12 @@
           &.mentor {
             &:before {
               content: 'Mentor';
+            }
+          }
+
+          &.staff {
+            &:before {
+              content: 'Staff';
             }
           }
         }

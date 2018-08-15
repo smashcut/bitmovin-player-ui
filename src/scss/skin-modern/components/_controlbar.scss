@@ -4,9 +4,9 @@
 .#{$prefix}-ui-controlbar {
   @extend %ui-container;
 
-  padding-top: 35px !important;
+  padding-top: 22px !important;
   background: $new-color-smashcut-black;
-  bottom: calc((#{$controlbar-height} + 30px) * -1);
+  bottom: calc((#{$controlbar-height} + 14px) * -1);
   min-height: $controlbar-height;
   left: 0;
   line-height: 1em;
@@ -32,7 +32,7 @@
   }
 
   .#{$prefix}-controlbar-bottom {
-    margin: 5px 10px 8px;
+    margin: 0 10px 8px;
     white-space: nowrap; // Required for iOS 8.2 to avoid wrapped controlbar due to wrong size calculation
 
     > .#{$prefix}-container-wrapper {

@@ -1,7 +1,8 @@
 import {Container, ContainerConfig} from './container';
 import {Label, LabelConfig} from './label';
 import {Component, ComponentConfig} from './component';
-import {UIInstanceManager, SeekPreviewArgs, TimelineMarker} from '../uimanager';
+import {UIInstanceManager, TimelineMarker} from '../uimanager';
+import {SeekPreviewEventArgs} from './seekbar';
 import {StringUtils} from '../stringutils';
 import {ImageLoader} from '../imageloader';
 
@@ -32,6 +33,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   private metadata: Component<ComponentConfig>;
 
   private currentMarker: TimelineMarker;
+  private isOverMarker: boolean;
   private markerTypeClass: string;
 
   private timeFormat: string;
@@ -93,13 +95,17 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
-    uimanager.onSeekPreview.subscribeRateLimited((sender, args: SeekPreviewArgs) => {
+    uimanager.onSeekPreview.subscribeRateLimited((sender, args: SeekPreviewEventArgs) => {
+      const previousMarker = this.currentMarker;
+
       this.currentMarker = args.marker;
+      this.isOverMarker = args.isOverMarker;
+
       if (player.isLive()) {
         let maxTimeShift = player.getMaxTimeShift();
         let time = maxTimeShift - maxTimeShift * (args.position / 100);
         this.setTime(time);
-      } else {
+      } else if (!previousMarker || !this.isOverMarker) {
         this.setSmashcutData(null);
         let percentage = args.position;
         let time = player.getDuration() * (percentage / 100);
@@ -113,6 +119,10 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       this.timeFormat = Math.abs(player.isLive() ? player.getMaxTimeShift() : player.getDuration()) >= 3600 ?
         StringUtils.FORMAT_HHMMSS : StringUtils.FORMAT_MMSS;
     };
+
+    this.innerSeekbar.getDomElement().on('mouseleave', () => {
+      this.hide();
+    });
 
     player.addEventHandler(player.EVENT.ON_READY, init);
     init();
@@ -142,6 +152,22 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.titleLabel.setText(text);
   }
 
+  /**
+   * Returns the current marker.
+   * @returns {TimelineMarker}
+   */
+  getCurrentMarker() {
+    return this.currentMarker;
+  }
+
+  /**
+   * Returns if the mouse is over marker.
+   * @returns {TimelineMarker}
+   */
+  getIsOverMarker() {
+    return this.isOverMarker;
+  }
+
   setSmashcutData(marker: any) {
     if (marker) {
       let text = marker.text || '';
@@ -165,7 +191,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       }
 
       this.titleLabel.setText(marker.title);
-      this.commentLabel.setText('"' + text + '"');
+      this.commentLabel.setText(text);
       this.avatarLabel.setText(marker.avatar);
       // Removing margin if the user doesn't have an avatar
       this.avatarLabel

@@ -45,6 +45,10 @@ export interface SeekPreviewEventArgs extends SeekPreviewArgs {
    * Tells if the seek preview event comes from a scrubbing.
    */
   scrubbing: boolean;
+  /**
+   * Tells if the mouse is over a marker.
+   */
+  isOverMarker: boolean;
 }
 
 /**
@@ -170,11 +174,9 @@ export class SeekBar extends Component<SeekBarConfig> {
           currentMarker: snappedMarker,
         });
 
-        if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
-          this.getShowSuggestionsButton().show();
-        }
-      } else if (this.hasShowSuggestionButton()) {
-        this.getShowSuggestionsButton().hide();
+        this.showSuggestionsButton();
+      } else {
+        this.hideSuggestionsButton();
       }
     };
 
@@ -611,7 +613,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
         if (snappedMarker.markerType === 'note') {
           this.snappedMarker = null;
-          this.getLabel().hide();
+          this.hideLabel();
         }
       }
 
@@ -676,24 +678,20 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       this.onSeekPreviewEvent(position, false, isOverMarker);
 
-      if (!snappedMarker || snappedMarker.markerType === 'note') {
-        if (snappedMarker) {
-          this.getShowSuggestionsButton().configWithoutArgs({
-            currentMarker: snappedMarker,
-          });
+      if (snappedMarker && snappedMarker.markerType === 'note') {
+        this.getShowSuggestionsButton().configWithoutArgs({
+          currentMarker: snappedMarker,
+        });
 
-          if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
-            this.getShowSuggestionsButton().show();
-          }
-        } else if (this.hasShowSuggestionButton()) {
-          this.getShowSuggestionsButton().hide();
-        }
+        this.showSuggestionsButton();
       }
 
-      if (this.hasLabel() && this.getLabel().isHidden()) {
-        this.getLabel().show();
-        this.getShowSuggestionsButton().hide();
+      if (!snappedMarker) {
+        this.hideSuggestionsButton();
       }
+
+      this.showLabel();
+      this.hideSuggestionsButton();
 
       if (isOverMarker && snappedMarker) {
         const markerEl = this.seekBarMarkersContainer.find(`[data-marker-time="${snappedMarker.time}"]`);
@@ -701,7 +699,7 @@ export class SeekBar extends Component<SeekBarConfig> {
         this.removeBiggerMarkers();
         markerEl.addClass('bigger');
 
-        this.getLabel().show();
+        this.showLabel();
         this.getLabel().setSmashcutData(snappedMarker);
         this.getLabel().setTimeText(null);
         this.getLabel().setThumbnail(null, 180);
@@ -710,13 +708,21 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     // Hide seek target indicator when mouse or finger leaves seekbar
     seekBar.on('touchend mouseleave', (e: MouseEvent | TouchEvent) => {
+      const label = this.getLabel();
+
       e.preventDefault();
 
       this.setSeekPosition(0);
       this.snappedMarker = null;
 
-      if (this.hasLabel()) {
-        this.getLabel().hide();
+      if (label.getCurrentMarker() && label.getIsOverMarker()) {
+        setTimeout(() => {
+          if (!this.labelIsHovered()) {
+            this.hideLabel();
+          }
+        }, 200);
+      } else {
+        this.hideLabel();
       }
 
       this.removeBiggerMarkers();
@@ -973,6 +979,32 @@ export class SeekBar extends Component<SeekBarConfig> {
   }
 
   /**
+   * Returns the hovered status of the label
+   * @returns {boolean}
+   */
+  labelIsHovered(): boolean {
+    return this.hasLabel() && this.getLabel().isHovered();
+  }
+
+  /**
+   * Shows the label.
+   */
+  showLabel() {
+    if (this.hasLabel() && this.getLabel().isHidden()) {
+      this.getLabel().show();
+    }
+  }
+
+  /**
+   * Hides the label.
+   */
+  hideLabel() {
+    if (this.hasLabel() && this.getLabel().isShown()) {
+      this.getLabel().hide();
+    }
+  }
+
+  /**
    * Check if the view has a {@link ShowSuggestionsButton}
    * @returns {boolean}
    */
@@ -986,6 +1018,24 @@ export class SeekBar extends Component<SeekBarConfig> {
    */
   getShowSuggestionsButton(): ShowSuggestionsButton {
     return this.showSuggestionButton;
+  }
+
+  /**
+   * Shows the suggestions button.
+   */
+  showSuggestionsButton() {
+    if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isHidden()) {
+      this.getShowSuggestionsButton().show();
+    }
+  }
+
+  /**
+   * Hides the suggestions button.
+   */
+  hideSuggestionsButton() {
+    if (this.hasShowSuggestionButton() && this.getShowSuggestionsButton().isShown()) {
+      this.getShowSuggestionsButton().hide();
+    }
   }
 
   protected onSeekEvent() {
@@ -1012,6 +1062,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       scrubbing: scrubbing,
       position: percentage,
       marker: snappedMarker,
+      isOverMarker: isOverMarker,
     });
   }
 
