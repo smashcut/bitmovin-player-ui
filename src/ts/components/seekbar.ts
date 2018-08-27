@@ -1049,19 +1049,23 @@ export class SeekBar extends Component<SeekBarConfig> {
   }
 
   protected onSeekPreviewEvent(percentage: number, scrubbing: boolean, isOverMarker: boolean = false) {
-    const isBetweenMargins = percentage > 1.5 && percentage < 87.8;
-    let snappedMarker = this.getMarkerAtPosition(percentage);
+    const isBetweenMargins = percentage > 1.5 && percentage < 80.5;
+    const newPercentage = !isBetweenMargins
+      ? (percentage <= 1.5 ? 1.5 : 80.5)
+      : percentage;
+
+    let snappedMarker = this.getMarkerAtPosition(newPercentage);
     this.snappedMarker = snappedMarker;
 
-    if (this.label && isBetweenMargins) {
+    if (this.label) {
       this.label.getDomElement().css({
-        'left': (isOverMarker ? snappedMarker.timePercentage : percentage) + '%',
+        'left': (isOverMarker ? snappedMarker.timePercentage : newPercentage) + '%',
       });
     }
 
     this.seekBarEvents.onSeekPreview.dispatch(this, {
       scrubbing: scrubbing,
-      position: percentage,
+      position: newPercentage,
       marker: snappedMarker,
       isOverMarker: isOverMarker,
     });
