@@ -24,11 +24,10 @@
 
   .#{$prefix}-seekbar-label-inner {
     border: 1px solid $color-smashcut-gray;
-    // bottom arrow from http://www.cssarrowplease.com/
-    &::after {
+
+    .#{$prefix}-ui-label-arrow {
       border: .5em solid transparent;
       border-top-color: $new-color-smashcut-red;
-      content: ' ';
       height: 0;
       left: 15%;
       margin-left: -.65em;

@@ -31,6 +31,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
   private logo: Component<ComponentConfig>;
   private markerType: Component<ComponentConfig>;
   private metadata: Component<ComponentConfig>;
+  private arrow: Component<ComponentConfig>;
 
   private currentMarker: TimelineMarker;
   private isOverMarker: boolean;
@@ -77,11 +78,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       cssClass: 'seekbar-label-metadata',
     });
 
+    this.arrow = new Component<ComponentConfig>({ tag: 'span', cssClass: 'ui-label-arrow' });
+
     this.innerSeekbar = new Container({
       components: [
         this.thumbnail,
         this.logo,
         this.metadata,
+        this.arrow,
       ],
       cssClass: 'seekbar-label-inner',
     });
@@ -148,6 +152,14 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
    */
   setTitleText(text: string) {
     this.titleLabel.setText(text);
+  }
+
+  /**
+   * Returns the arrow element
+   * @returns {Component<ComponentConfig>}
+   */
+  getArrow() {
+    return this.arrow;
   }
 
   /**

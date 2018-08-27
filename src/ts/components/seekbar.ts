@@ -712,20 +712,22 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       e.preventDefault();
 
-      this.setSeekPosition(0);
-      this.snappedMarker = null;
+      if (label) {
+        this.setSeekPosition(0);
+        this.snappedMarker = null;
 
-      if (label.getCurrentMarker() && label.getIsOverMarker()) {
-        setTimeout(() => {
-          if (!this.labelIsHovered()) {
-            this.hideLabel();
-          }
-        }, 200);
-      } else {
-        this.hideLabel();
+        if (label.getCurrentMarker() && label.getIsOverMarker()) {
+          setTimeout(() => {
+            if (!this.labelIsHovered()) {
+              this.hideLabel();
+            }
+          }, 200);
+        } else {
+          this.hideLabel();
+        }
+
+        this.removeBiggerMarkers();
       }
-
-      this.removeBiggerMarkers();
     });
 
     seekBarContainer.append(seekBar);
@@ -1084,9 +1086,35 @@ export class SeekBar extends Component<SeekBarConfig> {
     let snappedMarker = this.getMarkerAtPosition(percentage);
     this.snappedMarker = snappedMarker;
 
+    const holdSnappedPosition = isOverMarker && snappedMarker;
+
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (isOverMarker && snappedMarker ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
+        'left': (holdSnappedPosition ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
+      });
+    }
+
+    let arrowPosition = 15;
+
+    if (!isBetweenMargins && labelWidth && !holdSnappedPosition) {
+      let seekPositionInPx = percentage / 100 * parentWidth;
+      let extraLeft = 1;
+
+      if (percentage >= rightMargin) {
+        seekPositionInPx = parentWidth - seekPositionInPx;
+        extraLeft = -3;
+      }
+
+      arrowPosition = (seekPositionInPx + extraLeft) * 100 / labelWidth;
+
+      if (percentage >= rightMargin) {
+        arrowPosition = 100 - arrowPosition;
+      }
+    }
+
+    if (this.label) {
+      this.label.getArrow().getDomElement().css({
+        'left': arrowPosition + '%',
       });
     }
 
