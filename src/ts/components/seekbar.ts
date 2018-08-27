@@ -979,6 +979,14 @@ export class SeekBar extends Component<SeekBarConfig> {
   }
 
   /**
+   * Gets the label of this seek bar.
+   * @returns number
+   */
+  getLabelWidth(): string {
+    return this.label ? this.label.getDomElement().css('width') : '0px';
+  }
+
+  /**
    * Returns the hovered status of the label
    * @returns {boolean}
    */
@@ -1049,23 +1057,42 @@ export class SeekBar extends Component<SeekBarConfig> {
   }
 
   protected onSeekPreviewEvent(percentage: number, scrubbing: boolean, isOverMarker: boolean = false) {
-    const isBetweenMargins = percentage > 1.5 && percentage < 80.5;
-    const newPercentage = !isBetweenMargins
-      ? (percentage <= 1.5 ? 1.5 : 80.5)
+    const parentWidth = parseFloat(this.getDomElement().css('width'));
+    const labelWidth = parseFloat(this.getLabelWidth());
+
+    /**
+     * The left margin is just the percentage of (15% of the labelWidth) from the parentWidth
+     * @type {number}
+     */
+    const leftMargin = (labelWidth * 0.15) * 100 / parentWidth;
+    /**
+     * The right margin is the percentage of (85% of the labelWidth) since we have
+     * a left: -15% on the container
+     * @type {number}
+     */
+    const rightMargin = 100 - ((labelWidth * 0.85) * 100 / parentWidth);
+
+    const isBetweenMargins = percentage > leftMargin && percentage < rightMargin;
+    /**
+     * We use this variable to set the thumbnail position
+     * @type {number}
+     */
+    const thumbnailPercentage = !isBetweenMargins
+      ? (percentage <= leftMargin ? leftMargin : rightMargin)
       : percentage;
 
-    let snappedMarker = this.getMarkerAtPosition(newPercentage);
+    let snappedMarker = this.getMarkerAtPosition(percentage);
     this.snappedMarker = snappedMarker;
 
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (isOverMarker ? snappedMarker.timePercentage : newPercentage) + '%',
+        'left': (isOverMarker ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
       });
     }
 
     this.seekBarEvents.onSeekPreview.dispatch(this, {
       scrubbing: scrubbing,
-      position: newPercentage,
+      position: percentage,
       marker: snappedMarker,
       isOverMarker: isOverMarker,
     });
