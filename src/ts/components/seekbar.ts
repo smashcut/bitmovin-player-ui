@@ -1086,7 +1086,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (isOverMarker ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
+        'left': (isOverMarker && snappedMarker ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
       });
     }
 
