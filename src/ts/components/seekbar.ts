@@ -1063,25 +1063,33 @@ export class SeekBar extends Component<SeekBarConfig> {
     const labelWidth = parseFloat(this.getLabelWidth());
 
     /**
-     * The left margin is just the percentage of (15% of the labelWidth) from the parentWidth
+     * The left margin is just the percentage of (15% of the labelWidth - 9) from the parentWidth
+     * the 9 is taken from the margins that the seekbar has
      * @type {number}
      */
-    const leftMargin = (labelWidth * 0.15) * 100 / parentWidth;
+    const leftMargin = (labelWidth * 0.15 - 9) * 100 / parentWidth;
     /**
-     * The right margin is the percentage of (85% of the labelWidth) since we have
-     * a left: -15% on the container
+     * The right margin is the percentage of (85% of the labelWidth - 4) since we have
+     * a left: -15% on the container and the 4 is taken from the margin of the seekbar
      * @type {number}
      */
-    const rightMargin = 100 - ((labelWidth * 0.85) * 100 / parentWidth);
+    const rightMargin = 100 - ((labelWidth * 0.85 - 5) * 100 / parentWidth);
 
     const isBetweenMargins = percentage > leftMargin && percentage < rightMargin;
     /**
      * We use this variable to set the thumbnail position
      * @type {number}
      */
-    const thumbnailPercentage = !isBetweenMargins
+    /*const thumbnailPercentage = !isBetweenMargins
       ? (percentage <= leftMargin ? leftMargin : rightMargin)
-      : percentage;
+      : percentage;*/
+    let thumbnailPercentage = `${percentage}%`;
+
+    if (!isBetweenMargins) {
+      thumbnailPercentage = percentage <= leftMargin
+        ? `calc(${leftMargin}%)`
+        : `calc(${rightMargin}%)`;
+    }
 
     let snappedMarker = this.getMarkerAtPosition(percentage);
     this.snappedMarker = snappedMarker;
@@ -1090,7 +1098,7 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     if (this.label) {
       this.label.getDomElement().css({
-        'left': (holdSnappedPosition ? snappedMarker.timePercentage : thumbnailPercentage) + '%',
+        'left': (holdSnappedPosition ? snappedMarker.timePercentage + '%' : thumbnailPercentage),
       });
     }
 
@@ -1098,14 +1106,12 @@ export class SeekBar extends Component<SeekBarConfig> {
 
     if (!isBetweenMargins && labelWidth && !holdSnappedPosition) {
       let seekPositionInPx = percentage / 100 * parentWidth;
-      let extraLeft = 1;
 
       if (percentage >= rightMargin) {
         seekPositionInPx = parentWidth - seekPositionInPx;
-        extraLeft = -3;
       }
 
-      arrowPosition = (seekPositionInPx + extraLeft) * 100 / labelWidth;
+      arrowPosition = seekPositionInPx * 100 / labelWidth;
 
       if (percentage >= rightMargin) {
         arrowPosition = 100 - arrowPosition;
