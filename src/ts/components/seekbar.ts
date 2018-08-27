@@ -1102,7 +1102,7 @@ export class SeekBar extends Component<SeekBarConfig> {
       });
     }
 
-    let arrowPosition = 15;
+    let arrowPosition = 16;
 
     if (!isBetweenMargins && labelWidth && !holdSnappedPosition) {
       let seekPositionInPx = percentage / 100 * parentWidth;
@@ -1111,10 +1111,10 @@ export class SeekBar extends Component<SeekBarConfig> {
         seekPositionInPx = parentWidth - seekPositionInPx;
       }
 
-      arrowPosition = seekPositionInPx * 100 / labelWidth;
+      arrowPosition = seekPositionInPx * 100 / labelWidth + 5;
 
       if (percentage >= rightMargin) {
-        arrowPosition = 100 - arrowPosition;
+        arrowPosition = 100 - arrowPosition + 5;
       }
     }
 
