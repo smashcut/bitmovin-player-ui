@@ -1,6 +1,6 @@
 {
   "name": "bitmovin-player-ui",
-  "version": "2.11.0",
+  "version": "2.11.2",
   "description": "Bitmovin Player UI Framework",
   "main": "dist/js/framework/main.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "gulp-typescript": "^3.2.3",
     "gulp-uglify": "^2.0.0",
     "merge2": "^1.2.0",
+    "minimist": "^1.2.0",
     "postcss-svg": "^1.0.6",
     "run-sequence": "^1.2.2",
     "stream-combiner2": "^1.1.1",

@@ -1,4 +1,4 @@
-@import '../variables';
+@import 'variables';
 
 %ui-seekbar {
   @extend %ui-component;
@@ -60,7 +60,7 @@
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
-      background-color: #dc4a28;
+      background-color: $new-color-smashcut-red;
       margin: $bar-inset 0;
       transition: .1s linear, .1s linear;
       transition-property: transform;

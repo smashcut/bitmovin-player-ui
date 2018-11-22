@@ -35,6 +35,9 @@ var npmPackage = require('./package.json');
 var path = require('path');
 var combine = require('stream-combiner2');
 
+var args = require('minimist')(process.argv.slice(2));
+var theme = args['theme'] || 'smashcut';
+
 var paths = {
   source: {
     html: ['./src/html/*.html'],
@@ -147,25 +150,27 @@ gulp.task('browserify', function() {
   return stream.pipe(browserSync.reload({stream: true}));
 });
 
-// Compiles SASS stylesheets to CSS stylesheets in the target directory, adds autoprefixes and creates sourcemaps
-gulp.task('sass', function() {
+function buildSass(theme, dest) {
   var stream = gulp.src(paths.source.sass)
-  .pipe(sourcemaps.init())
-  .pipe(sass({
-    includePaths: [
-      // Includes node_modules of the current module
-      path.join(__dirname, 'node_modules'),
-      // Includes node_modules of the current module, or, if used as a dependency in a supermodule where this
-      // gulpfile is reused, includes node_modules of the supermodule
-      './node_modules'],
-  }).on('error', sass.logError))
-  .pipe(postcss([
-    autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}),
-    postcssSVG()
-  ]))
-  .pipe(cssBase64())
-  .pipe(sourcemaps.write())
-  .pipe(gulp.dest(paths.target.css));
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+      includePaths: [
+        // Include variables from theme directory
+        path.join(__dirname, 'src/scss/themes/' + theme),
+        './src/scss/themes/' + theme,
+        // Includes node_modules of the current module
+        path.join(__dirname, 'node_modules'),
+        // Includes node_modules of the current module, or, if used as a dependency in a supermodule where this
+        // gulpfile is reused, includes node_modules of the supermodule
+        './node_modules'],
+    }).on('error', sass.logError))
+    .pipe(postcss([
+      autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}),
+      postcssSVG()
+    ]))
+    .pipe(cssBase64())
+    .pipe(sourcemaps.write())
+    .pipe(dest);
 
   if (production) {
     // Minify CSS
@@ -174,11 +179,27 @@ gulp.task('sass', function() {
       // TODO check if it works in a later version, because disabling increases file size substantially
       svgo: false
     })]))
-    .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest(paths.target.css));
+
+      .pipe(rename({extname: '.min.css'}))
+      .pipe(dest);
   }
 
   return stream.pipe(browserSync.reload({stream: true}));
+}
+
+// Compiles SASS stylesheets to CSS stylesheets in the target directory, adds autoprefixes and creates sourcemaps
+gulp.task('sass', function() {
+  return buildSass(theme, gulp.dest(paths.target.css));
+});
+
+gulp.task('sass:smashcut', function() {
+  var theme = 'smashcut';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:nyu', function() {
+  var theme = 'nyu';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
 // Builds the complete project from the sources into the target directory
@@ -186,7 +207,7 @@ gulp.task('build', function(callback) {
   // First run 'clean', then the other tasks
   // TODO remove runSequence on Gulp 4.0 and use built in serial execution instead
   runSequence('clean',
-    ['html', 'browserify', 'sass'],
+    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:nyu'],
     callback);
 });
 

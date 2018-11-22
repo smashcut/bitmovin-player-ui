@@ -1,4 +1,4 @@
-@import '../variables';
+@import 'variables';
 
 .#{$prefix}-ui-seekbar-label {
   @extend %ui-container;
@@ -68,7 +68,7 @@
     > .#{$prefix}-container-wrapper {
       padding: 20px;
       font-family: Roboto, serif;
-      border: solid #dc4a28;
+      border: solid $new-color-smashcut-red;
       border-width: 0 0 2px 0;
     }
 

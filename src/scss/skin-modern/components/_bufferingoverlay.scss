@@ -1,4 +1,4 @@
-@import '../variables';
+@import 'variables';
 @import '../mixins';
 
 // H/V center items in the middle of the overlay
@@ -64,7 +64,7 @@
     }
 
     animation: fancy $buffering-animation-duration ease-in infinite;
-    background: svg('assets/skin-modern/images/smashcut/edited/loader.svg') no-repeat center;
+    background: svg('assets/skin-modern/images/smashcut/edited/loader.svg', '[fill]: #{$color-smashcut-orange}') no-repeat center;
     display: inline-block;
     height: 2em;
     margin: .2em;

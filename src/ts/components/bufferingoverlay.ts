@@ -65,5 +65,6 @@ export class BufferingOverlay extends Container<BufferingOverlayConfig> {
     if (player.isStalled()) {
       this.show();
     }
+    this.show();
   }
 }
