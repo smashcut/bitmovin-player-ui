@@ -50,7 +50,7 @@ import {VolumeControlButton} from './components/volumecontrolbutton';
 import {VolumeSlider} from './components/volumeslider';
 import {VolumeToggleButton} from './components/volumetogglebutton';
 import {VRToggleButton} from './components/vrtogglebutton';
-import {Watermark} from './components/watermark';
+// import {Watermark} from './components/watermark';
 
 import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
 import EVENT = bitmovin.PlayerAPI.EVENT;
@@ -628,7 +628,7 @@ export namespace UIManager.Factory {
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),
-        new Watermark(),
+        // new Watermark(),
         new ErrorMessageOverlay(),
       ],
       cssClasses: ['ui-skin-modern'],
@@ -735,7 +735,7 @@ export namespace UIManager.Factory {
         settingsPanel,
         subtitleSettingsPanel,
         new RecommendationOverlay(),
-        new Watermark(),
+        // new Watermark(),
         new ErrorMessageOverlay(),
       ],
       cssClasses: ['ui-skin-modern', 'ui-skin-smallscreen'],
@@ -786,7 +786,7 @@ export namespace UIManager.Factory {
         new SubtitleOverlay(),
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        new Watermark(),
+        // new Watermark(),
         controlBar,
         new TitleBar({keepHiddenWithoutMetadata: true}),
         new ErrorMessageOverlay(),
@@ -865,7 +865,7 @@ export namespace UIManager.Factory {
         new SubtitleOverlay(),
         new CastStatusOverlay(),
         new PlaybackToggleOverlay(),
-        new Watermark(),
+        // new Watermark(),
         new RecommendationOverlay(),
         controlBar,
         new TitleBar(),
@@ -905,7 +905,7 @@ export namespace UIManager.Factory {
       components: [
         new SubtitleOverlay(),
         new PlaybackToggleOverlay(),
-        new Watermark(),
+        // new Watermark(),
         controlBar,
         new TitleBar(),
         new ErrorMessageOverlay(),
@@ -946,7 +946,7 @@ export namespace UIManager.Factory {
         new SubtitleOverlay(),
         new CastStatusOverlay(),
         new PlaybackToggleOverlay(),
-        new Watermark(),
+        // new Watermark(),
         new RecommendationOverlay(),
         controlBar,
         new TitleBar(),
