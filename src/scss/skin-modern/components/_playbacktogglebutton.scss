@@ -3,18 +3,29 @@
 
 .#{$prefix}-ui-playbacktogglebutton {
   @extend %ui-button;
+    
+  &:before {
+       font-family: 'Font Awesome 5 Free';
+       content: '\f04b' !important;
+       display: inline-block;
+       vertical-align: middle;
+       font-weight: 900;
+       font-size: 16px;
+       color: #ffffff;
+  }
 
-  background-image: svg('assets/skin-modern/images/play-filled.svg', '[color]:white');
+  &.#{$prefix}-off {
+        &:before {
+              content: '\f04b' !important;
+            }
+        }
+        &.#{$prefix}-on {
+             &:before {
+                 content: '\f04c' !important;
+            }
+        }
 
   &:hover {
     @include svg-icon-shadow;
-  }
-
-  &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/pause-filled.svg', '[color]:white');
-
-    &.#{$prefix}-stoptoggle {
-      background-image: svg('assets/skin-modern/images/stop.svg');
-    }
   }
 }

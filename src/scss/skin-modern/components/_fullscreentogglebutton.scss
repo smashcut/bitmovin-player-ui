@@ -3,10 +3,16 @@
 
 .#{$prefix}-ui-fullscreentogglebutton {
   @extend %ui-button;
-
-  background-image: svg('assets/skin-modern/images/smashcut/edited/full_screen.svg', '[fill]:#fff');
-
-  &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/smashcut/edited/windowed_video.svg', '[fill]:#fff');
-  }
+     &:before {
+       font-family: 'Font Awesome 5 Free';
+       content: '\f065';
+       display: inline-block;
+       vertical-align: middle;
+       font-weight: 900;
+       font-size: 16px;
+       color: #ffffff;
+     }
+    &.#{$prefix}-on {
+      color: #444444;
+    }
 }

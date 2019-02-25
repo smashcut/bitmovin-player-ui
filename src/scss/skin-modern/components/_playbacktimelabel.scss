@@ -2,12 +2,14 @@
 
 .#{$prefix}-ui-playbacktimelabel {
   @extend %ui-label;
-
-  font-family: Roboto Mono, serif;
   font-size: 80%;
   font-weight: bold;
   text-transform: uppercase;
-
+  font-family: Roboto;
+  margin-right: 4px !important;
+  margin-top: 4px !important;
+  font-weight: normal;
+  
   &:nth-of-type(1) {
     &::after {
       content: '/';
