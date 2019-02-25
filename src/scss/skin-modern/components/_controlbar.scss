@@ -5,7 +5,7 @@
   @extend %ui-container;
 
   padding-top: 22px !important;
-  background: $new-color-smashcut-black;
+  background: $smashcut-grey-dark;
   bottom: calc((#{$controlbar-height} + 14px) * -1);
   min-height: $controlbar-height;
   left: 0;

@@ -11,15 +11,16 @@
   margin: 4px;
   position: relative;
   width: 100%;
-
+  margin-right: 9px;
   $bar-inset: 0;
 
   .#{$prefix}-seekbar {
     height: 8px;
     position: relative;
-    background: #4b5058;
     border: 0 solid transparent;
     border-radius: 4px;
+    background: #444444;
+    overflow: hidden;
 
     %bar {
       // sass-lint:disable no-vendor-prefixes
@@ -60,12 +61,12 @@
 
     .#{$prefix}-seekbar-playbackposition {
       @extend %bar;
-      background-color: $new-color-smashcut-red;
       margin: $bar-inset 0;
       transition: .1s linear, .1s linear;
       transition-property: transform;
       border: 0 solid transparent;
       border-radius: 4px 0 0 4px;
+      background-color: $color-smashcut-orange;
     }
 
     .#{$prefix}-seekbar-playbackposition-marker {

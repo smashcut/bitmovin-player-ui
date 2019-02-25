@@ -8,9 +8,10 @@
 
   .#{$prefix}-seekbar {
     position: relative;
-    top: 4px;
+    top: 8px;
     background: $color-white;
     height: 3px;
+    overflow: unset !important;
     .#{$prefix}-seekbar-backdrop {
       @extend %bar;
       background-color: transparentize($color-white, .4);

@@ -4,21 +4,18 @@
 .#{$prefix}-ui-settingstogglebutton {
   @extend %ui-button;
 
-  background-image: svg('assets/skin-modern/images/smashcut/edited/settings.svg', '[fill]:#fff');
-
-  /*
-  &:hover {
-    background-image: svg('assets/skin-modern/images/smashcut/edited/settings.svg', '[fill]:#fff');
-  }
-  */
-
-  &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/smashcut/edited/settings.svg', '[fill]:#777');
-
-    /*
-    &:hover {
-      background-image: svg('assets/skin-modern/images/smashcut/edited/settings.svg', '[fill]:#777');
+  &:before {
+     font-family: 'Font Awesome 5 Free';
+     content: '\f013';
+     display: inline-block;
+     vertical-align: middle;
+     font-weight: 900;
+     font-size: 16px;
+     color: #ffffff;
+}
+ &.bmpui-on {
+     &:before {
+         color: rgba(255, 255, 255, 0.7);
     }
-    */
-  }
+ }
 }
