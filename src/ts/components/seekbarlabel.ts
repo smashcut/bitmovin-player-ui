@@ -327,7 +327,7 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         // A default value for width is set in the stylesheet and can be overwritten from there or anywhere else.
         thumbnailElement.css({
           'display': 'inherit',
-          'background-image': `url(${thumbnail.url})`,
+          'background-image': `url("${thumbnail.url}")`,
           'width': thumbnail.w + 'px',
           'padding-bottom': `${100 * aspectRatio}%`,
           'background-size': `${sizeX}% ${sizeY}%`,
