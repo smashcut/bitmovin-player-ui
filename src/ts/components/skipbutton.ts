@@ -54,7 +54,7 @@ export class SkipButton extends Button<SkipButtonConfig> {
           action: 'seeking-end',
           e,
           position: currentTime * 100 / duration,
-          originator: 'SeekBar',
+          originator: 'SkipButton',
         });
       }
     });
