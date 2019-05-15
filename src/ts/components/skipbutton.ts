@@ -36,6 +36,8 @@ export class SkipButton extends Button<SkipButtonConfig> {
 
     let isSeeking = false;
 
+    const buttonElem = this.toDomElement();
+
     // Control player by button events
     // When a button event triggers a player API call,
     // events are fired which in turn call the event handler
@@ -50,7 +52,8 @@ export class SkipButton extends Button<SkipButtonConfig> {
 
       if (nextTime !== currentTime) {
         player.seek(nextTime);
-        this.toDomElement().dispatchSmashcutPlayerUiEvent({
+        console.log('dispatch seeking-end')
+        buttonElem.dispatchSmashcutPlayerUiEvent({
           action: 'seeking-end',
           e,
           position: currentTime * 100 / duration,
