@@ -301,6 +301,8 @@
   var playerSetup = function(config) {
     player = bitmovin.player('player');
 
+
+
     player.setup(config).then(function() {
       // Add UI to loaded player
       uiManager = bitmovin.playerui.UIManager.Factory.buildDefaultUI(player, uiConfig);
@@ -311,6 +313,10 @@
   };
 
   playerSetup(config);
+
+  // events from seekbar are showing here
+  // why not from skipbutton?
+  $('#player').on('smashcutplayerui', console.log)
 
   $.each(sources, function(key, value) {
     $('#config-source').append($('<option></option>').attr('value', key).text(key));
