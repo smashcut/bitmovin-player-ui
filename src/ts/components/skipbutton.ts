@@ -50,11 +50,10 @@ export class SkipButton extends Button<SkipButtonConfig> {
 
       if (nextTime !== currentTime) {
         player.seek(nextTime);
-        console.log('dispatch seeking-end')
         this.getDomElement().dispatchSmashcutPlayerUiEvent({
           action: 'seeking-end',
           e,
-          position: currentTime * 100 / duration,
+          position: nextTime * 100 / duration,
           originator: 'SkipButton',
         });
       }
