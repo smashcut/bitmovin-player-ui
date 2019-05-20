@@ -433,7 +433,7 @@ export class DOM {
   }
 
   dispatchSmashcutPlayerUiEvent(data: any): any {
-    this.dispatchEvent(new CustomEvent('smashcutplayerui', {detail: data, bubbles: true, cancelable: true}));
+    this.dispatchEvent(new CustomEvent('smashcutplayerui', {detail: data, bubbles: true, cancelable: false}));
   }
 
   /**
