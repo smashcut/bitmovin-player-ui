@@ -28,7 +28,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
   private avatarLabel: Label<LabelConfig>;
   private commentLabel: Label<LabelConfig>;
-  private logo: Component<ComponentConfig>;
   private markerType: Component<ComponentConfig>;
   private metadata: Component<ComponentConfig>;
   private arrow: Component<ComponentConfig>;
@@ -49,7 +48,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     this.avatarLabel = new Label({cssClasses: ['seekbar-label-avatar']});
     this.commentLabel = new Label({cssClasses: ['seekbar-label-comment']});
-    this.logo = new Component({cssClasses: ['seekbar-label-logo']});
     this.markerType = new Component({cssClasses: ['seekbar-label-marker-type']});
 
     this.metadata = new Container({
@@ -83,7 +81,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
     this.innerSeekbar = new Container({
       components: [
         this.thumbnail,
-        this.logo,
         this.metadata,
         this.arrow,
       ],
@@ -209,7 +206,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
         .css('margin', marker.avatar ? null : '0');
       this.setMarkerType(marker.markerType);
       this.setBackground(true);
-      this.setLogo(false);
     } else {
       this.titleLabel.getDomElement().removeClass('note');
       this.titleLabel.setText(null);
@@ -217,7 +213,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
       this.avatarLabel.setText(null);
       this.setMarkerType(null);
       this.setBackground(false);
-      this.setLogo(false);
     }
   }
 
@@ -232,14 +227,6 @@ export class SeekBarLabel extends Container<SeekBarLabelConfig> {
 
     if (this.markerTypeClass) {
       dom.addClass(type);
-    }
-  }
-
-  setLogo(onOff: boolean) {
-    if (onOff) {
-      this.logo.show();
-    } else {
-      this.logo.hide();
     }
   }
 

@@ -50,15 +50,6 @@
     width: 210px !important;
   }
 
-  .#{$prefix}-seekbar-label-logo {
-    @include hidden;
-    width: 40px;
-    height: 40px;
-    background-size: 40px 40px;
-    background-repeat: no-repeat;
-    background-image: svg('assets/skin-modern/images/smashcut/edited/footer_logo.svg');
-  }
-
   .#{$prefix}-seekbar-label-metadata {
     bottom: 0;
     display: block;
