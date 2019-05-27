@@ -461,7 +461,7 @@ export namespace UIManager.Factory {
     let settingsPanel = new SettingsPanel({
       components: [
         new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),
-        new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
+        // new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
         new SettingsPanelItem('Audio Track', new AudioTrackSelectBox()),
         new SettingsPanelItem('Audio Quality', new AudioQualitySelectBox()),
       ],
@@ -565,7 +565,7 @@ export namespace UIManager.Factory {
     let settingsPanel = new SettingsPanel({
       components: [
         new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),
-        new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
+        // new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
         new SettingsPanelItem('Audio Track', new AudioTrackSelectBox()),
         new SettingsPanelItem('Audio Quality', new AudioQualitySelectBox()),
       ],
@@ -673,7 +673,7 @@ export namespace UIManager.Factory {
     let settingsPanel = new SettingsPanel({
       components: [
         new SettingsPanelItem('Video Quality', new VideoQualitySelectBox()),
-        new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
+        // new SettingsPanelItem('Speed', new PlaybackSpeedSelectBox()),
         new SettingsPanelItem('Audio Track', new AudioTrackSelectBox()),
         new SettingsPanelItem('Audio Quality', new AudioQualitySelectBox()),
       ],
