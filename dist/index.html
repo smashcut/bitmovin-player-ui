@@ -399,7 +399,8 @@
       playerSetup(config);
     },
     'Add subtitle': function() {
-      return player.addSubtitle({url: 'http://bitdash-a.akamaihd.net/content/sintel/subtitles/subtitles_en.vtt', id: 'test', lang: 'ru', label: 'Test Subtitle'});
+      return player.addSubtitle({url: 'http://bitdash-a.akamaihd.net/content/sintel/subtitles/subtitles_en' +
+          '.vtt', id: 'test', lang: 'ru', label: 'Test Subtitle'});
     },
     'Remove subtitle': function() {
       return player.removeSubtitle('test');
