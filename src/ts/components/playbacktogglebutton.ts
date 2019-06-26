@@ -3,20 +3,22 @@ import {UIInstanceManager} from '../uimanager';
 import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
 import {PlayerUtils} from '../playerutils';
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
-
 /**
  * A button that toggles between playback and pause.
  */
+
+
+
 export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
 
   private static readonly CLASS_STOPTOGGLE = 'stoptoggle';
 
   constructor(config: ToggleButtonConfig = {}) {
-    super(config);
+    super(config);    
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-playbacktogglebutton',
-      text: 'Play/Pause',
+      text: 'Play/Pause'
     }, this.config);
   }
 
@@ -24,6 +26,20 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
     super.configure(player, uimanager);
 
     let isSeeking = false;
+
+    const config = <ToggleButtonConfig>this.getConfig();
+    
+    this.getDomElement().on('mouseover', (e) => {
+      if(player.isPlaying()) {
+        config && config.tooltip && config.tooltip.setText('Pause', -14, 0);
+      } else {
+        config && config.tooltip && config.tooltip.setText('Play', -14, 0);
+      }
+    });
+
+    this.getDomElement().on('mouseleave', () => {
+      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+    });
 
     // Handler to update button state based on player state
     let playbackStateHandler = (event: PlayerEvent) => {

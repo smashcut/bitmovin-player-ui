@@ -4,6 +4,7 @@ import {PlayerUtils} from '../playerutils';
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
 import {Button, ButtonConfig} from './button';
 import {ToggleButton} from './togglebutton';
+import { Tooltip } from './tooltip';
 
 /**
  * Configuration interface for a toggle button component.
@@ -13,6 +14,7 @@ export interface SkipButtonConfig extends ButtonConfig {
    * How much time and in which direction to skip
    */
   duration?: number;
+  tooltip?: Tooltip  
 }
 
 /**
@@ -36,6 +38,19 @@ export class SkipButton extends Button<SkipButtonConfig> {
 
     let isSeeking = false;
 
+    const config = <SkipButtonConfig>this.getConfig();
+    this.getDomElement().on('mouseover', (e) => {
+      const target = e.target as HTMLTextAreaElement;
+      const left = target.offsetLeft - target.offsetWidth -15;
+      const top = target.offsetTop;
+      config && config.tooltip && config.tooltip.setText(config.duration > 0 ? 'Forward 10s' : 'Backward 10s', left, top);
+    });
+
+    this.getDomElement().on('mouseleave', () => {
+      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+    });
+
+
     // Control player by button events
     // When a button event triggers a player API call,
     // events are fired which in turn call the event handler
@@ -45,9 +60,12 @@ export class SkipButton extends Button<SkipButtonConfig> {
         return;
       }
       let currentTime = player.getCurrentTime();
+      if(currentTime <= 0.2) {
+        return;
+      }
       let duration = player.getDuration();
       let nextTime = Math.min(duration, Math.max(0, currentTime + (<SkipButtonConfig>this.config).duration));
-
+      
       if (nextTime !== currentTime) {
         player.seek(nextTime);
         this.getDomElement().dispatchSmashcutPlayerUiEvent({

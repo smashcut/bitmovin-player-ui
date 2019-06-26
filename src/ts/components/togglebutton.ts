@@ -1,5 +1,6 @@
 import {Button, ButtonConfig} from './button';
 import {NoArgs, EventDispatcher, Event} from '../eventdispatcher';
+import { Tooltip } from './tooltip';
 
 /**
  * Configuration interface for a toggle button component.
@@ -9,6 +10,7 @@ export interface ToggleButtonConfig extends ButtonConfig {
    * The text on the button.
    */
   text?: string;
+  tooltip?: Tooltip
 }
 
 /**

@@ -52,6 +52,8 @@ import {VolumeToggleButton} from './components/volumetogglebutton';
 import {VRToggleButton} from './components/vrtogglebutton';
 // import {Watermark} from './components/watermark';
 
+import {Tooltip} from './components/tooltip';
+
 import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
 import EVENT = bitmovin.PlayerAPI.EVENT;
 import PlayerAPI = bitmovin.PlayerAPI;
@@ -456,6 +458,7 @@ export namespace UIManager.Factory {
   function smashcutUi() {
 
     let subtitleOverlay = new SubtitleOverlay();
+    let tooltip = new Tooltip();
 
     let showSuggestionButton = new ShowSuggestionsButton({});
     let settingsPanel = new SettingsPanel({
@@ -505,9 +508,9 @@ export namespace UIManager.Factory {
     let controlBarBottom = new Container({
       cssClasses: ['controlbar-bottom'],
       components: [
-        new PlaybackToggleButton(),
-        new SkipButton({duration: -10}),
-        new SkipButton({duration: 10}),
+        new PlaybackToggleButton({ tooltip: tooltip }),
+        new SkipButton({duration: -10, tooltip: tooltip}),
+        new SkipButton({duration: 10, tooltip: tooltip}),
         new PlaybackTimeLabel({
           timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
           hideInLivePlayback: true,
@@ -518,12 +521,13 @@ export namespace UIManager.Factory {
         }),
         new Spacer(),
         new VolumeSlider(),
-        new VolumeToggleButton(),
+        new VolumeToggleButton({ tooltip: tooltip }),
         // new CommentsToggleButton({seekBar: seekBar}),
-        new ClosedCaptioningToggleButton(),
-        new SettingsToggleButton({settingsPanel: settingsPanel}),
+        new ClosedCaptioningToggleButton({ tooltip: tooltip }),
+        new SettingsToggleButton({settingsPanel: settingsPanel, tooltip: tooltip}),
         // new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
-        new FullscreenToggleButton(),
+        new FullscreenToggleButton({ tooltip: tooltip }),
+        tooltip,
       ],
     });
 

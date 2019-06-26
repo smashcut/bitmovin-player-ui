@@ -25,5 +25,19 @@ export class FullscreenToggleButton extends ToggleButton<ToggleButtonConfig> {
         player.enterFullscreen();
       }
     });
+
+    const config = <ToggleButtonConfig>this.getConfig();
+    
+    this.getDomElement().on('mouseover', (e) => {
+      const target = e.target as HTMLTextAreaElement;
+      const left = target.offsetLeft - target.offsetWidth - 25;
+      const top = target.offsetTop;
+      config && config.tooltip && config.tooltip.setText(player.isFullscreen() ? 'Exit full screen' : 'Full screen', left, top);
+    });
+
+    this.getDomElement().on('mouseleave', () => {
+      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+    });
+
   }
 }

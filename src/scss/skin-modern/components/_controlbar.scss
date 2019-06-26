@@ -18,6 +18,7 @@
   .#{$prefix}-controlbar-bottom {
     > .#{$prefix}-container-wrapper {
       display: flex;
+      position: relative;
     }
   }
 

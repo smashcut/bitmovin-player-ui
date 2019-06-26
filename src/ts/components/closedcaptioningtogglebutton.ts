@@ -1,5 +1,5 @@
-import {ToggleButton, ToggleButtonConfig} from './togglebutton';
-import {UIInstanceManager} from '../uimanager';
+import { ToggleButton, ToggleButtonConfig } from './togglebutton';
+import { UIInstanceManager } from '../uimanager';
 
 /**
  * Configuration interface for the {@link ClosedCaptioningToggleButton}.
@@ -28,5 +28,19 @@ export class ClosedCaptioningToggleButton extends ToggleButton<ClosedCaptioningT
     this.onClick.subscribe(() => {
       console.log('closed captioning button clicked');
     });
+
+    const config = <ToggleButtonConfig>this.getConfig();
+
+    this.getDomElement().on('mouseover', (e) => {
+      const target = e.target as HTMLTextAreaElement;
+      const left = target.offsetLeft - target.offsetWidth - 24;
+      const top = target.offsetTop;
+      config && config.tooltip && config.tooltip.setText('Closed captions', left, top);
+    });
+
+    this.getDomElement().on('mouseleave', () => {
+      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+    });
+
   }
 }

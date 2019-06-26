@@ -68,6 +68,7 @@ import {PlayerUtils} from './playerutils';
 import {UIUtils} from './uiutils';
 import {BrowserUtils} from './browserutils';
 import {StorageUtils} from './storageutils';
+import {Tooltip} from './components/tooltip';
 // HACK: gulp-tslint fails on unused files so we need this dummy import
 import {ArrayUtils as Dummy} from './utils'; // tslint:disable-line
 import {SubtitleSettingsResetButton} from './components/subtitlesettings/subtitlesettingsresetbutton';
@@ -152,6 +153,7 @@ const playerui = {
   SubtitleSelectBox,
   TitleBar,
   ToggleButton,
+  Tooltip,
   UIContainer,
   VideoQualitySelectBox,
   VolumeControlButton,
