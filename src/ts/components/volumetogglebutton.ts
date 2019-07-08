@@ -53,11 +53,11 @@ export class VolumeToggleButton extends ToggleButton<ToggleButtonConfig> {
       const target = e.target as HTMLTextAreaElement;
       const left = target.offsetLeft - target.offsetWidth;
       const top = target.offsetTop;
-      config && config.tooltip && config.tooltip.setText('Volume', left, top);
+      config && config.tooltip && config.tooltip.setText('Volume', left, top, false);
     });
 
     this.getDomElement().on('mouseleave', () => {
-      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+      config && config.tooltip && config.tooltip.setText('', 0, 0, false);
     });
 
     // Startup init

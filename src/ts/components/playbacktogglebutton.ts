@@ -31,14 +31,14 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
     
     this.getDomElement().on('mouseover', (e) => {
       if(player.isPlaying()) {
-        config && config.tooltip && config.tooltip.setText('Pause', -14, 0);
+        config && config.tooltip && config.tooltip.setText('Pause', -14, 0, false);
       } else {
-        config && config.tooltip && config.tooltip.setText('Play', -14, 0);
+        config && config.tooltip && config.tooltip.setText('Play', -14, 0, false);
       }
     });
 
     this.getDomElement().on('mouseleave', () => {
-      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+      config && config.tooltip && config.tooltip.setText('', 0, 0, false);
     });
 
     // Handler to update button state based on player state

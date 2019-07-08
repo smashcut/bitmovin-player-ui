@@ -43,11 +43,11 @@ export class SkipButton extends Button<SkipButtonConfig> {
       const target = e.target as HTMLTextAreaElement;
       const left = target.offsetLeft - target.offsetWidth -15;
       const top = target.offsetTop;
-      config && config.tooltip && config.tooltip.setText(config.duration > 0 ? 'Forward 10s' : 'Backward 10s', left, top);
+      config && config.tooltip && config.tooltip.setText(config.duration > 0 ? 'Forward 10s' : 'Backward 10s', left, top, false);
     });
 
     this.getDomElement().on('mouseleave', () => {
-      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+      config && config.tooltip && config.tooltip.setText('', 0, 0, false);
     });
 
 

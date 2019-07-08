@@ -30,13 +30,13 @@ export class FullscreenToggleButton extends ToggleButton<ToggleButtonConfig> {
     
     this.getDomElement().on('mouseover', (e) => {
       const target = e.target as HTMLTextAreaElement;
-      const left = target.offsetLeft - target.offsetWidth - 25;
+      const left = target.offsetLeft - target.offsetWidth - 53;
       const top = target.offsetTop;
-      config && config.tooltip && config.tooltip.setText(player.isFullscreen() ? 'Exit full screen' : 'Full screen', left, top);
+      config && config.tooltip && config.tooltip.setText(player.isFullscreen() ? 'Exit full screen' : 'Full screen', left, top, true);
     });
 
     this.getDomElement().on('mouseleave', () => {
-      config && config.tooltip && config.tooltip.setText('', 10000, 10000);
+      config && config.tooltip && config.tooltip.setText('', 0, 0, false);
     });
 
   }
