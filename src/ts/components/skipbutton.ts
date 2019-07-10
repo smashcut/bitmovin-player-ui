@@ -60,7 +60,7 @@ export class SkipButton extends Button<SkipButtonConfig> {
         return;
       }
       let currentTime = player.getCurrentTime();
-      if(currentTime <= 0.2) {
+      if(currentTime <= 0.1 && this.config.cssClass === 'ui-skipbutton-backward') {
         return;
       }
       let duration = player.getDuration();
