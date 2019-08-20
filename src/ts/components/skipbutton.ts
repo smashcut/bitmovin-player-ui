@@ -14,7 +14,8 @@ export interface SkipButtonConfig extends ButtonConfig {
    * How much time and in which direction to skip
    */
   duration?: number;
-  tooltip?: Tooltip  
+  tooltip?: Tooltip;
+  text?: string;
 }
 
 /**
@@ -30,6 +31,7 @@ export class SkipButton extends Button<SkipButtonConfig> {
     this.config = this.mergeConfig(config, {
       cssClass: config.duration > 0 ? 'ui-skipbutton-forward' : 'ui-skipbutton-backward',
       text: 'Skip',
+      label: config.text
     }, this.config);
   }
 
@@ -37,11 +39,10 @@ export class SkipButton extends Button<SkipButtonConfig> {
     super.configure(player, uimanager);
 
     let isSeeking = false;
-
     const config = <SkipButtonConfig>this.getConfig();
     this.getDomElement().on('mouseover', (e) => {
       const target = e.target as HTMLTextAreaElement;
-      const left = target.offsetLeft - target.offsetWidth -15;
+      const left = target.offsetLeft - target.offsetWidth - 15;
       const top = target.offsetTop;
       config && config.tooltip && config.tooltip.setText(config.duration > 0 ? 'Forward 10s' : 'Backward 10s', left, top, false);
     });

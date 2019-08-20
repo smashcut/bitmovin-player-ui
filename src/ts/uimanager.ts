@@ -1,58 +1,59 @@
-import {AdClickOverlay} from './components/adclickoverlay';
-import {AdMessageLabel} from './components/admessagelabel';
-import {AdSkipButton} from './components/adskipbutton';
-import {AirPlayToggleButton} from './components/airplaytogglebutton';
-import {ArrayUtils} from './arrayutils';
-import {AudioQualitySelectBox} from './components/audioqualityselectbox';
-import {AudioTrackSelectBox} from './components/audiotrackselectbox';
-import {BrowserUtils} from './browserutils';
-import {BufferingOverlay} from './components/bufferingoverlay';
-import {CastStatusOverlay} from './components/caststatusoverlay';
-import {CastToggleButton} from './components/casttogglebutton';
-import {CastUIContainer} from './components/castuicontainer';
-import {CloseButton} from './components/closebutton';
-import {ShowSuggestionsButton} from './components/showsuggestionsbutton';
-import {ClosedCaptioningToggleButton} from './components/closedcaptioningtogglebutton';
-import {CommentsToggleButton} from './components/commentstogglebutton';
-import {Component, ComponentConfig} from './components/component';
-import {Container} from './components/container';
-import {ControlBar} from './components/controlbar';
-import {DOM} from './dom';
-import {EmbedVideoPanel} from './components/embedvideopanel';
-import {ErrorMessageOverlay} from './components/errormessageoverlay';
-import {FullscreenToggleButton} from './components/fullscreentogglebutton';
-import {Label} from './components/label';
-import {MetadataLabel, MetadataLabelContent} from './components/metadatalabel';
-import {NoArgs, EventDispatcher, CancelEventArgs} from './eventdispatcher';
-import {PictureInPictureToggleButton} from './components/pictureinpicturetogglebutton';
-import {PlaybackSpeedSelectBox} from './components/playbackspeedselectbox';
-import {PlaybackTimeLabel, PlaybackTimeLabelMode} from './components/playbacktimelabel';
-import {PlaybackToggleButton} from './components/playbacktogglebutton';
-import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';
-import {RecommendationOverlay} from './components/recommendationoverlay';
-import {SeekBarLabel} from './components/seekbarlabel';
-import {SeekBar} from './components/seekbar';
-import {SettingsPanel, SettingsPanelItem} from './components/settingspanel';
-import {SettingsToggleButton} from './components/settingstogglebutton';
-import {SkipButton} from './components/skipbutton';
-import {Spacer} from './components/spacer';
-import {SubtitleOverlay} from './components/subtitleoverlay';
-import {SubtitleSelectBox} from './components/subtitleselectbox';
-import {SubtitleSettingsCloseButton} from './components/subtitlesettings/subtitlesettingsclosebutton';
-import {SubtitleSettingsLabel} from './components/subtitlesettings/subtitlesettingslabel';
-import {SubtitleSettingsOpenButton} from './components/subtitlesettings/subtitlesettingsopenbutton';
-import {SubtitleSettingsPanel} from './components/subtitlesettings/subtitlesettingspanel';
-import {TitleBar} from './components/titlebar';
-import {UIContainer} from './components/uicontainer';
-import {UIUtils} from './uiutils';
-import {VideoQualitySelectBox} from './components/videoqualityselectbox';
-import {VolumeControlButton} from './components/volumecontrolbutton';
-import {VolumeSlider} from './components/volumeslider';
-import {VolumeToggleButton} from './components/volumetogglebutton';
-import {VRToggleButton} from './components/vrtogglebutton';
+import { AdClickOverlay } from './components/adclickoverlay';
+import { AdMessageLabel } from './components/admessagelabel';
+import { AdSkipButton } from './components/adskipbutton';
+import { AirPlayToggleButton } from './components/airplaytogglebutton';
+import { ArrayUtils } from './arrayutils';
+import { AudioQualitySelectBox } from './components/audioqualityselectbox';
+import { AudioTrackSelectBox } from './components/audiotrackselectbox';
+import { BrowserUtils } from './browserutils';
+import { BufferingOverlay } from './components/bufferingoverlay';
+import { CastStatusOverlay } from './components/caststatusoverlay';
+import { CastToggleButton } from './components/casttogglebutton';
+import { CastUIContainer } from './components/castuicontainer';
+import { CloseButton } from './components/closebutton';
+import { ShowSuggestionsButton } from './components/showsuggestionsbutton';
+import { ClosedCaptioningToggleButton } from './components/closedcaptioningtogglebutton';
+import { CommentsToggleButton } from './components/commentstogglebutton';
+import { Component, ComponentConfig } from './components/component';
+import { Container } from './components/container';
+import { ControlBar } from './components/controlbar';
+import { DOM } from './dom';
+import { EmbedVideoPanel } from './components/embedvideopanel';
+import { ErrorMessageOverlay } from './components/errormessageoverlay';
+import { FullscreenToggleButton } from './components/fullscreentogglebutton';
+import { Label } from './components/label';
+import { MetadataLabel, MetadataLabelContent } from './components/metadatalabel';
+import { NoArgs, EventDispatcher, CancelEventArgs } from './eventdispatcher';
+import { PictureInPictureToggleButton } from './components/pictureinpicturetogglebutton';
+import { PlaybackSpeedSelectBox } from './components/playbackspeedselectbox';
+import { PlaybackTimeLabel, PlaybackTimeLabelMode } from './components/playbacktimelabel';
+import { PlaybackToggleButton } from './components/playbacktogglebutton';
+import { PlaybackToggleOverlay } from './components/playbacktoggleoverlay';
+import { RecommendationOverlay } from './components/recommendationoverlay';
+import { SeekBarLabel } from './components/seekbarlabel';
+import { SeekBar } from './components/seekbar';
+import { SettingsPanel, SettingsPanelItem } from './components/settingspanel';
+import { SettingsToggleButton } from './components/settingstogglebutton';
+import { SkipButton } from './components/skipbutton';
+import { Spacer } from './components/spacer';
+import { SubtitleOverlay } from './components/subtitleoverlay';
+import { SubtitleSelectBox } from './components/subtitleselectbox';
+import { SubtitleSettingsCloseButton } from './components/subtitlesettings/subtitlesettingsclosebutton';
+import { SubtitleSettingsLabel } from './components/subtitlesettings/subtitlesettingslabel';
+import { SubtitleSettingsOpenButton } from './components/subtitlesettings/subtitlesettingsopenbutton';
+import { SubtitleSettingsPanel } from './components/subtitlesettings/subtitlesettingspanel';
+import { TitleBar } from './components/titlebar';
+import { UIContainer } from './components/uicontainer';
+import { UIUtils } from './uiutils';
+import { VideoQualitySelectBox } from './components/videoqualityselectbox';
+import { VolumeControlButton } from './components/volumecontrolbutton';
+import { VolumeSlider } from './components/volumeslider';
+import { VolumeToggleButton } from './components/volumetogglebutton';
+import { VRToggleButton } from './components/vrtogglebutton';
+import { ReturnButton } from './components/returnbutton';
 // import {Watermark} from './components/watermark';
 
-import {Tooltip} from './components/tooltip';
+import { Tooltip } from './components/tooltip';
 
 import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
 import EVENT = bitmovin.PlayerAPI.EVENT;
@@ -217,7 +218,7 @@ export class UIManager {
       }
 
       // Add the default player UI
-      uiVariants.push({ui: playerUi});
+      uiVariants.push({ ui: playerUi });
 
       this.uiVariants = uiVariants;
     }
@@ -489,7 +490,7 @@ export namespace UIManager.Factory {
     });
     settingsPanel.addComponent(
       new SettingsPanelItem(
-        new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
+        new SubtitleSettingsLabel({ text: 'Subtitles', opener: subtitleSettingsOpenButton }),
         new SubtitleSelectBox()
       ));
 
@@ -498,7 +499,7 @@ export namespace UIManager.Factory {
       hidden: true,
     });
 
-    let seekBar = new SeekBar({label: new SeekBarLabel(), showSuggestionButton: showSuggestionButton});
+    let seekBar = new SeekBar({ label: new SeekBarLabel(), showSuggestionButton: showSuggestionButton });
 
     let controlBarMiddle = new Container({
       cssClasses: ['controlbar-middle'],
@@ -509,8 +510,8 @@ export namespace UIManager.Factory {
       cssClasses: ['controlbar-bottom'],
       components: [
         new PlaybackToggleButton({ tooltip: tooltip }),
-        new SkipButton({duration: -10, tooltip: tooltip}),
-        new SkipButton({duration: 10, tooltip: tooltip}),
+        new SkipButton({ duration: -10, tooltip: tooltip }),
+        new SkipButton({ duration: 10, tooltip: tooltip }),
         new PlaybackTimeLabel({
           timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
           hideInLivePlayback: true,
@@ -524,7 +525,7 @@ export namespace UIManager.Factory {
         new VolumeToggleButton({ tooltip: tooltip }),
         // new CommentsToggleButton({seekBar: seekBar}),
         new ClosedCaptioningToggleButton({ tooltip: tooltip }),
-        new SettingsToggleButton({settingsPanel: settingsPanel, tooltip: tooltip}),
+        new SettingsToggleButton({ settingsPanel: settingsPanel, tooltip: tooltip }),
         // new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
         new FullscreenToggleButton({ tooltip: tooltip }),
         tooltip,
@@ -563,7 +564,8 @@ export namespace UIManager.Factory {
   }
 
   // tslint:disable-next-line
-  function modernUI() {
+  function smashcutSmallScreenUi() {
+
     let subtitleOverlay = new SubtitleOverlay();
 
     let settingsPanel = new SettingsPanel({
@@ -584,14 +586,16 @@ export namespace UIManager.Factory {
 
     let subtitleSettingsOpenButton = new SubtitleSettingsOpenButton({
       subtitleSettingsPanel: subtitleSettingsPanel,
-      settingsPanel: settingsPanel,
+      settingsPanel: settingsPanel
     });
 
     settingsPanel.addComponent(
       new SettingsPanelItem(
-        new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
+        new SubtitleSettingsLabel({ text: 'Subtitles', opener: subtitleSettingsOpenButton }),
         new SubtitleSelectBox()
       ));
+    
+    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
 
     let controlBar = new ControlBar({
       components: [
@@ -599,43 +603,51 @@ export namespace UIManager.Factory {
         subtitleSettingsPanel,
         new Container({
           components: [
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
-            new SeekBar({label: new SeekBarLabel()}),
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
+            new ReturnButton({ label: 'Return' }),
+            new ClosedCaptioningToggleButton(),
+            new SettingsToggleButton({ settingsPanel: settingsPanel })
           ],
-          cssClasses: ['controlbar-top'],
+          cssClasses: ['controlbar-1'],
         }),
         new Container({
           components: [
-            new PlaybackToggleButton(),
-            new VolumeToggleButton(),
-            new VolumeSlider(),
-            new Spacer(),
-            new PictureInPictureToggleButton(),
-            new AirPlayToggleButton(),
-            new CastToggleButton(),
-            new VRToggleButton(),
-            new SettingsToggleButton({settingsPanel: settingsPanel}),
-            new FullscreenToggleButton(),
+            new SkipButton({ duration: -10, text: '10s' }),
+            new PlaybackToggleButton({ label: 'Play' }),
+            new SkipButton({ duration: 10, text: '10s' })
           ],
-          cssClasses: ['controlbar-bottom'],
+          cssClasses: ['controlbar-2'],
         }),
-      ],
+        new Container({
+          components: [
+            new Container({
+              components: [
+                new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
+                new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+                new FullscreenToggleButton(),
+              ],
+              cssClasses: ['controlbar-time-and-fullscreen'],
+            }),
+            new SeekBar({ label: new SeekBarLabel() })
+          ],
+          cssClasses: ['controlbar-3'],
+        })
+      ]
     });
 
     return new UIContainer({
+      hideDelay: 5000,
       components: [
         subtitleOverlay,
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        new CastStatusOverlay(),
         controlBar,
-        new TitleBar(),
+        new CastStatusOverlay(),
+        //new TitleBar(),
         new RecommendationOverlay(),
         // new Watermark(),
         new ErrorMessageOverlay(),
       ],
-      cssClasses: ['ui-skin-modern'],
+      cssClasses: ['ui-skin-modern ui-skin-smashcut', 'ui-skin-smallscreen'],
     });
   }
 
@@ -647,7 +659,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         new Container({
           components: [
-            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
+            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -699,20 +711,20 @@ export namespace UIManager.Factory {
 
     settingsPanel.addComponent(
       new SettingsPanelItem(
-        new SubtitleSettingsLabel({text: 'Subtitles', opener: subtitleSettingsOpenButton}),
+        new SubtitleSettingsLabel({ text: 'Subtitles', opener: subtitleSettingsOpenButton }),
         new SubtitleSelectBox()
       ));
 
-    settingsPanel.addComponent(new CloseButton({target: settingsPanel}));
-    subtitleSettingsPanel.addComponent(new CloseButton({target: subtitleSettingsPanel}));
+    settingsPanel.addComponent(new CloseButton({ target: settingsPanel }));
+    subtitleSettingsPanel.addComponent(new CloseButton({ target: subtitleSettingsPanel }));
 
     let controlBar = new ControlBar({
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
-            new SeekBar({label: new SeekBarLabel()}),
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
+            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
+            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+            new SeekBar({ label: new SeekBarLabel() })
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -725,15 +737,15 @@ export namespace UIManager.Factory {
         new BufferingOverlay(),
         new CastStatusOverlay(),
         new PlaybackToggleOverlay(),
+        new FullscreenToggleButton(),
         controlBar,
         new TitleBar({
           components: [
-            new MetadataLabel({content: MetadataLabelContent.Title}),
+            new MetadataLabel({ content: MetadataLabelContent.Title }),
             new CastToggleButton(),
             new VRToggleButton(),
             new VolumeToggleButton(),
-            new SettingsToggleButton({settingsPanel: settingsPanel}),
-            new FullscreenToggleButton(),
+            new SettingsToggleButton({ settingsPanel: settingsPanel })
           ],
         }),
         settingsPanel,
@@ -755,13 +767,13 @@ export namespace UIManager.Factory {
         new TitleBar({
           components: [
             // dummy label with no content to move buttons to the right
-            new Label({cssClass: 'label-metadata-title'}),
+            new Label({ cssClass: 'label-metadata-title' }),
             new FullscreenToggleButton(),
           ],
         }),
         new Container({
           components: [
-            new AdMessageLabel({text: 'Ad: {remainingTime} secs'}),
+            new AdMessageLabel({ text: 'Ad: {remainingTime} secs' }),
             new AdSkipButton(),
           ],
           cssClass: 'ui-ads-status',
@@ -776,9 +788,9 @@ export namespace UIManager.Factory {
       components: [
         new Container({
           components: [
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true}),
-            new SeekBar({smoothPlaybackPositionUpdateIntervalMs: -1}),
-            new PlaybackTimeLabel({timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right']}),
+            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
+            new SeekBar({ smoothPlaybackPositionUpdateIntervalMs: -1 }),
+            new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
           ],
           cssClasses: ['controlbar-top'],
         }),
@@ -792,7 +804,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         // new Watermark(),
         controlBar,
-        new TitleBar({keepHiddenWithoutMetadata: true}),
+        new TitleBar({ keepHiddenWithoutMetadata: true }),
         new ErrorMessageOverlay(),
       ],
       cssClasses: ['ui-skin-modern', 'ui-skin-cast-receiver'],
@@ -801,27 +813,29 @@ export namespace UIManager.Factory {
 
   export function buildModernUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
     // show smallScreen UI only on mobile/handheld devices
-    let smallScreenSwitchWidth = 600;
+    let smallScreenSwitchWidth = 1000;
 
-    return new UIManager(player, [{
-      ui: modernSmallScreenAdsUI(),
-      condition: (context: UIConditionContext) => {
-        return context.isMobile && context.documentWidth < smallScreenSwitchWidth && context.isAdWithUI;
+    return new UIManager(player, [
+      // {
+      //   ui: modernSmallScreenAdsUI(),
+      //   condition: (context: UIConditionContext) => {
+      //     return context.documentWidth < smallScreenSwitchWidth && context.isAdWithUI;
+      //   },
+      // },
+      // {
+      //   ui: modernAdsUI(),
+      //   condition: (context: UIConditionContext) => {
+      //     return context.isAdWithUI;
+      //   },
+      // }, 
+      {
+        ui: smashcutSmallScreenUi(),
+        condition: (context: UIConditionContext) => {
+          return context.documentWidth < smallScreenSwitchWidth;
+        },
       },
-    }, {
-      ui: modernAdsUI(),
-      condition: (context: UIConditionContext) => {
-        return context.isAdWithUI;
-      },
-    }, {
-      ui: modernSmallScreenUI(),
-      condition: (context: UIConditionContext) => {
-        return context.isMobile && context.documentWidth < smallScreenSwitchWidth;
-      },
-    }, {
-      ui: smashcutUi(),
-      // ui: modernUI(),
-    }], config);
+      { ui: smashcutUi() }
+    ], config);
   }
 
   export function buildModernSmallScreenUI(player: PlayerAPI, config: UIConfig = {}): UIManager {
@@ -854,11 +868,11 @@ export namespace UIManager.Factory {
       components: [
         settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({label: new SeekBarLabel()}),
+        new SeekBar({ label: new SeekBarLabel() }),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeControlButton(),
-        new SettingsToggleButton({settingsPanel: settingsPanel}),
+        new SettingsToggleButton({ settingsPanel: settingsPanel }),
         new CastToggleButton(),
         new FullscreenToggleButton(),
       ],
@@ -932,14 +946,14 @@ export namespace UIManager.Factory {
     let controlBar = new ControlBar({
       components: [settingsPanel,
         new PlaybackToggleButton(),
-        new SeekBar({label: new SeekBarLabel()}),
+        new SeekBar({ label: new SeekBarLabel() }),
         new PlaybackTimeLabel(),
         new VRToggleButton(),
         new VolumeToggleButton(),
         new VolumeSlider(),
         new VolumeControlButton(),
-        new VolumeControlButton({vertical: false}),
-        new SettingsToggleButton({settingsPanel: settingsPanel}),
+        new VolumeControlButton({ vertical: false }),
+        new SettingsToggleButton({ settingsPanel: settingsPanel }),
         new CastToggleButton(),
         new FullscreenToggleButton(),
       ],

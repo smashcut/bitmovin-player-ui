@@ -1,10 +1,10 @@
-import {ContainerConfig, Container} from './container';
-import {UIInstanceManager} from '../uimanager';
-import {DOM} from '../dom';
-import {Timeout} from '../timeout';
-import {PlayerUtils} from '../playerutils';
+import { ContainerConfig, Container } from './container';
+import { UIInstanceManager } from '../uimanager';
+import { DOM } from '../dom';
+import { Timeout } from '../timeout';
+import { PlayerUtils } from '../playerutils';
 import PlayerResizeEvent = bitmovin.PlayerAPI.PlayerResizeEvent;
-import {CancelEventArgs} from '../eventdispatcher';
+import { CancelEventArgs } from '../eventdispatcher';
 
 /**
  * Configuration interface for a {@link UIContainer}.
@@ -64,12 +64,9 @@ export class UIContainer extends Container<UIContainerConfig> {
     let isFirstTouch = true;
 
     let showUi = () => {
-      if (!isUiShown) {
-        // Let subscribers know that they should reveal themselves
-        uimanager.onControlsShow.dispatch(this);
-        player.fireEvent(player.EVENT.ON_SHOW_CONTROLS, {});
-        isUiShown = true;
-      }
+      uimanager.onControlsShow.dispatch(this);
+      player.fireEvent(player.EVENT.ON_SHOW_CONTROLS, {});
+      isUiShown = true;
       // Don't trigger timeout while seeking (it will be triggered once the seek is finished) or casting
       if (!isSeeking && !player.isCasting()) {
         this.uiHideTimeout.start();
@@ -77,29 +74,30 @@ export class UIContainer extends Container<UIContainerConfig> {
     };
 
     let hideUi = () => {
-      // Hide the UI only if it is shown, and if not casting
-      if (isUiShown && !player.isCasting()) {
-        // Issue a preview event to check if we are good to hide the controls
-        let previewHideEventArgs = <CancelEventArgs>{};
-        uimanager.onPreviewControlsHide.dispatch(this, previewHideEventArgs);
-
-        if (!previewHideEventArgs.cancel) {
-          // If the preview wasn't canceled, let subscribers know that they should now hide themselves
-          uimanager.onControlsHide.dispatch(this);
-          player.fireEvent(player.EVENT.ON_HIDE_CONTROLS, {});
-          isUiShown = false;
-        } else {
-          // If the hide preview was canceled, continue to show UI
-          showUi();
-        }
-      }
+      let previewHideEventArgs = <CancelEventArgs>{};
+      uimanager.onPreviewControlsHide.dispatch(this, previewHideEventArgs);
+      // If the preview wasn't canceled, let subscribers know that they should now hide themselves	
+      uimanager.onControlsHide.dispatch(this);
+      player.fireEvent(player.EVENT.ON_HIDE_CONTROLS, {});
+      isUiShown = false;
     };
 
     // Timeout to defer UI hiding by the configured delay time
     this.uiHideTimeout = new Timeout(config.hideDelay, hideUi);
-
+    
+    // When the mouse enters, we show the UI
+    container.on('touchstart mouseenter', () => {
+      showUi();
+    });
+    // When the mouse moves within, we show the UI
+    container.on('touchmove mousemove', () => {
+      showUi();
+    });
+    // When the mouse leaves, we can prepare to hide the UI, except a seek is going on
     // On touch displays, the first touch reveals the UI
-    container.on('touchend', (e) => {
+    container.on('touchend mouseleave', e => {
+      // When a seek is going on, the seek scrub pointer may exit the UI area while still seeking, and we do not hide
+      // the UI in such cases
       if (!isUiShown) {
         // Only if the UI is hidden, we prevent other actions (except for the first touch) and reveal the UI instead.
         // The first touch is not prevented to let other listeners receive the event and trigger an initial action, e.g.
@@ -112,19 +110,6 @@ export class UIContainer extends Container<UIContainerConfig> {
         }
         showUi();
       }
-    });
-    // When the mouse enters, we show the UI
-    container.on('mouseenter', () => {
-      showUi();
-    });
-    // When the mouse moves within, we show the UI
-    container.on('mousemove', () => {
-      showUi();
-    });
-    // When the mouse leaves, we can prepare to hide the UI, except a seek is going on
-    container.on('mouseleave', () => {
-      // When a seek is going on, the seek scrub pointer may exit the UI area while still seeking, and we do not hide
-      // the UI in such cases
       if (!isSeeking) {
         this.uiHideTimeout.start();
       }

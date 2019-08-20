@@ -10,6 +10,7 @@ export interface ButtonConfig extends ComponentConfig {
    * The text on the button.
    */
   text?: string;
+  label?: string;
 }
 
 /**
@@ -35,9 +36,11 @@ export class Button<Config extends ButtonConfig> extends Component<ButtonConfig>
       'type': 'button',
       'id': this.config.id,
       'class': this.getCssClasses(),
-    }).append(new DOM('span', {
-      'class': this.prefixCss('label'),
-    }).html(this.config.text));
+    }).append( new DOM('span', { 'class': this.prefixCss('label')}).html(this.config.text) )
+    
+    if(this.config.label) {
+      buttonElement.append(new DOM('span', { 'class': this.prefixCss('text')}).html(this.config.label));
+    }
 
     // Listen for the click event on the button element and trigger the corresponding event on the button component
     buttonElement.on('click', () => {
@@ -53,6 +56,10 @@ export class Button<Config extends ButtonConfig> extends Component<ButtonConfig>
    */
   setText(text: string): void {
     this.getDomElement().find('.' + this.prefixCss('label')).html(text);
+  }
+
+  setLabel(label: string): void {
+    this.getDomElement().find('.' + this.prefixCss('text')).html(label);
   }
 
   protected onClickEvent() {

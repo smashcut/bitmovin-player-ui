@@ -17,6 +17,14 @@
     color: $color-primary;
     display: none;
   }
+  
+  .#{$prefix}-text {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;  
+  }
 
   @include hidden;
 }

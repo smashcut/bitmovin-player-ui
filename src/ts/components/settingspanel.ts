@@ -101,7 +101,7 @@ export class SettingsPanel extends Container<SettingsPanelConfig> {
       this.hideTimeout.clear();
     }
   }
-
+  
   /**
    * Checks if there are active settings within this settings panel. An active setting is a setting that is visible
    * and enabled, which the user can interact with.
@@ -109,7 +109,7 @@ export class SettingsPanel extends Container<SettingsPanelConfig> {
    */
   hasActiveSettings(): boolean {
     for (let component of this.getItems()) {
-      if (component.isActive()) {
+      if (component && typeof component.isActive === 'function' && component.isActive()) {
         return true;
       }
     }

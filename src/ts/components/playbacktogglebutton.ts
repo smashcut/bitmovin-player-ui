@@ -98,9 +98,11 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
         if (player.isPlaying()) {
           this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'pause', e, originator: 'PlaybackToggleButton'})
           player.pause('ui');
+          this.setLabel('Play');
         } else {
           this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', e, originator: 'PlaybackToggleButton'})
           player.play('ui');
+          this.setLabel('Pause');
         }
       });
     }

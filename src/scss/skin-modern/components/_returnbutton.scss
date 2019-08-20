@@ -1,0 +1,22 @@
+@import 'variables';
+@import '../mixins';
+
+
+.#{$prefix}-ui-return-button {
+    @extend %ui-button;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &:before {
+       font-family: 'Font Awesome 5 Free';
+       content: '\f053';
+       display: inline-block;
+       vertical-align: middle;
+       font-weight: 900;
+       font-size: 16px;
+       color: #ffffff;
+    }
+    & > span {
+       margin: 0 12px !important;
+    }
+  }
