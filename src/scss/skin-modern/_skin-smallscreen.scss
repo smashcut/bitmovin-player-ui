@@ -37,7 +37,17 @@
     right: 0;
     display: block;
     &.#{$prefix}-hidden {
-      display: none;
+      .#{$prefix}-controlbar-1 {
+        visibility: hidden;
+      }
+      .#{$prefix}-controlbar-2 {
+        visibility: hidden;
+      }
+      .#{$prefix}-controlbar-3 {
+        .#{$prefix}-controlbar-time-and-fullscreen {
+          visibility: hidden;
+        }
+      }
     }
     & > div {
       height: 100%;

@@ -635,7 +635,7 @@ export namespace UIManager.Factory {
     });
 
     return new UIContainer({
-      hideDelay: 5000,
+      hideDelay: 1500,
       components: [
         subtitleOverlay,
         new BufferingOverlay(),
