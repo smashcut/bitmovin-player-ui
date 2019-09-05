@@ -37,6 +37,9 @@
     right: 0;
     display: block;
     &.#{$prefix}-hidden {
+      & > div {
+        background-image: none;
+      }
       .#{$prefix}-controlbar-1 {
         visibility: hidden;
       }
