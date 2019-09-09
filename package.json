@@ -5,8 +5,12 @@
   "main": "./dist/js/framework/main.js",
   "types": "./dist/js/framework/main.d.ts",
   "scripts": {
-    "test": "npx jest",
-    "prepublish": "gulp npm-prepare"
+    "build": "gulp build",
+    "lint": "gulp lint",
+    "serve": "gulp serve",
+    "prepublish": "gulp npm-prepare",
+    "serve": "gulp serve",
+    "test": "npx jest"
   },
   "repository": {
     "type": "git",
