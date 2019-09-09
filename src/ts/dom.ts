@@ -413,6 +413,25 @@ export class DOM {
   }
 
   /**
+   * Allow to dispatch browser events
+   * @param event
+   */
+  dispatchEvent(event: Event): any {
+    if (this.elements == null) {
+      this.document.dispatchEvent(event);
+    }
+    else {
+      this.forEach((element) => {
+        element.dispatchEvent(event);
+      });
+    }
+  }
+
+  dispatchSmashcutPlayerUiEvent(data: any): any {
+    this.dispatchEvent(new CustomEvent('smashcutplayerui', {detail: data, bubbles: true, cancelable: false}));
+  }
+
+  /**
    * Adds the specified class(es) to all elements.
    * @param className the class(es) to add, multiple classes separated by space
    * @returns {DOM}

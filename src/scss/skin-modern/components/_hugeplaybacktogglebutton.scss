@@ -44,6 +44,7 @@
   overflow: hidden; // hide overflow from scale animation
   width: 8em;
 
+  /* make big overlay button invisible but functional
   .#{$prefix}-image {
     background-image: svg('assets/skin-modern/images/play_big.svg');
     background-position: center;
@@ -56,6 +57,7 @@
       animation: breathe 3s ease-in-out infinite;
     }
   }
+  */
 
   &.#{$prefix}-on {
     .#{$prefix}-image {
@@ -69,16 +71,6 @@
     .#{$prefix}-image {
       animation: fade-in $animation-duration cubic-bezier(.55, .055, .675, .19); // http://easings.net/de#easeInCubic
       visibility: visible;
-    }
-  }
-
-  &.#{$prefix}-no-transition-animations {
-    &.#{$prefix}-on,
-    &.#{$prefix}-off {
-      .#{$prefix}-image {
-        animation: none;
-        transition: none;
-      }
     }
   }
 }

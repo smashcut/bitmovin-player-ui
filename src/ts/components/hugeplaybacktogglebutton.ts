@@ -23,9 +23,11 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
     super.configure(player, uimanager, false);
 
     let togglePlayback = () => {
-      if (player.isPlaying() || this.isPlayInitiated) {
+      if (player.isPlaying()) {
+        this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'pause', originator: 'HugePlaybackToggleButton'})
         player.pause('ui');
       } else {
+        this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', originator: 'HugePlaybackToggleButton'})
         player.play('ui');
       }
     };
