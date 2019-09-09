@@ -1,0 +1,56 @@
+@import "variables";
+@import "../mixins";
+
+.#{$prefix}-ui-tooltip-box {
+  @extend %ui-container;
+  @include hidden-animated;
+  
+  position: absolute !important;
+  margin-top: -37px !important;
+  margin-left: -7px !important;
+  color: #fff; 
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 13px; 
+  padding: 8px 21px;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+  z-index: 999;
+  visibility: visible;
+  opacity: 1;
+  &:empty {
+    visibility: hidden;
+    opacity: 0;
+  }
+  &.rightSideArrow {
+    &::after {
+      left: initial !important;
+    }
+  }
+  &::before {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    bottom: -8px;
+    left: 50%;
+    margin-left: -10px;
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+  &::after {
+    border-top-color: rgba(0, 0, 0, 0.9);
+    border-top-style: solid;
+    border-top-width: 6px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    bottom: -6px;
+    left: 50%;
+    margin-left: -8px;
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+}

@@ -3,14 +3,16 @@
 
 .#{$prefix}-ui-fullscreentogglebutton {
   @extend %ui-button;
-
-  background-image: svg('assets/skin-modern/images/fullscreen.svg');
-
-  &:hover {
-    @include svg-icon-shadow;
-  }
-
-  &.#{$prefix}-on {
-    background-image: svg('assets/skin-modern/images/fullscreenX.svg');
-  }
+     &:before {
+       font-family: 'Font Awesome 5 Free';
+       content: '\f065';
+       display: inline-block;
+       vertical-align: middle;
+       font-weight: 900;
+       font-size: 16px;
+       color: #ffffff;
+     }
+    &.#{$prefix}-on {
+      color: #444444;
+    }
 }

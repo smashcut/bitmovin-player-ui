@@ -1,21 +1,24 @@
-import {ToggleButtonConfig} from './togglebutton';
-import {PlaybackToggleButton} from './playbacktogglebutton';
-import {DOM} from '../dom';
-import {UIInstanceManager} from '../uimanager';
-import { PlayerAPI, PlayerEventBase, WarningEvent } from 'bitmovin-player';
+import { ToggleButtonConfig } from "./togglebutton";
+import { PlaybackToggleButton } from "./playbacktogglebutton";
+import { DOM } from "../dom";
+import { UIInstanceManager } from "../uimanager";
+import { PlayerAPI, PlayerEventBase, WarningEvent } from "bitmovin-player";
 
 /**
  * A button that overlays the video and toggles between playback and pause.
  */
 export class HugePlaybackToggleButton extends PlaybackToggleButton {
-
   constructor(config: ToggleButtonConfig = {}) {
     super(config);
 
-    this.config = this.mergeConfig(config, {
-      cssClass: 'ui-hugeplaybacktogglebutton',
-      text: 'Play/Pause',
-    }, this.config);
+    this.config = this.mergeConfig(
+      config,
+      {
+        cssClass: "ui-hugeplaybacktogglebutton",
+        text: "Play/Pause"
+      },
+      this.config
+    );
   }
 
   configure(player: PlayerAPI, uimanager: UIInstanceManager): void {
@@ -24,11 +27,17 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
 
     let togglePlayback = () => {
       if (player.isPlaying()) {
-        this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'pause', originator: 'HugePlaybackToggleButton'})
-        player.pause('ui');
+        this.getDomElement().dispatchSmashcutPlayerUiEvent({
+          action: "pause",
+          originator: "HugePlaybackToggleButton"
+        });
+        player.pause("ui");
       } else {
-        this.getDomElement().dispatchSmashcutPlayerUiEvent({action: 'play', originator: 'HugePlaybackToggleButton'})
-        player.play('ui');
+        this.getDomElement().dispatchSmashcutPlayerUiEvent({
+          action: "play",
+          originator: "HugePlaybackToggleButton"
+        });
+        player.play("ui");
       }
     };
 
@@ -105,7 +114,9 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
     });
 
     player.on(player.exports.PlayerEvent.Warning, (event: WarningEvent) => {
-      if (event.code === player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED) {
+      if (
+        event.code === player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED
+      ) {
         // if playback could not be started, reset the first play flag as we need the user interaction to start
         firstPlay = true;
       }
@@ -124,7 +135,9 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
     // Hide the play button animation when the UI is loaded (it should only be animated on state changes)
     suppressPlayButtonTransitionAnimation();
 
-    const isAutoplayEnabled = player.getConfig().playback && Boolean(player.getConfig().playback.autoplay);
+    const isAutoplayEnabled =
+      player.getConfig().playback &&
+      Boolean(player.getConfig().playback.autoplay);
     // We only know if an autoplay attempt is upcoming if the player is not yet ready. It the player is already ready,
     // the attempt might be upcoming or might have already happened, but we don't have to handle that because we can
     // simply rely on isPlaying and the play state events.
@@ -139,7 +152,10 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
 
       // Show the play button without an animation if a play attempt is blocked
       player.on(player.exports.PlayerEvent.Warning, (event: WarningEvent) => {
-        if (event.code === player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED) {
+        if (
+          event.code ===
+          player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED
+        ) {
           suppressPlayButtonTransitionAnimation();
         }
       });
@@ -153,9 +169,11 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
     // Setting the image directly on the button does not work together with scaling animations, because the button
     // can cover the whole video player are and scaling would extend it beyond. By adding an inner element, confined
     // to the size if the image, it can scale inside the player without overshooting.
-    buttonElement.append(new DOM('div', {
-      'class': this.prefixCss('image'),
-    }));
+    buttonElement.append(
+      new DOM("div", {
+        class: this.prefixCss("image")
+      })
+    );
 
     return buttonElement;
   }
@@ -166,7 +184,9 @@ export class HugePlaybackToggleButton extends PlaybackToggleButton {
    * @param {boolean} enabled true to enable the animations (default), false to disable them
    */
   protected setTransitionAnimationsEnabled(enabled: boolean): void {
-    const noTransitionAnimationsClass = this.prefixCss('no-transition-animations');
+    const noTransitionAnimationsClass = this.prefixCss(
+      "no-transition-animations"
+    );
 
     if (enabled) {
       this.getDomElement().removeClass(noTransitionAnimationsClass);

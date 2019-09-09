@@ -1,32 +1,57 @@
-import {ToggleButton, ToggleButtonConfig} from './togglebutton';
-import {UIInstanceManager} from '../uimanager';
-import {PlayerUtils} from '../playerutils';
+import { ToggleButton, ToggleButtonConfig } from "./togglebutton";
+import { UIInstanceManager } from "../uimanager";
+import { PlayerUtils } from "../playerutils";
 import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
-import { PlayerAPI, WarningEvent } from 'bitmovin-player';
+import { PlayerAPI, WarningEvent } from "bitmovin-player";
 
 /**
  * A button that toggles between playback and pause.
  */
 export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
-
-  private static readonly CLASS_STOPTOGGLE = 'stoptoggle';
+  private static readonly CLASS_STOPTOGGLE = "stoptoggle";
   protected isPlayInitiated: boolean;
 
   constructor(config: ToggleButtonConfig = {}) {
     super(config);
 
-    this.config = this.mergeConfig(config, {
-      cssClass: 'ui-playbacktogglebutton',
-      text: 'Play/Pause',
-    }, this.config);
+    this.config = this.mergeConfig(
+      config,
+      {
+        cssClass: "ui-playbacktogglebutton",
+        text: "Play/Pause"
+      },
+      this.config
+    );
 
     this.isPlayInitiated = false;
   }
 
-  configure(player: PlayerAPI, uimanager: UIInstanceManager, handleClickEvent: boolean = true): void {
+  configure(
+    player: PlayerAPI,
+    uimanager: UIInstanceManager,
+    handleClickEvent: boolean = true
+  ): void {
     super.configure(player, uimanager);
 
     let isSeeking = false;
+
+    const config = <ToggleButtonConfig>this.getConfig();
+
+    this.getDomElement().on("mouseover", e => {
+      if (player.isPlaying()) {
+        config &&
+          config.tooltip &&
+          config.tooltip.setText("Pause", -14, 0, false);
+      } else {
+        config &&
+          config.tooltip &&
+          config.tooltip.setText("Play", -14, 0, false);
+      }
+    });
+
+    this.getDomElement().on("mouseleave", () => {
+      config && config.tooltip && config.tooltip.setText("", 0, 0, false);
+    });
 
     // Handler to update button state based on player state
     let playbackStateHandler = () => {
@@ -44,17 +69,17 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
     };
 
     // Call handler upon these events
-    player.on(player.exports.PlayerEvent.Play, (e) => {
+    player.on(player.exports.PlayerEvent.Play, e => {
       this.isPlayInitiated = true;
       playbackStateHandler();
     });
 
-    player.on(player.exports.PlayerEvent.Paused, (e) => {
+    player.on(player.exports.PlayerEvent.Paused, e => {
       this.isPlayInitiated = false;
       playbackStateHandler();
     });
 
-    player.on(player.exports.PlayerEvent.Playing, (e) => {
+    player.on(player.exports.PlayerEvent.Playing, e => {
       this.isPlayInitiated = false;
       playbackStateHandler();
     });
@@ -63,28 +88,39 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
     uimanager.getConfig().events.onUpdated.subscribe(playbackStateHandler);
     player.on(player.exports.PlayerEvent.SourceUnloaded, playbackStateHandler);
     // when playback finishes, player turns to paused mode
-    player.on(player.exports.PlayerEvent.PlaybackFinished, playbackStateHandler);
+    player.on(
+      player.exports.PlayerEvent.PlaybackFinished,
+      playbackStateHandler
+    );
     player.on(player.exports.PlayerEvent.CastStarted, playbackStateHandler);
 
     // When a playback attempt is rejected with warning 5008, we switch the button state back to off
     // This is required for blocked autoplay, because there is no Paused event in such case
     player.on(player.exports.PlayerEvent.Warning, (event: WarningEvent) => {
-      if (event.code === player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED) {
+      if (
+        event.code === player.exports.WarningCode.PLAYBACK_COULD_NOT_BE_STARTED
+      ) {
         this.isPlayInitiated = false;
         this.off();
       }
     });
 
     // Detect absence of timeshifting on live streams and add tagging class to convert button icons to play/stop
-    let timeShiftDetector = new PlayerUtils.TimeShiftAvailabilityDetector(player);
+    let timeShiftDetector = new PlayerUtils.TimeShiftAvailabilityDetector(
+      player
+    );
     timeShiftDetector.onTimeShiftAvailabilityChanged.subscribe(
       (sender, args: TimeShiftAvailabilityChangedArgs) => {
         if (!args.timeShiftAvailable) {
-          this.getDomElement().addClass(this.prefixCss(PlaybackToggleButton.CLASS_STOPTOGGLE));
+          this.getDomElement().addClass(
+            this.prefixCss(PlaybackToggleButton.CLASS_STOPTOGGLE)
+          );
         } else {
-          this.getDomElement().removeClass(this.prefixCss(PlaybackToggleButton.CLASS_STOPTOGGLE));
+          this.getDomElement().removeClass(
+            this.prefixCss(PlaybackToggleButton.CLASS_STOPTOGGLE)
+          );
         }
-      },
+      }
     );
     timeShiftDetector.detect(); // Initial detection
 
@@ -92,11 +128,21 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
       // Control player by button events
       // When a button event triggers a player API call, events are fired which in turn call the event handler
       // above that updated the button state.
-      this.onClick.subscribe(() => {
+      this.onClick.subscribe((e) => {
         if (player.isPlaying() || this.isPlayInitiated) {
-          player.pause('ui');
+          this.getDomElement().dispatchSmashcutPlayerUiEvent({
+            action: "pause",
+            e,
+            originator: "PlaybackToggleButton"
+          });
+          player.pause("ui");
         } else {
-          player.play('ui');
+          this.getDomElement().dispatchSmashcutPlayerUiEvent({
+            action: "play",
+            e,
+            originator: "PlaybackToggleButton"
+          });
+          player.play("ui");
         }
       });
     }

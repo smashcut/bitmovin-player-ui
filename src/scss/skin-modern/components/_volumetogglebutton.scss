@@ -4,17 +4,27 @@
 .#{$prefix}-ui-volumetogglebutton {
   @extend %ui-button;
 
-  &:hover {
-    @include svg-icon-shadow;
+   &:before {
+       font-family: 'Font Awesome 5 Free';
+       content: '\f6a9';
+       display: inline-block;
+       vertical-align: middle;
+       font-weight: 900;
+       font-size: 16px;
+       color: #ffffff;
   }
 
   &.#{$prefix}-muted {
-    background-image: svg('assets/skin-modern/images/music-off.svg');
+    &:before {
+      content: '\f6a9';
+    }
   }
 
   &.#{$prefix}-unmuted {
     &[data-#{$prefix}-volume-level-tens='0'] {
-      background-image: svg('assets/skin-modern/images/music-off.svg');
+      &:before {
+        content: '\f6a9';
+      }
     }
 
     &[data-#{$prefix}-volume-level-tens='1'],
@@ -22,7 +32,9 @@
     &[data-#{$prefix}-volume-level-tens='3'],
     &[data-#{$prefix}-volume-level-tens='4'],
     &[data-#{$prefix}-volume-level-tens='5'] {
-      background-image: svg('assets/skin-modern/images/music-low.svg');
+      &:before {
+        content: '\f027';
+      }
     }
 
     &[data-#{$prefix}-volume-level-tens='6'],
@@ -30,7 +42,9 @@
     &[data-#{$prefix}-volume-level-tens='8'],
     &[data-#{$prefix}-volume-level-tens='9'],
     &[data-#{$prefix}-volume-level-tens='10'] {
-      background-image: svg('assets/skin-modern/images/music-on.svg');
+      &:before {
+        content: '\f028';
+      }
     }
   }
 }

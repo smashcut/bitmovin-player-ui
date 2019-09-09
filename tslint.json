@@ -9,7 +9,7 @@
     "no-trailing-whitespace": true,
     "no-var-keyword": false,
     "one-line": [true, "check-open-brace", "check-whitespace"],
-    "quotemark": [true, "single"],
+    "quotemark": [false, "double"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
     "triple-equals": [true, "allow-null-check"],
     "typedef-whitespace": [true, {
@@ -28,11 +28,11 @@
       "check-type"
     ],
     "trailing-comma": [true, {"multiline": {
-      "arrays": "always",
-      "exports": "always",
-      "functions": "always",
-      "imports": "always",
-      "objects": "always",
+      "arrays": "ignore",
+      "exports": "never",
+      "functions": "never",
+      "imports": "never",
+      "objects": "ignore",
       "typeLiterals": "always"
     }, "singleline": "never"}]
   }

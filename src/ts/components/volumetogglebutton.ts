@@ -40,6 +40,19 @@ export class VolumeToggleButton extends ToggleButton<ToggleButtonConfig> {
       volumeController.toggleMuted();
     });
 
+    const config = <ToggleButtonConfig>this.getConfig();
+
+    this.getDomElement().on('mouseover', (e) => {
+      const target = e.target as HTMLTextAreaElement;
+      const left = target.offsetLeft - target.offsetWidth;
+      const top = target.offsetTop;
+      config && config.tooltip && config.tooltip.setText('Volume', left, top, false);
+    });
+
+    this.getDomElement().on('mouseleave', () => {
+      config && config.tooltip && config.tooltip.setText('', 0, 0, false);
+    });
+
     // Startup init
     volumeController.onChangedEvent();
   }

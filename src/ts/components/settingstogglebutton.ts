@@ -1,9 +1,10 @@
-import {ToggleButton, ToggleButtonConfig} from './togglebutton';
-import {SettingsPanel} from './settingspanel';
-import {UIInstanceManager} from '../uimanager';
-import {Component, ComponentConfig} from './component';
-import {ArrayUtils} from '../arrayutils';
-import { PlayerAPI } from 'bitmovin-player';
+import { ToggleButton, ToggleButtonConfig } from "./togglebutton";
+import { SettingsPanel } from "./settingspanel";
+import { UIInstanceManager } from "../uimanager";
+import { Component, ComponentConfig } from "./component";
+import { ArrayUtils } from "../arrayutils";
+import { PlayerAPI } from "bitmovin-player";
+import { Tooltip } from "./tooltip";
 
 /**
  * Configuration interface for the {@link SettingsToggleButton}.
@@ -13,7 +14,7 @@ export interface SettingsToggleButtonConfig extends ToggleButtonConfig {
    * The settings panel whose visibility the button should toggle.
    */
   settingsPanel: SettingsPanel;
-
+  tooltip?: Tooltip;
   /**
    * Decides if the button should be automatically hidden when the settings panel does not contain any active settings.
    * Default: true
@@ -24,23 +25,28 @@ export interface SettingsToggleButtonConfig extends ToggleButtonConfig {
 /**
  * A button that toggles visibility of a settings panel.
  */
-export class SettingsToggleButton extends ToggleButton<SettingsToggleButtonConfig> {
-
+export class SettingsToggleButton extends ToggleButton<
+  SettingsToggleButtonConfig
+> {
   private visibleSettingsPanels: SettingsPanel[] = [];
 
   constructor(config: SettingsToggleButtonConfig) {
     super(config);
 
     if (!config.settingsPanel) {
-      throw new Error('Required SettingsPanel is missing');
+      throw new Error("Required SettingsPanel is missing");
     }
 
-    this.config = this.mergeConfig(config, {
-      cssClass: 'ui-settingstogglebutton',
-      text: 'Settings',
-      settingsPanel: null,
-      autoHideWhenNoActiveSettings: true,
-    }, <SettingsToggleButtonConfig>this.config);
+    this.config = this.mergeConfig(
+      config,
+      {
+        cssClass: "ui-settingstogglebutton",
+        text: "Settings",
+        settingsPanel: null,
+        autoHideWhenNoActiveSettings: true
+      },
+      <SettingsToggleButtonConfig>this.config
+    );
   }
 
   configure(player: PlayerAPI, uimanager: UIInstanceManager): void {
@@ -55,7 +61,9 @@ export class SettingsToggleButton extends ToggleButton<SettingsToggleButtonConfi
         // Hide all open SettingsPanels before opening this button's panel
         // (We need to iterate a copy because hiding them will automatically remove themselves from the array
         // due to the subscribeOnce above)
-        this.visibleSettingsPanels.slice().forEach(settingsPanel => settingsPanel.hide());
+        this.visibleSettingsPanels
+          .slice()
+          .forEach(settingsPanel => settingsPanel.hide());
       }
       settingsPanel.toggleHidden();
     });
@@ -68,14 +76,31 @@ export class SettingsToggleButton extends ToggleButton<SettingsToggleButtonConfi
       this.off();
     });
 
+    this.getDomElement().on("mouseover", e => {
+      const target = e.target as HTMLTextAreaElement;
+      const left = target.offsetLeft - target.offsetWidth;
+      const top = target.offsetTop;
+      config &&
+        config.tooltip &&
+        config.tooltip.setText("Settings", left, top, false);
+    });
+
+    this.getDomElement().on("mouseleave", () => {
+      config && config.tooltip && config.tooltip.setText("", 0, 0, false);
+    });
+
     // Ensure that only one `SettingPanel` is visible at once
     // Keep track of shown SettingsPanels
-    uimanager.onComponentShow.subscribe((sender: Component<ComponentConfig>) => {
-      if (sender instanceof SettingsPanel) {
-        this.visibleSettingsPanels.push(sender);
-        sender.onHide.subscribeOnce(() => ArrayUtils.remove(this.visibleSettingsPanels, sender));
+    uimanager.onComponentShow.subscribe(
+      (sender: Component<ComponentConfig>) => {
+        if (sender instanceof SettingsPanel) {
+          this.visibleSettingsPanels.push(sender);
+          sender.onHide.subscribeOnce(() =>
+            ArrayUtils.remove(this.visibleSettingsPanels, sender)
+          );
+        }
       }
-    });
+    );
 
     // Handle automatic hiding of the button if there are no settings for the user to interact with
     if (config.autoHideWhenNoActiveSettings) {
@@ -92,7 +117,9 @@ export class SettingsToggleButton extends ToggleButton<SettingsToggleButtonConfi
         }
       };
       // Wire the handler to the event
-      settingsPanel.onSettingsStateChanged.subscribe(settingsPanelItemsChangedHandler);
+      settingsPanel.onSettingsStateChanged.subscribe(
+        settingsPanelItemsChangedHandler
+      );
       // Call handler for first init at startup
       settingsPanelItemsChangedHandler();
     }
