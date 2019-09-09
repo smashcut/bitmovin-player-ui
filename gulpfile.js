@@ -42,6 +42,8 @@ const outputnames = {
   cssPrefix: argv.outputnames && argv.outputnames.cssPrefix || 'bmpui',
 };
 
+const theme=argv.theme || 'smashcut'
+
 var paths = {
   source: {
     html: ['./src/html/*.html'],
@@ -152,12 +154,15 @@ gulp.task('browserify', function() {
 });
 
 // Compiles SASS stylesheets to CSS stylesheets in the target directory, adds autoprefixes and creates sourcemaps
-gulp.task('sass', function() {
+function buildSass(theme, dest) {
   var stream = gulp.src(paths.source.sass)
   .pipe(sourcemaps.init())
   .pipe(header(`$prefix: '${outputnames.cssPrefix}';`)) // Overwrites declaration in _variables.scss
   .pipe(sass({
     includePaths: [
+      // Include variables from theme directory
+      path.join(__dirname, 'src/scss/themes/' + theme),
+      './src/scss/themes/' + theme,
       // Includes node_modules of the current module
       path.join(__dirname, 'node_modules'),
       // Includes node_modules of the current module, or, if used as a dependency in a supermodule where this
@@ -176,7 +181,7 @@ gulp.task('sass', function() {
     }
   }))
   .pipe(sourcemaps.write())
-  .pipe(gulp.dest(paths.target.css));
+  .pipe(dest);
 
   if (production) {
     // Minify CSS
@@ -186,14 +191,34 @@ gulp.task('sass', function() {
       svgo: false
     })]))
     .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest(paths.target.css));
+    .pipe(dest);
   }
 
   return stream.pipe(browserSync.reload({stream: true}));
+}
+
+// Compiles SASS stylesheets to CSS stylesheets in the target directory, adds autoprefixes and creates sourcemaps
+gulp.task('sass', function() {
+  return buildSass(theme, gulp.dest(paths.target.css));
+});
+
+gulp.task('sass:smashcut', function() {
+  var theme = 'smashcut';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:montclair', function() {
+  var theme = 'montclair';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:nyu', function() {
+  var theme = 'nyu';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
 // Builds the complete project from the sources into the target directory
-gulp.task('build', gulp.series('clean', gulp.parallel('html', 'browserify', 'sass')));
+gulp.task('build', gulp.series('clean', gulp.parallel('html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu')));
 
 gulp.task('build-prod', gulp.series(function(callback) {
   production = true;

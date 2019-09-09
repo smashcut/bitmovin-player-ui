@@ -1,5 +1,5 @@
 // demo for extracted audio tracks and subtitle settings from the settings panel direct into the controlBar
-@import '../variables';
+@import 'variables';
 
 .#{$prefix}-ui-audiotracksettingstogglebutton {
   @extend %ui-settingstogglebutton;
