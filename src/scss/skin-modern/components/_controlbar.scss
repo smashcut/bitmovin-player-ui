@@ -36,6 +36,7 @@
     margin: 0 10px 8px;
 
     > .#{$prefix}-container-wrapper {
+      align-items: center;
 
       .#{$prefix}-ui-volumeslider {
         margin: auto .5em;

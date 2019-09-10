@@ -1,7 +1,7 @@
 @import 'variables';
 @import '../mixins';
 
-$seekbar-height: .3125em;
+$seekbar-height: .5em;
 
 %ui-seekbar {
   @extend %ui-component;
@@ -17,6 +17,12 @@ $seekbar-height: .3125em;
   $bar-inset: auto;
 
   .#{$prefix}-seekbar {
+    height: 8px;
+    position: relative;
+    border: 0 solid transparent;
+    border-radius: 4px;
+    background: #444444;
+    overflow: hidden;
 
     %bar {
       // sass-lint:disable no-vendor-prefixes
@@ -24,7 +30,6 @@ $seekbar-height: .3125em;
       -webkit-transform-origin: 0 0; // required for Android 4.4 WebView
       bottom: 0;
       box-sizing: border-box;
-      height: $seekbar-height;
       left: 0;
       margin: auto;
       position: absolute;
@@ -34,29 +39,35 @@ $seekbar-height: .3125em;
       width: 100%;
     }
 
-    .#{$prefix}-seekbar-backdrop {
+    %rounded-bar {
       @extend %bar;
-      background-color: transparentize($color-primary, .8);
+      border: 0 solid transparent;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .#{$prefix}-seekbar-backdrop {
+      @extend %rounded-bar;
+      background-color: transparent; // transparentize($color-primary, .8);
       margin: $bar-inset 0;
       width: 100%;
     }
 
     .#{$prefix}-seekbar-bufferlevel {
-      @extend %bar;
-      background-color: $color-primary;
+      @extend %rounded-bar;
+      background-color: #84878d; // $color-primary;
       margin: $bar-inset 0;
       transition: .3s linear, .3s linear;
       transition-property: transform;
     }
 
     .#{$prefix}-seekbar-seekposition {
-      @extend %bar;
-      background-color: transparentize($color-primary, .8);
+      @extend %rounded-bar;
+      background-color: rgba(255, 255, 255, 0.3); // transparentize($color-primary, .8);
       margin: $bar-inset 0;
     }
 
     .#{$prefix}-seekbar-playbackposition {
-      @extend %bar;
+      @extend %rounded-bar;
       background-color: $color-highlight;
       margin: $bar-inset 0;
       transition: .1s linear, .1s linear;
@@ -70,6 +81,7 @@ $seekbar-height: .3125em;
       background-color: transparentize($color-highlight, .5);
       border: solid $color-highlight .1875em;
       border-radius: 50%;
+      display: none;
     }
 
     .#{$prefix}-seekbar-markers {

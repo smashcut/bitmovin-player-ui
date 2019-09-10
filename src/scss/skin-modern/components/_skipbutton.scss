@@ -19,6 +19,9 @@
 
 .#{$prefix}-ui-skipbutton-forward {
   @extend %ui-button;
+
+  margin-right: 10px; // distance to play-time-label
+
   &:before {
      font-family: 'Font Awesome 5 Free';
      content: '\f2f9';
