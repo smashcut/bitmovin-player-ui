@@ -1,0 +1,45 @@
+@import 'variables';
+@import '../mixins';
+
+.#{$prefix}-ui-skipbutton-backward,
+.#{$prefix}-ui-skipbutton-forward {
+  @extend %ui-button;
+
+  height: 22px;
+
+  &:hover {
+    @include svg-icon-shadow;
+  }
+
+  &.#{$prefix}-disabled {
+    opacity: 0.5;
+  }
+
+}
+
+.#{$prefix}-ui-skipbutton-forward {
+  @extend %ui-button;
+  &:before {
+     font-family: 'Font Awesome 5 Free';
+     content: '\f2f9';
+     display: inline-block;
+     vertical-align: middle;
+     font-weight: 900;
+     font-size: 16px;
+     color: #ffffff;
+  }
+}
+
+.#{$prefix}-ui-skipbutton-backward {
+  @extend %ui-button;
+
+  &:before {
+     font-family: 'Font Awesome 5 Free';
+     content: '\f0e2';
+     display: inline-block;
+     vertical-align: middle;
+     font-weight: 900;
+     font-size: 16px;
+    color: #ffffff;
+  }
+}

@@ -51,6 +51,7 @@ import { UIConditionContext, UIManager } from "./uimanager";
 import { UIConfig } from "./uiconfig";
 import { PlayerAPI } from "bitmovin-player";
 import { Tooltip } from "./components/tooltip";
+import {SkipButton} from './components/skipbutton';
 
 export namespace UIFactory {
   export function buildDefaultUI(
@@ -120,30 +121,33 @@ export namespace UIFactory {
         settingsPanel,
         new Container({
           components: [
-            new PlaybackTimeLabel({
-              timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-              hideInLivePlayback: true
-            }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({
-              timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-              cssClasses: ["text-right"]
-            })
+            new SeekBar({ label: new SeekBarLabel() })
           ],
           cssClasses: ["controlbar-top"]
         }),
         new Container({
           components: [
             new PlaybackToggleButton(),
-            new VolumeToggleButton({ tooltip: tooltip }),
-            new VolumeSlider(),
+            new SkipButton({ duration: -10, tooltip: tooltip }),
+            new SkipButton({ duration: 10, tooltip: tooltip }),
+            new PlaybackTimeLabel({
+              timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
+              hideInLivePlayback: true
+            }),
+            new PlaybackTimeLabel({
+              timeLabelMode: PlaybackTimeLabelMode.TotalTime,
+              cssClasses: ["text-right"]
+            }),
             new Spacer(),
             new PictureInPictureToggleButton(),
             new AirPlayToggleButton(),
             new CastToggleButton(),
             new VRToggleButton(),
+            new VolumeSlider(),
+            new VolumeToggleButton({ tooltip: tooltip }),
             new SettingsToggleButton({ settingsPanel: settingsPanel, tooltip: tooltip }),
-            new FullscreenToggleButton({ tooltip: tooltip })
+            new FullscreenToggleButton({ tooltip: tooltip }),
+            tooltip
           ],
           cssClasses: ["controlbar-bottom"]
         })

@@ -2,8 +2,21 @@
 
 .#{$prefix}-ui-playbacktimelabel {
   @extend %ui-label;
-
+  font-size: 80%;
+  font-weight: bold;
   text-transform: uppercase;
+  margin-right: 4px !important;
+  margin-top: 4px !important;
+  font-weight: normal;
+
+  &:nth-of-type(1) {
+    &::after {
+      content: '/';
+      display: inline-block;
+      margin-left: 5px;
+    }
+  }
+
 
   &.#{$prefix}-ui-playbacktimelabel-live {
     cursor: pointer;

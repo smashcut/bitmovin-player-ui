@@ -5,6 +5,7 @@ import { Component, ComponentConfig } from "./component";
 import { ArrayUtils } from "../arrayutils";
 import { PlayerAPI } from "bitmovin-player";
 import { Tooltip } from "./tooltip";
+import { SkipButtonConfig } from "./skipbutton";
 
 /**
  * Configuration interface for the {@link SettingsToggleButton}.
@@ -76,18 +77,20 @@ export class SettingsToggleButton extends ToggleButton<
       this.off();
     });
 
-    this.getDomElement().on("mouseover", e => {
-      const target = e.target as HTMLTextAreaElement;
-      const left = target.offsetLeft - target.offsetWidth;
-      const top = target.offsetTop;
-      config &&
-        config.tooltip &&
-        config.tooltip.setText("Settings", left, top, false);
-    });
+    if (this.hasTooltip()) {
+      const tooltip = this.getTooltip();
 
-    this.getDomElement().on("mouseleave", () => {
-      config && config.tooltip && config.tooltip.setText("", 0, 0, false);
-    });
+      this.getDomElement().on("mouseleave", () => {
+        tooltip.setText("", 0, 0, false);
+      });
+
+      this.getDomElement().on("mouseover", e => {
+        const target = e.target as HTMLTextAreaElement;
+        const left = target.offsetLeft - target.offsetWidth;
+        const top = target.offsetTop;
+        tooltip.setText("Settings", left, top, false);
+      });
+    }
 
     // Ensure that only one `SettingPanel` is visible at once
     // Keep track of shown SettingsPanels

@@ -6,8 +6,8 @@ export class Tooltip extends Container<ContainerConfig> {
   constructor(config: ContainerConfig = {}) {
     super(config);
     this.config = this.mergeConfig(
-      {},
-      { cssClass: "ui-tooltip-box" },
+      config,
+      { cssClass: "ui-tooltip-box", hidden: true },
       this.config
     );
     this.label = "";
@@ -15,7 +15,11 @@ export class Tooltip extends Container<ContainerConfig> {
   }
 
   setText(text: string, left: number, top: number, rightSideArrow: boolean) {
-    console.log("Tooltip.setText", text, left, top, rightSideArrow);
+    if (text) {
+      this.show();
+    } else {
+      this.hide();
+    }
     this.getDomElement().removeClass("rightSideArrow");
     if (rightSideArrow) {
       this.getDomElement().addClass("rightSideArrow");
@@ -25,7 +29,7 @@ export class Tooltip extends Container<ContainerConfig> {
       .html(text)
       .css({
         left: left + "px",
-        top: top + "px"
+        top: top + "px",
       });
   }
 }

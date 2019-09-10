@@ -80,6 +80,8 @@ export { SettingsPanelPageOpenButton } from './components/settingspanelpageopenb
 export { SubtitleSettingsPanelPage } from './components/subtitlesettings/subtitlesettingspanelpage';
 export { SettingsPanelItem } from './components/settingspanelitem';
 export { Tooltip } from './components/tooltip';
+export { SkipButton } from './components/skipbutton';
+export { ClosedCaptioningToggleButton } from './components/closedcaptioningtogglebutton';
 
 // Object.assign polyfill for ES5/IE9
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object/assign

@@ -1,8 +1,7 @@
-import {Button, ButtonConfig} from './button';
-import {NoArgs, EventDispatcher, Event} from '../eventdispatcher';
-import { UIInstanceManager } from '../uimanager';
-import { PlayerAPI } from 'bitmovin-player';
-import { Tooltip } from './tooltip';
+import { Button, ButtonConfig } from "./button";
+import { NoArgs, EventDispatcher, Event } from "../eventdispatcher";
+import { UIInstanceManager } from "../uimanager";
+import { PlayerAPI } from "bitmovin-player";
 
 /**
  * Configuration interface for a toggle button component.
@@ -20,32 +19,36 @@ export interface ToggleButtonConfig extends ButtonConfig {
    * The text on the button.
    */
   text?: string;
-  tooltip?: Tooltip;
 }
 
 /**
  * A button that can be toggled between 'on' and 'off' states.
  */
-export class ToggleButton<Config extends ToggleButtonConfig> extends Button<Config> {
-
+export class ToggleButton<Config extends ToggleButtonConfig> extends Button<
+  Config
+> {
   private onState: boolean;
 
   private toggleButtonEvents = {
     onToggle: new EventDispatcher<ToggleButton<Config>, NoArgs>(),
     onToggleOn: new EventDispatcher<ToggleButton<Config>, NoArgs>(),
-    onToggleOff: new EventDispatcher<ToggleButton<Config>, NoArgs>(),
+    onToggleOff: new EventDispatcher<ToggleButton<Config>, NoArgs>()
   };
 
   constructor(config: Config) {
     super(config);
 
     const defaultConfig: ToggleButtonConfig = {
-      cssClass: 'ui-togglebutton',
-      onClass: 'on',
-      offClass: 'off',
+      cssClass: "ui-togglebutton",
+      onClass: "on",
+      offClass: "off"
     };
 
-    this.config = this.mergeConfig(config, defaultConfig as Config, this.config);
+    this.config = this.mergeConfig(
+      config,
+      defaultConfig as Config,
+      this.config
+    );
   }
 
   configure(player: PlayerAPI, uimanager: UIInstanceManager): void {

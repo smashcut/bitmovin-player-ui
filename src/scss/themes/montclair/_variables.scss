@@ -12,7 +12,7 @@ $color-background: #111 !default;
 $color-background-highlight: transparentize(mix($color-black, $color-highlight, 75%), .3) !default;
 $color-background-bars: transparentize($color-black, .3) !default;
 
-$font-family: sans-serif !default;
+$font-family: Roboto, 'Arial Unicode Ms', Arial, Helvetica, Verdana, 'PT Sans Caption', sans-serif !default;
 $font-size: 1em !default;
 
 $subtitle-text-color: #fff !default;

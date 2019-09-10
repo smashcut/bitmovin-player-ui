@@ -24,13 +24,13 @@
   }
 
   .#{$prefix}-seekbar-label-inner {
-    border-bottom: .2em solid $color-primary;
+    border-bottom: .2em solid $color-highlight;
 
     // bottom arrow from http://www.cssarrowplease.com/
     &::after {
       border: solid transparent;
       border-color: transparent;
-      border-top-color: $color-primary;
+      border-top-color: $color-highlight;
       border-width: .5em;
       content: ' ';
       height: 0;

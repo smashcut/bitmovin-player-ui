@@ -5,6 +5,9 @@
 @import 'components/uicontainer';
 @import 'components/controlbar';
 @import 'components/button';
+@import 'components/tooltip';
+@import 'components/skipbutton';
+@import 'components/closedcaptioningtogglebutton';
 @import 'components/playbacktogglebutton';
 @import 'components/fullscreentogglebutton';
 @import 'components/vrtogglebutton';
@@ -42,7 +45,6 @@
 @import 'components/subtitlesettings/subtitlesettings';
 @import 'components/subtitlesettingspaneltogglebutton';
 @import 'components/audiotracksettingspaneltogglebutton';
-@import 'components/tooltip';
 @import 'skin-ads';
 @import 'skin-cast-receiver';
 @import 'skin-smallscreen';
