@@ -1,15 +1,22 @@
-import {UIContainer} from './components/uicontainer';
-import {DOM} from './dom';
-import {Component, ComponentConfig} from './components/component';
-import {Container} from './components/container';
-import { SeekBar, SeekBarMarker } from './components/seekbar';
-import {NoArgs, EventDispatcher, CancelEventArgs} from './eventdispatcher';
-import {UIUtils} from './uiutils';
-import {ArrayUtils} from './arrayutils';
-import {BrowserUtils} from './browserutils';
-import { TimelineMarker, UIConfig } from './uiconfig';
-import { PlayerAPI, PlayerEventCallback, PlayerEventBase, PlayerEvent, AdEvent, LinearAd } from 'bitmovin-player';
-import { VolumeController } from './volumecontroller';
+import { UIContainer } from "./components/uicontainer";
+import { DOM } from "./dom";
+import { Component, ComponentConfig } from "./components/component";
+import { Container } from "./components/container";
+import { SeekBar, SeekBarMarker } from "./components/seekbar";
+import { NoArgs, EventDispatcher, CancelEventArgs } from "./eventdispatcher";
+import { UIUtils } from "./uiutils";
+import { ArrayUtils } from "./arrayutils";
+import { BrowserUtils } from "./browserutils";
+import { TimelineMarker, UIConfig } from "./uiconfig";
+import {
+  PlayerAPI,
+  PlayerEventCallback,
+  PlayerEventBase,
+  PlayerEvent,
+  AdEvent,
+  LinearAd
+} from "bitmovin-player";
+import { VolumeController } from "./volumecontroller";
 
 export interface InternalUIConfig extends UIConfig {
   events: {
@@ -73,7 +80,6 @@ export interface UIVariant {
 }
 
 export class UIManager {
-
   private player: PlayerAPI;
   private uiContainerElement: DOM;
   private uiVariants: UIVariant[];
@@ -83,7 +89,7 @@ export class UIManager {
   private managerPlayerWrapper: PlayerWrapper;
 
   private events = {
-    onUiVariantResolve: new EventDispatcher<UIManager, UIConditionContext>(),
+    onUiVariantResolve: new EventDispatcher<UIManager, UIConditionContext>()
   };
 
   /**
@@ -107,7 +113,11 @@ export class UIManager {
    * @param uiconfig optional UI configuration
    */
   constructor(player: PlayerAPI, uiVariants: UIVariant[], uiconfig?: UIConfig);
-  constructor(player: PlayerAPI, playerUiOrUiVariants: UIContainer | UIVariant[], uiconfig: UIConfig = {}) {
+  constructor(
+    player: PlayerAPI,
+    playerUiOrUiVariants: UIContainer | UIVariant[],
+    uiconfig: UIConfig = {}
+  ) {
     if (playerUiOrUiVariants instanceof UIContainer) {
       // Single-UI constructor has been called, transform arguments to UIVariant[] signature
       let playerUi = <UIContainer>playerUiOrUiVariants;
@@ -117,8 +127,7 @@ export class UIManager {
       uiVariants.push({ ui: playerUi });
 
       this.uiVariants = uiVariants;
-    }
-    else {
+    } else {
       // Default constructor (UIVariant[]) has been called
       this.uiVariants = <UIVariant[]>playerUiOrUiVariants;
     }
@@ -134,9 +143,11 @@ export class UIManager {
       autoUiVariantResolve: true, // Switch on auto UI resolving by default
       ...uiconfig,
       events: {
-        onUpdated: new EventDispatcher<UIManager, void>(),
+        onUpdated: new EventDispatcher<UIManager, void>()
       },
-      volumeController: new VolumeController(this.managerPlayerWrapper.getPlayer()),
+      volumeController: new VolumeController(
+        this.managerPlayerWrapper.getPlayer()
+      )
     };
 
     /**
@@ -145,7 +156,9 @@ export class UIManager {
      */
     const updateConfig = () => {
       const playerSourceConfig = player.getSource() || {};
-      this.config.metadata = JSON.parse(JSON.stringify(uiconfig.metadata || {}));
+      this.config.metadata = JSON.parse(
+        JSON.stringify(uiconfig.metadata || {})
+      );
 
       // Extract the UI-related config properties from the source config
       const playerSourceUiConfig: UIConfig = {
@@ -153,34 +166,45 @@ export class UIManager {
           // TODO move metadata into source.metadata namespace in player v8
           title: playerSourceConfig.title,
           description: playerSourceConfig.description,
-          markers: (playerSourceConfig as any).markers,
+          markers: (playerSourceConfig as any).markers
         },
-        recommendations: (playerSourceConfig as any).recommendations,
+        recommendations: (playerSourceConfig as any).recommendations
       };
 
       // Player source config takes precedence over the UI config, because the config in the source is attached
       // to a source which changes with every player.load, whereas the UI config stays the same for the whole
       // lifetime of the player instance.
-      this.config.metadata.title = playerSourceUiConfig.metadata.title || uiconfig.metadata.title;
-      this.config.metadata.description = playerSourceUiConfig.metadata.description || uiconfig.metadata.description;
-      this.config.metadata.markers = playerSourceUiConfig.metadata.markers || uiconfig.metadata.markers || [];
-      this.config.recommendations = playerSourceUiConfig.recommendations || uiconfig.recommendations || [];
+      this.config.metadata.title =
+        playerSourceUiConfig.metadata.title || uiconfig.metadata.title;
+      this.config.metadata.description =
+        playerSourceUiConfig.metadata.description ||
+        uiconfig.metadata.description;
+      this.config.metadata.markers =
+        playerSourceUiConfig.metadata.markers ||
+        uiconfig.metadata.markers ||
+        [];
+      this.config.recommendations =
+        playerSourceUiConfig.recommendations || uiconfig.recommendations || [];
     };
 
     updateConfig();
 
     // Update the configuration when a new source is loaded
-    this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.SourceLoaded, () => {
-      updateConfig();
-      this.config.events.onUpdated.dispatch(this);
-    });
+    this.managerPlayerWrapper
+      .getPlayer()
+      .on(this.player.exports.PlayerEvent.SourceLoaded, () => {
+        updateConfig();
+        this.config.events.onUpdated.dispatch(this);
+      });
 
     if (uiconfig.container) {
       // Unfortunately "uiContainerElement = new DOM(config.container)" will not accept the container with
       // string|HTMLElement type directly, although it accepts both types, so we need to spit these two cases up here.
       // TODO check in upcoming TS versions if the container can be passed in directly, or fix the constructor
-      this.uiContainerElement = uiconfig.container instanceof HTMLElement ?
-        new DOM(uiconfig.container) : new DOM(uiconfig.container);
+      this.uiContainerElement =
+        uiconfig.container instanceof HTMLElement
+          ? new DOM(uiconfig.container)
+          : new DOM(uiconfig.container);
     } else {
       this.uiContainerElement = new DOM(player.getContainer());
     }
@@ -195,20 +219,29 @@ export class UIManager {
         uiVariantsWithoutCondition.push(uiVariant);
       }
       // Create the instance manager for a UI variant
-      this.uiInstanceManagers.push(new InternalUIInstanceManager(player, uiVariant.ui, this.config));
+      this.uiInstanceManagers.push(
+        new InternalUIInstanceManager(player, uiVariant.ui, this.config)
+      );
     }
     // Make sure that there is only one UI variant without a condition
     // It does not make sense to have multiple variants without condition, because only the first one in the list
     // (the one with the lowest index) will ever be selected.
     if (uiVariantsWithoutCondition.length > 1) {
-      throw Error('Too many UIs without a condition: You cannot have more than one default UI');
+      throw Error(
+        "Too many UIs without a condition: You cannot have more than one default UI"
+      );
     }
     // Make sure that the default UI variant, if defined, is at the end of the list (last index)
     // If it comes earlier, the variants with conditions that come afterwards will never be selected because the
     // default variant without a condition always evaluates to 'true'
-    if (uiVariantsWithoutCondition.length > 0
-      && uiVariantsWithoutCondition[0] !== this.uiVariants[this.uiVariants.length - 1]) {
-      throw Error('Invalid UI variant order: the default UI (without condition) must be at the end of the list');
+    if (
+      uiVariantsWithoutCondition.length > 0 &&
+      uiVariantsWithoutCondition[0] !==
+        this.uiVariants[this.uiVariants.length - 1]
+    ) {
+      throw Error(
+        "Invalid UI variant order: the default UI (without condition) must be at the end of the list"
+      );
     }
 
     let adStartedEvent: AdEvent = null; // keep the event stored here during ad playback
@@ -263,39 +296,64 @@ export class UIManager {
         // for now only linear ads can request a UI
         if (ad.isLinear) {
           let linearAd = ad as LinearAd;
-          adRequiresUi = linearAd.uiConfig && linearAd.uiConfig.requestsUi || false;
+          adRequiresUi =
+            (linearAd.uiConfig && linearAd.uiConfig.requestsUi) || false;
         }
       }
 
-      this.resolveUiVariant({
-        isAd: isAd,
-        adRequiresUi: adRequiresUi,
-      }, (context) => {
-        // If this is an ad UI, we need to relay the saved ON_AD_STARTED event data so ad components can configure
-        // themselves for the current ad.
-        if (context.isAd) {
-          /* Relay the ON_AD_STARTED event to the ads UI
-           *
-           * Because the ads UI is initialized in the ON_AD_STARTED handler, i.e. when the ON_AD_STARTED event has
-           * already been fired, components in the ads UI that listen for the ON_AD_STARTED event never receive it.
-           * Since this can break functionality of components that rely on this event, we relay the event to the
-           * ads UI components with the following call.
-           */
-          this.currentUi.getWrappedPlayer().fireEventInUI(this.player.exports.PlayerEvent.AdStarted, adStartedEvent);
+      this.resolveUiVariant(
+        {
+          isAd: isAd,
+          adRequiresUi: adRequiresUi
+        },
+        context => {
+          // If this is an ad UI, we need to relay the saved ON_AD_STARTED event data so ad components can configure
+          // themselves for the current ad.
+          if (context.isAd) {
+            /* Relay the ON_AD_STARTED event to the ads UI
+             *
+             * Because the ads UI is initialized in the ON_AD_STARTED handler, i.e. when the ON_AD_STARTED event has
+             * already been fired, components in the ads UI that listen for the ON_AD_STARTED event never receive it.
+             * Since this can break functionality of components that rely on this event, we relay the event to the
+             * ads UI components with the following call.
+             */
+            this.currentUi
+              .getWrappedPlayer()
+              .fireEventInUI(
+                this.player.exports.PlayerEvent.AdStarted,
+                adStartedEvent
+              );
+          }
         }
-      });
+      );
     };
 
     // Listen to the following events to trigger UI variant resolution
     if (this.config.autoUiVariantResolve) {
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.SourceLoaded, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.SourceUnloaded, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.Play, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.Paused, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.AdStarted, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.AdBreakFinished, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.PlayerResized, resolveUiVariant);
-      this.managerPlayerWrapper.getPlayer().on(this.player.exports.PlayerEvent.ViewModeChanged, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.SourceLoaded, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.SourceUnloaded, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.Play, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.Paused, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.AdStarted, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.AdBreakFinished, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.PlayerResized, resolveUiVariant);
+      this.managerPlayerWrapper
+        .getPlayer()
+        .on(this.player.exports.PlayerEvent.ViewModeChanged, resolveUiVariant);
     }
 
     // Initialize the UI
@@ -322,7 +380,9 @@ export class UIManager {
   switchToUiVariant(uiVariant: UIVariant, onShow?: () => void): void {
     let uiVariantIndex = this.uiVariants.indexOf(uiVariant);
 
-    const nextUi: InternalUIInstanceManager = this.uiInstanceManagers[uiVariantIndex];
+    const nextUi: InternalUIInstanceManager = this.uiInstanceManagers[
+      uiVariantIndex
+    ];
     let uiVariantChanged = false;
 
     // Determine if the UI variant is changing
@@ -367,16 +427,20 @@ export class UIManager {
    * @param {(context: UIConditionContext) => void} onShow a callback that is executed just before the new UI variant
    *   is shown (if a switch is happening)
    */
-  resolveUiVariant(context: Partial<UIConditionContext> = {}, onShow?: (context: UIConditionContext) => void): void {
+  resolveUiVariant(
+    context: Partial<UIConditionContext> = {},
+    onShow?: (context: UIConditionContext) => void
+  ): void {
     // Determine the current context for which the UI variant will be resolved
     const defaultContext: UIConditionContext = {
       isAd: false,
       adRequiresUi: false,
-      isFullscreen: this.player.getViewMode() === this.player.exports.ViewMode.Fullscreen,
+      isFullscreen:
+        this.player.getViewMode() === this.player.exports.ViewMode.Fullscreen,
       isMobile: BrowserUtils.isMobile,
       isPlaying: this.player.isPlaying(),
       width: this.uiContainerElement.width(),
-      documentWidth: document.body.clientWidth,
+      documentWidth: document.body.clientWidth
     };
 
     // Overwrite properties of the default context with passed in context properties
@@ -390,7 +454,10 @@ export class UIManager {
     // Select new UI variant
     // If no variant condition is fulfilled, we switch to *no* UI
     for (let uiVariant of this.uiVariants) {
-      if (uiVariant.condition == null || uiVariant.condition(switchingContext) === true) {
+      if (
+        uiVariant.condition == null ||
+        uiVariant.condition(switchingContext) === true
+      ) {
         nextUiVariant = uiVariant;
         break;
       }
@@ -408,10 +475,18 @@ export class UIManager {
     let player = ui.getWrappedPlayer();
 
     ui.configureControls();
+
     /* Append the UI DOM after configuration to avoid CSS transitions at initialization
-     * Example: Components are hidden during configuration and these hides may trigger CSS transitions that are
-     * undesirable at this time. */
-    this.uiContainerElement.append(dom);
+     * Example: Components are hidden during configuration and these hides may trigger
+     * CSS transitions that are undesirable at this time. */
+    // this.uiContainerElement.append(dom);
+
+    /* Append ui to parent instead of player */
+    let parentElement = new DOM(
+      this.uiContainerElement.get()[0].parentElement
+    );
+    parentElement.addClass("smashcut-custom-ui-bitmovin-player-holder");
+    parentElement.append(dom);
 
     // When the UI is loaded after a source was loaded, we need to tell the components to initialize themselves
     if (player.getSource()) {
@@ -422,16 +497,22 @@ export class UIManager {
     // might not be fully configured and e.g. do not have a size.
     // https://swizec.com/blog/how-to-properly-wait-for-dom-elements-to-show-up-in-modern-browsers/swizec/6663
     if (window.requestAnimationFrame) {
-      requestAnimationFrame(() => { ui.onConfigured.dispatch(ui.getUI()); });
+      requestAnimationFrame(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      });
     } else {
       // IE9 fallback
-      setTimeout(() => { ui.onConfigured.dispatch(ui.getUI()); }, 0);
+      setTimeout(() => {
+        ui.onConfigured.dispatch(ui.getUI());
+      }, 0);
     }
   }
 
   private releaseUi(ui: InternalUIInstanceManager): void {
     ui.releaseControls();
-    ui.getUI().getDomElement().remove();
+    ui.getUI()
+      .getDomElement()
+      .remove();
     ui.clearEventHandlers();
   }
 
@@ -473,7 +554,10 @@ export class UIManager {
    * be found and thus not removed.
    */
   removeTimelineMarker(timelineMarker: TimelineMarker): boolean {
-    if (ArrayUtils.remove(this.config.metadata.markers, timelineMarker) === timelineMarker) {
+    if (
+      ArrayUtils.remove(this.config.metadata.markers, timelineMarker) ===
+      timelineMarker
+    ) {
       this.config.events.onUpdated.dispatch(this);
       return true;
     }
@@ -511,7 +595,7 @@ export class UIInstanceManager {
     onControlsShow: new EventDispatcher<UIContainer, NoArgs>(),
     onPreviewControlsHide: new EventDispatcher<UIContainer, CancelEventArgs>(),
     onControlsHide: new EventDispatcher<UIContainer, NoArgs>(),
-    onRelease: new EventDispatcher<UIContainer, NoArgs>(),
+    onRelease: new EventDispatcher<UIContainer, NoArgs>()
   };
 
   constructor(player: PlayerAPI, ui: UIContainer, config: InternalUIConfig) {
@@ -628,7 +712,6 @@ export class UIInstanceManager {
  * that components receiving a reference to the {@link UIInstanceManager} should not have access to.
  */
 class InternalUIInstanceManager extends UIInstanceManager {
-
   private configured: boolean;
   private released: boolean;
 
@@ -651,7 +734,7 @@ class InternalUIInstanceManager extends UIInstanceManager {
   private configureControlsTree(component: Component<ComponentConfig>) {
     let configuredComponents: Component<ComponentConfig>[] = [];
 
-    UIUtils.traverseTree(component, (component) => {
+    UIUtils.traverseTree(component, component => {
       // First, check if we have already configured a component, and throw an error if we did. Multiple configuration
       // of the same component leads to unexpected UI behavior. Also, a component that is in the UI tree multiple
       // times hints at a wrong UI structure.
@@ -662,11 +745,13 @@ class InternalUIInstanceManager extends UIInstanceManager {
           // Write the component to the console to simplify identification of the culprit
           // (e.g. by inspecting the config)
           if (console) {
-            console.error('Circular reference in UI tree', component);
+            console.error("Circular reference in UI tree", component);
           }
 
           // Additionally throw an error, because this case must not happen and leads to unexpected UI behavior.
-          throw Error('Circular reference in UI tree: ' + component.constructor.name);
+          throw Error(
+            "Circular reference in UI tree: " + component.constructor.name
+          );
         }
       }
 
@@ -722,11 +807,10 @@ interface WrappedPlayer extends PlayerAPI {
  * handlers from the player.
  */
 export class PlayerWrapper {
-
   private player: PlayerAPI;
   private wrapper: WrappedPlayer;
 
-  private eventHandlers: { [eventType: string]: PlayerEventCallback[]; } = {};
+  private eventHandlers: { [eventType: string]: PlayerEventCallback[] } = {};
 
   constructor(player: PlayerAPI) {
     this.player = player;
@@ -743,7 +827,7 @@ export class PlayerWrapper {
     let properties = <any[]>[];
 
     for (let member of members) {
-      if (typeof (<any>player)[member] === 'function') {
+      if (typeof (<any>player)[member] === "function") {
         methods.push(member);
       } else {
         properties.push(member);
@@ -767,7 +851,10 @@ export class PlayerWrapper {
       // getters/setters.
       const propertyDescriptor = ((target: PlayerAPI) => {
         while (target) {
-          const propertyDescriptor = Object.getOwnPropertyDescriptor(target, property);
+          const propertyDescriptor = Object.getOwnPropertyDescriptor(
+            target,
+            property
+          );
           if (propertyDescriptor) {
             return propertyDescriptor;
           }
@@ -777,10 +864,13 @@ export class PlayerWrapper {
       })(player);
 
       // If the property has getters/setters, wrap them accordingly...
-      if (propertyDescriptor && (propertyDescriptor.get || propertyDescriptor.set)) {
+      if (
+        propertyDescriptor &&
+        (propertyDescriptor.get || propertyDescriptor.set)
+      ) {
         Object.defineProperty(wrapper, property, {
           get: () => propertyDescriptor.get.call(player),
-          set: (value: any) => propertyDescriptor.set.call(player, value),
+          set: (value: any) => propertyDescriptor.set.call(player, value)
         });
       }
       // ... else just transfer the property to the wrapper
@@ -814,14 +904,19 @@ export class PlayerWrapper {
     };
 
     wrapper.fireEventInUI = (event: PlayerEvent, data: {}) => {
-      if (this.eventHandlers[event]) { // check if there are handlers for this event registered
+      if (this.eventHandlers[event]) {
+        // check if there are handlers for this event registered
         // Extend the data object with default values to convert it to a {@link PlayerEventBase} object.
-        let playerEventData = <PlayerEventBase>Object.assign({}, {
-          timestamp: Date.now(),
-          type: event,
-          // Add a marker property so the UI can detect UI-internal player events
-          uiSourced: true,
-        }, data);
+        let playerEventData = <PlayerEventBase>Object.assign(
+          {},
+          {
+            timestamp: Date.now(),
+            type: event,
+            // Add a marker property so the UI can detect UI-internal player events
+            uiSourced: true
+          },
+          data
+        );
 
         // Execute the registered callbacks
         for (let callback of this.eventHandlers[event]) {
@@ -864,4 +959,3 @@ export class PlayerWrapper {
     }
   }
 }
-

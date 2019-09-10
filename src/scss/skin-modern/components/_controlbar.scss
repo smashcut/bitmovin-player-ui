@@ -4,14 +4,14 @@
 .#{$prefix}-ui-controlbar {
   @extend %ui-container;
 
-  // do not hide controlbar
-  // @include hidden-animated;
-  @include layout-align-bottom;
-
-  background: linear-gradient(to bottom, $color-transparent, $color-background-bars);
-  box-sizing: border-box;
+  padding-top: 22px !important;
+  background: $smashcut-grey-dark;
+  bottom: calc((#{$controlbar-height} + 14px) * -1);
+  min-height: $controlbar-height;
+  left: 0;
   line-height: 1em;
-  padding: 1em 1em .5em;
+  position: absolute;
+  right: 0;
 
   .#{$prefix}-controlbar-top,
   .#{$prefix}-controlbar-bottom {
@@ -33,6 +33,7 @@
 
   .#{$prefix}-controlbar-bottom {
     white-space: nowrap; // Required for iOS 8.2 to avoid wrapped controlbar due to wrong size calculation
+    margin: 0 10px 8px;
 
     > .#{$prefix}-container-wrapper {
 

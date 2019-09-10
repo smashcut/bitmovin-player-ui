@@ -7,7 +7,7 @@
   @include layout-cover;
 
   font-size: 1em;
-  overflow: hidden;
+  // overflow: hidden; allow smashcut controlbar to be seen
   pointer-events: none; // Do not catch pointer events, pass them through
 
   * {
