@@ -17,7 +17,7 @@
   .#{$prefix}-controlbar-bottom {
     > .#{$prefix}-container-wrapper {
       display: flex;
-      margin: .5em 0;
+      //margin: .5em 0;
     }
   }
 
@@ -37,7 +37,6 @@
 
     > .#{$prefix}-container-wrapper {
       align-items: center;
-      margin-top: 0;
 
       .#{$prefix}-ui-volumeslider {
         margin: auto .5em;
