@@ -157,13 +157,6 @@ export class SeekBar extends Component<SeekBarConfig> {
     let isUserSeeking = false;
     let isPlayerSeeking = false;
 
-    let dispatchMarkerEvent = (type: string, marker: TimelineMarker) => {
-      this.seekBar.dispatchSmashcutPlayerUiEvent({
-        action: "marker-" + type,
-        marker
-      });
-    };
-
     // Update playback and buffer positions
     let playbackPositionHandler = (
       event: PlayerEventBase = null,
@@ -541,17 +534,6 @@ export class SeekBar extends Component<SeekBarConfig> {
     let setupMarkers = () => {
       clearMarkers();
 
-      console.log("Markers", uimanager.getConfig(), player.getConfig());
-      /*
-      let hasMarkersInUiConfig = uimanager.getConfig().metadata && uimanager.getConfig().metadata.markers
-        && uimanager.getConfig().metadata.markers.length > 0;
-      let hasMarkersInPlayerConfig = player.getConfig().source && player.getConfig().source.markers
-        && player.getConfig().source.markers.length > 0;
-
-      // Take markers from the UI config. If no markers defined, try to take them from the player's source config.
-      let markers = hasMarkersInUiConfig ? uimanager.getConfig().metadata.markers :
-        hasMarkersInPlayerConfig ? player.getConfig().source.markers : null;
-*/
       const duration = player.getDuration();
 
       if (duration === Infinity) {
