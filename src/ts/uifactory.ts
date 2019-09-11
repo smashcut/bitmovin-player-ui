@@ -139,10 +139,10 @@ export namespace UIFactory {
               cssClasses: ["text-right"]
             }),
             new Spacer(),
-            new PictureInPictureToggleButton(),
-            new AirPlayToggleButton(),
-            new CastToggleButton(),
-            new VRToggleButton(),
+            // new PictureInPictureToggleButton(),
+            // new AirPlayToggleButton(),
+            // new CastToggleButton(),
+            // new VRToggleButton(),
             new VolumeSlider(),
             new VolumeToggleButton({ tooltip: tooltip }),
             new SettingsToggleButton({ settingsPanel: settingsPanel, tooltip: tooltip }),
@@ -159,11 +159,11 @@ export namespace UIFactory {
         subtitleOverlay,
         new BufferingOverlay(),
         new PlaybackToggleOverlay(),
-        new CastStatusOverlay(),
+        // new CastStatusOverlay(),
         controlBar,
         new TitleBar(),
         new RecommendationOverlay(),
-        new Watermark(),
+        // new Watermark(),
         new ErrorMessageOverlay()
       ]
     });
@@ -173,15 +173,15 @@ export namespace UIFactory {
     return new UIContainer({
       components: [
         new BufferingOverlay(),
-        new AdClickOverlay(),
+        // new AdClickOverlay(),
         new PlaybackToggleOverlay(),
-        new Container({
+        /*new Container({
           components: [
             new AdMessageLabel({ text: "Ad: {remainingTime} secs" }),
             new AdSkipButton()
           ],
           cssClass: "ui-ads-status"
-        }),
+        }),*/
         new ControlBar({
           components: [
             new Container({
@@ -270,24 +270,24 @@ export namespace UIFactory {
       components: [
         subtitleOverlay,
         new BufferingOverlay(),
-        new CastStatusOverlay(),
+        // new CastStatusOverlay(),
         new PlaybackToggleOverlay(),
         new RecommendationOverlay(),
         controlBar,
         new TitleBar({
           components: [
             new MetadataLabel({ content: MetadataLabelContent.Title }),
-            new CastToggleButton(),
-            new VRToggleButton(),
-            new PictureInPictureToggleButton(),
-            new AirPlayToggleButton(),
+            // new CastToggleButton(),
+            // new VRToggleButton(),
+            // new PictureInPictureToggleButton(),
+            // new AirPlayToggleButton(),
             new VolumeToggleButton(),
             new SettingsToggleButton({ settingsPanel: settingsPanel }),
             new FullscreenToggleButton()
           ]
         }),
         settingsPanel,
-        new Watermark(),
+        // new Watermark(),
         new ErrorMessageOverlay()
       ],
       cssClasses: ["ui-skin-smallscreen"],
@@ -299,7 +299,7 @@ export namespace UIFactory {
     return new UIContainer({
       components: [
         new BufferingOverlay(),
-        new AdClickOverlay(),
+        // new AdClickOverlay(),
         new PlaybackToggleOverlay(),
         new TitleBar({
           components: [
@@ -308,13 +308,13 @@ export namespace UIFactory {
             new FullscreenToggleButton()
           ]
         }),
-        new Container({
+        /*new Container({
           components: [
             new AdMessageLabel({ text: "Ad: {remainingTime} secs" }),
             new AdSkipButton()
           ],
           cssClass: "ui-ads-status"
-        })
+        })*/
       ],
       cssClasses: ["ui-skin-ads", "ui-skin-smallscreen"]
     });
