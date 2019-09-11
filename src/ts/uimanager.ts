@@ -479,9 +479,10 @@ export class UIManager {
     /* Append the UI DOM after configuration to avoid CSS transitions at initialization
      * Example: Components are hidden during configuration and these hides may trigger
      * CSS transitions that are undesirable at this time. */
-    // this.uiContainerElement.append(dom);
+    this.uiContainerElement.append(dom);
+    this.uiContainerElement.addClass("smashcut-custom-ui-bitmovin-player-holder");
 
-    /* Append ui to parent instead of player */
+    /* Append ui to parent instead of player
     let parentElement = new DOM(
       this.uiContainerElement.get()[0].parentElement
     );
@@ -491,7 +492,7 @@ export class UIManager {
     // When the UI is loaded after a source was loaded, we need to tell the components to initialize themselves
     if (player.getSource()) {
       this.config.events.onUpdated.dispatch(this);
-    }
+    }*/
 
     // Fire onConfigured after UI DOM elements are successfully added. When fired immediately, the DOM elements
     // might not be fully configured and e.g. do not have a size.
