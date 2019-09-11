@@ -51,6 +51,10 @@ export class ControlBar extends Container<ControlBarConfig> {
 
     uimanager.onControlsShow.subscribe(() => {
       this.show();
+      this.getDomElement().dispatchSmashcutPlayerUiEvent({
+        action: "controlbar-show",
+        originator: "Controlbar"
+      });
     });
     uimanager.onPreviewControlsHide.subscribe((sender, args) => {
       // Cancel the hide event if hovered child components block hiding
@@ -58,6 +62,10 @@ export class ControlBar extends Container<ControlBarConfig> {
     });
     uimanager.onControlsHide.subscribe(() => {
       this.hide();
+      this.getDomElement().dispatchSmashcutPlayerUiEvent({
+        action: "controlbar-hide",
+        originator: "Controlbar"
+      });
     });
   }
 }
