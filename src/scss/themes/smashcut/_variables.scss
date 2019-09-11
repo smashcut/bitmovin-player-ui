@@ -1,26 +1,3 @@
-$prefix: 'bmpui' !default;
-
-$color-black: #000 !default;
-$color-white: #fff !default;
-$color-transparent: rgba(0, 0, 0, 0) !default;
-$color-red: #f00 !default;
+@import '../common';
 
 $color-highlight: #ee4923 !default;
-$color-primary: #fff !default;
-$color-secondary: #999 !default;
-
-$color-background: #111 !default;
-$color-background-highlight: transparentize(mix($color-black, $color-highlight, 75%), .3) !default;
-$color-background-bars: transparentize($color-black, .3) !default;
-
-$font-family: Roboto, 'Arial Unicode Ms', Arial, Helvetica, Verdana, 'PT Sans Caption', sans-serif !default;
-$font-size: 1em !default;
-
-$subtitle-text-color: #fff !default;
-$subtitle-text-border-color: #000 !default;
-
-$animation-duration: .3s !default;
-$animation-duration-short: $animation-duration / 2 !default;
-
-$controlbar-height: 64px;
-$smashcut-grey-dark: #242424;
