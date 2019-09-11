@@ -563,6 +563,12 @@ export class SeekBar extends Component<SeekBarConfig> {
       e.stopPropagation();
 
       let targetPercentage = 100 * this.getOffset(e);
+      seekBar.dispatchSmashcutPlayerUiEvent({
+        action: 'seeking-change',
+        e,
+        position: targetPercentage,
+        originator: 'SeekBar',
+      });
       this.setSeekPosition(targetPercentage);
       this.setPlaybackPosition(targetPercentage);
       this.onSeekPreviewEvent(targetPercentage, true);
@@ -576,6 +582,13 @@ export class SeekBar extends Component<SeekBarConfig> {
 
       let targetPercentage = 100 * this.getOffset(e);
       let snappedChapter = this.getMarkerAtPosition(targetPercentage);
+
+      seekBar.dispatchSmashcutPlayerUiEvent({
+        action: 'seeking-end',
+        e,
+        position: targetPercentage,
+        originator: 'SeekBar',
+      });
 
       this.setSeeking(false);
       seeking = false;
@@ -596,6 +609,8 @@ export class SeekBar extends Component<SeekBarConfig> {
       e.preventDefault();
       // Avoid propagation to VR handler
       e.stopPropagation();
+
+      seekBar.dispatchSmashcutPlayerUiEvent({action: 'seeking-start', e, originator: 'SeekBar'});
 
       this.setSeeking(true); // Set seeking class on DOM element
       seeking = true; // Set seek tracking flag
