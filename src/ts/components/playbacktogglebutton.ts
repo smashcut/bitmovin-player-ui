@@ -128,7 +128,7 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
       // Control player by button events
       // When a button event triggers a player API call, events are fired which in turn call the event handler
       // above that updated the button state.
-      this.onClick.subscribe((e) => {
+      this.onClick.subscribe(e => {
         if (player.isPlaying() || this.isPlayInitiated) {
           this.getDomElement().dispatchSmashcutPlayerUiEvent({
             action: "pause",
@@ -157,5 +157,15 @@ export class PlaybackToggleButton extends ToggleButton<ToggleButtonConfig> {
 
     // Startup init
     playbackStateHandler();
+  }
+
+  on() {
+    super.on();
+    this.setLabel("Pause");
+  }
+
+  off() {
+    super.off();
+    this.setLabel("Play");
   }
 }

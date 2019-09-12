@@ -16,9 +16,18 @@
   min-width: 1.5em;
   padding: .25em;
 
-  .#{$prefix}-label {
+  .#{$prefix}-text {
     color: $color-primary;
     display: none;
+  }
+
+
+  .#{$prefix}-label {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
   }
 
   &.#{$prefix}-disabled {
@@ -29,7 +38,8 @@
       pointer-events: none;
     }
 
-    .#{$prefix}-label {
+    .#{$prefix}-label,
+    .#{$prefix}-text{
       &:hover {
         text-decoration: none;
       }

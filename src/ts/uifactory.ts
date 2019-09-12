@@ -52,6 +52,7 @@ import { UIConfig } from "./uiconfig";
 import { PlayerAPI } from "bitmovin-player";
 import { Tooltip } from "./components/tooltip";
 import {SkipButton} from './components/skipbutton';
+import {ReturnButton} from './components/returnbutton';
 
 export namespace UIFactory {
   export function buildDefaultUI(
@@ -82,7 +83,7 @@ export namespace UIFactory {
     let mainSettingsPanelPage = new SettingsPanelPage({
       components: [
         new SettingsPanelItem("Video Quality", new VideoQualitySelectBox()),
-        new SettingsPanelItem("Speed", new PlaybackSpeedSelectBox()),
+        // new SettingsPanelItem("Speed", new PlaybackSpeedSelectBox()),
         new SettingsPanelItem("Audio Track", new AudioTrackSelectBox()),
         new SettingsPanelItem("Audio Quality", new AudioQualitySelectBox())
       ]
@@ -161,7 +162,7 @@ export namespace UIFactory {
         new PlaybackToggleOverlay(),
         // new CastStatusOverlay(),
         controlBar,
-        new TitleBar(),
+        // new TitleBar(),
         new RecommendationOverlay(),
         // new Watermark(),
         new ErrorMessageOverlay()
@@ -207,7 +208,7 @@ export namespace UIFactory {
     let mainSettingsPanelPage = new SettingsPanelPage({
       components: [
         new SettingsPanelItem("Video Quality", new VideoQualitySelectBox()),
-        new SettingsPanelItem("Speed", new PlaybackSpeedSelectBox()),
+        // new SettingsPanelItem("Speed", new PlaybackSpeedSelectBox()),
         new SettingsPanelItem("Audio Track", new AudioTrackSelectBox()),
         new SettingsPanelItem("Audio Quality", new AudioQualitySelectBox())
       ]
@@ -249,49 +250,54 @@ export namespace UIFactory {
 
     let controlBar = new ControlBar({
       components: [
+        settingsPanel,
         new Container({
           components: [
-            new PlaybackTimeLabel({
-              timeLabelMode: PlaybackTimeLabelMode.CurrentTime,
-              hideInLivePlayback: true
-            }),
-            new SeekBar({ label: new SeekBarLabel() }),
-            new PlaybackTimeLabel({
-              timeLabelMode: PlaybackTimeLabelMode.TotalTime,
-              cssClasses: ["text-right"]
-            })
+            new ReturnButton({ label: 'Return' }),
+            // new ClosedCaptioningToggleButton(),
+            new SettingsToggleButton({ settingsPanel: settingsPanel })
           ],
-          cssClasses: ["controlbar-top"]
+          cssClasses: ['controlbar-1'],
+        }),
+        new Container({
+          components: [
+            new SkipButton({ duration: -10, text: '10s' }),
+            new PlaybackToggleButton({ label: 'Play' }),
+            new SkipButton({ duration: 10, text: '10s' })
+          ],
+          cssClasses: ['controlbar-2'],
+        }),
+        new Container({
+          components: [
+            new Container({
+              components: [
+                new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.CurrentTime, hideInLivePlayback: true }),
+                new PlaybackTimeLabel({ timeLabelMode: PlaybackTimeLabelMode.TotalTime, cssClasses: ['text-right'] }),
+                new FullscreenToggleButton(),
+              ],
+              cssClasses: ['controlbar-time-and-fullscreen'],
+            }),
+            new SeekBar({ label: new SeekBarLabel() })
+          ],
+          cssClasses: ['controlbar-3'],
         })
       ]
     });
 
     return new UIContainer({
+      hideDelay: 1500,
       components: [
         subtitleOverlay,
         new BufferingOverlay(),
-        // new CastStatusOverlay(),
         new PlaybackToggleOverlay(),
-        new RecommendationOverlay(),
         controlBar,
-        new TitleBar({
-          components: [
-            new MetadataLabel({ content: MetadataLabelContent.Title }),
-            // new CastToggleButton(),
-            // new VRToggleButton(),
-            // new PictureInPictureToggleButton(),
-            // new AirPlayToggleButton(),
-            new VolumeToggleButton(),
-            new SettingsToggleButton({ settingsPanel: settingsPanel }),
-            new FullscreenToggleButton()
-          ]
-        }),
-        settingsPanel,
+        // new CastStatusOverlay(),
+        // new TitleBar(),
+        new RecommendationOverlay(),
         // new Watermark(),
-        new ErrorMessageOverlay()
+        new ErrorMessageOverlay(),
       ],
-      cssClasses: ["ui-skin-smallscreen"],
-      hidePlayerStateExceptions: [PlayerUtils.PlayerState.Finished]
+      cssClasses: ['ui-skin-modern ui-skin-smashcut', 'ui-skin-smallscreen'],
     });
   }
 

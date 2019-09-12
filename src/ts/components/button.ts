@@ -12,6 +12,10 @@ export interface ButtonConfig extends ComponentConfig {
    */
   text?: string;
 
+  /*
+   * The label below the icon (smallscreen)
+   */
+  label?: string;
   tooltip?: Tooltip;
 }
 
@@ -61,11 +65,23 @@ export class Button<Config extends ButtonConfig> extends Component<Config> {
       type: "button",
       id: this.config.id,
       class: this.getCssClasses()
-    }).append(
-      new DOM("span", {
-        class: this.prefixCss("label")
-      }).html(this.config.text)
-    );
+    });
+
+    if (this.config.text) {
+      buttonElement.append(
+        new DOM("span", { class: this.prefixCss("text") }).html(
+          this.config.text
+        )
+      );
+    }
+
+    if (this.config.label) {
+      buttonElement.append(
+        new DOM("span", { class: this.prefixCss("label") }).html(
+          this.config.label
+        )
+      );
+    }
 
     // Listen for the click event on the button element and trigger the corresponding event on the button component
     buttonElement.on("click", () => {
@@ -81,8 +97,14 @@ export class Button<Config extends ButtonConfig> extends Component<Config> {
    */
   setText(text: string): void {
     this.getDomElement()
-      .find("." + this.prefixCss("label"))
+      .find("." + this.prefixCss("text"))
       .html(text);
+  }
+
+  setLabel(label: string): void {
+    this.getDomElement()
+      .find("." + this.prefixCss("label"))
+      .html(label);
   }
 
   protected onClickEvent() {

@@ -30,7 +30,8 @@ export class SkipButton extends Button<SkipButtonConfig> {
           config.duration > 0
             ? "ui-skipbutton-forward"
             : "ui-skipbutton-backward",
-        text: "Skip"
+        text: "Skip",
+        label: "10s"
       },
       this.config
     );
