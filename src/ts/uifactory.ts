@@ -365,7 +365,7 @@ export namespace UIFactory {
     config: UIConfig = {}
   ): UIManager {
     // show smallScreen UI only on mobile/handheld devices
-    let smallScreenSwitchWidth = 600;
+    let smallScreenSwitchWidth = 1000;
 
     return new UIManager(
       player,
