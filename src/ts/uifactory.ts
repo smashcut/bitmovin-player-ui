@@ -261,9 +261,9 @@ export namespace UIFactory {
         }),
         new Container({
           components: [
-            new SkipButton({ duration: -10, text: '10s' }),
+            new SkipButton({ duration: -10, label: '10s' }),
             new PlaybackToggleButton({ label: 'Play' }),
-            new SkipButton({ duration: 10, text: '10s' })
+            new SkipButton({ duration: 10, label: '10s' })
           ],
           cssClasses: ['controlbar-2'],
         }),
@@ -393,7 +393,7 @@ export namespace UIFactory {
             return (
               !context.isAd &&
               !context.adRequiresUi &&
-              context.isMobile &&
+              // context.isMobile &&
               context.documentWidth < smallScreenSwitchWidth
             );
           }

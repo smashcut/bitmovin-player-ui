@@ -1,5 +1,5 @@
-@import 'variables';
-@import '../mixins';
+@import "variables";
+@import "../mixins";
 
 .#{$prefix}-ui-skipbutton-backward,
 .#{$prefix}-ui-skipbutton-forward {
@@ -14,7 +14,6 @@
   &.#{$prefix}-disabled {
     opacity: 0.5;
   }
-
 }
 
 .#{$prefix}-ui-skipbutton-forward {
@@ -23,13 +22,13 @@
   margin-right: 10px; // distance to play-time-label
 
   &:before {
-     font-family: 'Font Awesome 5 Free';
-     content: '\f2f9';
-     display: inline-block;
-     vertical-align: middle;
-     font-weight: 900;
-     font-size: 16px;
-     color: #ffffff;
+    font-family: "Font Awesome 5 Free";
+    content: "\f2f9";
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 900;
+    font-size: 16px;
+    color: #ffffff;
   }
 }
 
@@ -37,12 +36,12 @@
   @extend %ui-button;
 
   &:before {
-     font-family: 'Font Awesome 5 Free';
-     content: '\f0e2';
-     display: inline-block;
-     vertical-align: middle;
-     font-weight: 900;
-     font-size: 16px;
+    font-family: "Font Awesome 5 Free";
+    content: "\f0e2";
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 900;
+    font-size: 16px;
     color: #ffffff;
   }
 }

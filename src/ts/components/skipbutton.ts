@@ -11,7 +11,6 @@ export interface SkipButtonConfig extends ButtonConfig {
    * How much time and in which direction to skip
    */
   duration?: number;
-  text?: string;
 }
 
 /**
@@ -31,7 +30,6 @@ export class SkipButton extends Button<SkipButtonConfig> {
             ? "ui-skipbutton-forward"
             : "ui-skipbutton-backward",
         text: "Skip",
-        label: "10s"
       },
       this.config
     );
