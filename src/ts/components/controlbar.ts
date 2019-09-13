@@ -22,7 +22,7 @@ export class ControlBar extends Container<ControlBarConfig> {
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-controlbar',
-      hidden: false,
+      hidden: true,
     }, <ControlBarConfig>this.config);
   }
 
