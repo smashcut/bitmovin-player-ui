@@ -217,8 +217,13 @@ gulp.task('sass:nyu', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
+gulp.task('sass:ati', function() {
+  var theme = 'ati';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
 // Builds the complete project from the sources into the target directory
-gulp.task('build', gulp.series('clean', gulp.parallel('html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu')));
+gulp.task('build', gulp.series('clean', gulp.parallel('html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati')));
 
 gulp.task('build-prod', gulp.series(function(callback) {
   production = true;
