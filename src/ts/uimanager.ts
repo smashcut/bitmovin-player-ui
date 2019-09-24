@@ -524,7 +524,7 @@ export namespace UIManager.Factory {
         new VolumeSlider(),
         new VolumeToggleButton({ tooltip: tooltip }),
         // new CommentsToggleButton({seekBar: seekBar}),
-        new ClosedCaptioningToggleButton({ tooltip: tooltip }),
+        new ClosedCaptioningToggleButton({ subtitleOverlay: subtitleOverlay, tooltip: tooltip }),
         new SettingsToggleButton({ settingsPanel: settingsPanel, tooltip: tooltip }),
         // new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
         new FullscreenToggleButton({ tooltip: tooltip }),
@@ -604,8 +604,8 @@ export namespace UIManager.Factory {
         new Container({
           components: [
             new ReturnButton({ label: 'Return' }),
-            new ClosedCaptioningToggleButton(),
-            new SettingsToggleButton({ settingsPanel: settingsPanel })
+            new ClosedCaptioningToggleButton({subtitleOverlay: subtitleOverlay}),
+            new SettingsToggleButton({ settingsPanel: settingsPanel }),
           ],
           cssClasses: ['controlbar-1'],
         }),

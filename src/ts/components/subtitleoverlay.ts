@@ -4,7 +4,7 @@ import SubtitleCueEvent = bitmovin.PlayerAPI.SubtitleCueEvent;
 import {Label, LabelConfig} from './label';
 import {ComponentConfig, Component} from './component';
 import {ControlBar} from './controlbar';
-import { EventDispatcher } from '../eventdispatcher';
+import {Event, EventDispatcher, NoArgs} from '../eventdispatcher';
 
 /**
  * Overlays the player to display subtitles.
@@ -14,6 +14,13 @@ export class SubtitleOverlay extends Container<ContainerConfig> {
   private subtitleManager: ActiveSubtitleManager;
   private previewSubtitleActive: boolean;
   private previewSubtitle: SubtitleLabel;
+  private _subtitlesOn: boolean = true;
+  private subtitleOverlayEvents = {
+    /**
+     * Fire when subtitlesOn is toggled
+     */
+    onChangeSubtitlesOn: new EventDispatcher<SubtitleOverlay, boolean>(),
+  };
 
   private preprocessLabelEventCallback = new EventDispatcher<SubtitleCueEvent, SubtitleLabel>();
 
@@ -63,7 +70,9 @@ export class SubtitleOverlay extends Container<ContainerConfig> {
       this.addComponent(labelToAdd);
       this.updateComponents();
 
-      this.show();
+      if (this.subtitlesOn) {
+        this.show();
+      }
     });
     player.addEventHandler(player.EVENT.ON_CUE_EXIT, (event: SubtitleCueEvent) => {
       let labelToRemove = subtitleManager.cueExit(event);
@@ -89,6 +98,12 @@ export class SubtitleOverlay extends Container<ContainerConfig> {
       this.removeComponents();
       this.updateComponents();
     };
+
+    this.onChangeSubtitlesOn.subscribe((subtitleOverlay, on) => {
+      if (!on) {
+        subtitleClearHandler();
+      }
+    });
 
     player.addEventHandler(player.EVENT.ON_AUDIO_CHANGED, subtitleClearHandler);
     player.addEventHandler(player.EVENT.ON_SUBTITLE_CHANGED, subtitleClearHandler);
@@ -256,6 +271,24 @@ export class SubtitleOverlay extends Container<ContainerConfig> {
     this.removeComponent(this.previewSubtitle);
     this.updateComponents();
   }
+
+  protected onChangeSubtitlesOnEvent(on: boolean) {
+    this.subtitleOverlayEvents.onChangeSubtitlesOn.dispatch(this, on);
+  }
+
+  get onChangeSubtitlesOn(): Event<SubtitleOverlay, boolean> {
+    return this.subtitleOverlayEvents.onChangeSubtitlesOn.getEvent();
+  }
+
+  toggleSubtitlesOn(): void {
+    this._subtitlesOn = !this._subtitlesOn;
+    this.onChangeSubtitlesOnEvent(this._subtitlesOn);
+  }
+
+  get subtitlesOn(): boolean {
+    return this._subtitlesOn;
+  }
+
 }
 
 interface ActiveSubtitleCue {
