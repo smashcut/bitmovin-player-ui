@@ -39,6 +39,20 @@
     &.#{$prefix}-hidden {
       & > div {
         background-image: none;
+        .#{$prefix}-controlbar-1 {
+          visibility: hidden;
+          opacity: 0;
+        }
+        .#{$prefix}-controlbar-2 {
+          visibility: hidden;
+          opacity: 0;
+        }
+        .#{$prefix}-controlbar-3 {
+          .#{$prefix}-controlbar-time-and-fullscreen {
+            visibility: hidden;
+            opacity: 0;
+          }
+        }
       }
     }
     & > div {
