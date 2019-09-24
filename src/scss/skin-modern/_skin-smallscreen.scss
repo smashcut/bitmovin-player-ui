@@ -37,7 +37,9 @@
     right: 0;
     display: block;
     &.#{$prefix}-hidden {
-      display: none;
+      & > div {
+        background-image: none;
+      }
     }
     & > div {
       height: 100%;
