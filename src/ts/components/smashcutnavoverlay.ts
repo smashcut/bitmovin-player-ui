@@ -14,9 +14,17 @@ export class SmashcutNavOverlay extends Container<ContainerConfig> {
   constructor(config: ContainerConfig = {}) {
     super(config);
 
-    this.replayButton = new SmashcutNavButton({cssClass: 'ui-smashcutnavbutton', text: 'REPLAY'});
-    this.prevButton = new SmashcutNavButton({cssClass: 'ui-smashcutnavbutton prev', text: 'PREVIOUS'});
-    this.nextButton = new SmashcutNavButton({cssClass: 'ui-smashcutnavbutton next', text: 'NEXT'});
+    this.replayButton = new SmashcutNavButton({cssClass: 'ui-smashcutnavbutton', text: 'REPLAY', action: 'play-again'});
+    this.prevButton = new SmashcutNavButton({
+      cssClass: 'ui-smashcutnavbutton prev',
+      text: 'PREVIOUS',
+      action: 'play-previous',
+    });
+    this.nextButton = new SmashcutNavButton({
+      cssClass: 'ui-smashcutnavbutton next',
+      text: 'NEXT',
+      action: 'play-next',
+    });
 
     this.config = this.mergeConfig(config, {
       cssClass: 'ui-smashcutnav-overlay',
