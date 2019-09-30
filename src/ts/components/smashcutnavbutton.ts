@@ -5,6 +5,7 @@ import {UIInstanceManager} from '../uimanager';
 export interface SmashcutNavButtonConfig extends ButtonConfig {
   action?: string;
 }
+
 /**
  * A button to play previous or next video.
  */
@@ -25,6 +26,25 @@ export class SmashcutNavButton extends Button<SmashcutNavButtonConfig> {
     this.onClick.subscribe(() => {
       this.getDomElement().dispatchSmashcutPlayerUiEvent({action, originator: 'SmashcutNavButton'});
     });
+  }
+
+  public setConfig(config: string) {
+    console.log('setConfig', config)
+    this.getDomElement().removeClass(('locked'));
+    this.getDomElement().removeClass(('notavailable'));
+    switch (config) {
+      case 'locked':
+      case 'notavailable':
+              this.getDomElement().addClass((config));
+        break;
+      case undefined:
+      case null:
+      case '':
+        break;
+      default:
+        console.warn('Unexpected config:', config);
+        break;
+    }
   }
 
   protected toDomElement(): DOM {

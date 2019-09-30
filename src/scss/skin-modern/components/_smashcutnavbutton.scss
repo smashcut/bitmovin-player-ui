@@ -8,7 +8,7 @@
   font-weight: 900;
   font-size: 23px;
   color: white;
-  padding-top: 3px;
+  padding-top: 11px;
 }
 
 .#{$prefix}-ui-smashcutnavbutton {
@@ -32,6 +32,10 @@
       opacity: 1;
       transition: opacity 0.2s ease-in-out;
     }
+  }
+
+  &.notavailable {
+    display: none;
   }
 
   .#{$prefix}-label {
@@ -62,7 +66,6 @@
     &:before {
       @include fontAwesomeIcon('\f01e');
     }
-
   }
 
   &.prev {
@@ -71,12 +74,32 @@
         @include fontAwesomeIcon('\f100');
       }
     }
+
+    &.locked {
+      pointer-events: none;
+
+      .#{$prefix}-image {
+        &:before {
+          @include fontAwesomeIcon('\f023');
+        }
+      }
+    }
   }
 
   &.next {
     .#{$prefix}-image {
       &:before {
         @include fontAwesomeIcon('\f101');
+      }
+    }
+
+    &.locked {
+      pointer-events: none;
+
+      .#{$prefix}-image {
+        &:before {
+          @include fontAwesomeIcon('\f023');
+        }
       }
     }
   }

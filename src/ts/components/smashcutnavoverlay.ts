@@ -50,6 +50,9 @@ export class SmashcutNavOverlay extends Container<ContainerConfig> {
         return;
       }
 
+      this.prevButton.setConfig(player.getConfig().source.previousLesson);
+      this.nextButton.setConfig(player.getConfig().source.nextLesson);
+
       this.show();
     });
     // Hide recommendations when playback starts, e.g. a restart
