@@ -37,6 +37,8 @@ import {AdMessageLabel} from './components/admessagelabel';
 import {AdClickOverlay} from './components/adclickoverlay';
 import {PlaybackSpeedSelectBox} from './components/playbackspeedselectbox';
 import {HugeReplayButton} from './components/hugereplaybutton';
+import {SmashcutNavButton} from './components/smashcutnavbutton';
+import {SmashcutNavOverlay} from './components/smashcutnavoverlay';
 import {BufferingOverlay} from './components/bufferingoverlay';
 import {CastUIContainer} from './components/castuicontainer';
 import {PlaybackToggleOverlay} from './components/playbacktoggleoverlay';

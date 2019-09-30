@@ -11,7 +11,6 @@ import { CastStatusOverlay } from './components/caststatusoverlay';
 import { CastToggleButton } from './components/casttogglebutton';
 import { CastUIContainer } from './components/castuicontainer';
 import { CloseButton } from './components/closebutton';
-import { ShowSuggestionsButton } from './components/showsuggestionsbutton';
 import { ClosedCaptioningToggleButton } from './components/closedcaptioningtogglebutton';
 import { CommentsToggleButton } from './components/commentstogglebutton';
 import { Component, ComponentConfig } from './components/component';
@@ -30,11 +29,14 @@ import { PlaybackTimeLabel, PlaybackTimeLabelMode } from './components/playbackt
 import { PlaybackToggleButton } from './components/playbacktogglebutton';
 import { PlaybackToggleOverlay } from './components/playbacktoggleoverlay';
 import { RecommendationOverlay } from './components/recommendationoverlay';
-import { SeekBarLabel } from './components/seekbarlabel';
+import { ReturnButton } from './components/returnbutton';
 import { SeekBar } from './components/seekbar';
+import { SeekBarLabel } from './components/seekbarlabel';
 import { SettingsPanel, SettingsPanelItem } from './components/settingspanel';
 import { SettingsToggleButton } from './components/settingstogglebutton';
+import { ShowSuggestionsButton } from './components/showsuggestionsbutton';
 import { SkipButton } from './components/skipbutton';
+import { SmashcutNavOverlay } from './components/smashcutnavoverlay';
 import { Spacer } from './components/spacer';
 import { SubtitleOverlay } from './components/subtitleoverlay';
 import { SubtitleSelectBox } from './components/subtitleselectbox';
@@ -43,6 +45,7 @@ import { SubtitleSettingsLabel } from './components/subtitlesettings/subtitleset
 import { SubtitleSettingsOpenButton } from './components/subtitlesettings/subtitlesettingsopenbutton';
 import { SubtitleSettingsPanel } from './components/subtitlesettings/subtitlesettingspanel';
 import { TitleBar } from './components/titlebar';
+import { Tooltip } from './components/tooltip';
 import { UIContainer } from './components/uicontainer';
 import { UIUtils } from './uiutils';
 import { VideoQualitySelectBox } from './components/videoqualityselectbox';
@@ -50,10 +53,7 @@ import { VolumeControlButton } from './components/volumecontrolbutton';
 import { VolumeSlider } from './components/volumeslider';
 import { VolumeToggleButton } from './components/volumetogglebutton';
 import { VRToggleButton } from './components/vrtogglebutton';
-import { ReturnButton } from './components/returnbutton';
 // import {Watermark} from './components/watermark';
-
-import { Tooltip } from './components/tooltip';
 
 import AdStartedEvent = bitmovin.PlayerAPI.AdStartedEvent;
 import EVENT = bitmovin.PlayerAPI.EVENT;
@@ -557,7 +557,7 @@ export namespace UIManager.Factory {
         new PlaybackToggleOverlay(),
         showSuggestionButton,
         controlBar,
-        new RecommendationOverlay(),
+        new SmashcutNavOverlay(),
         new ErrorMessageOverlay(),
       ],
     });
@@ -643,7 +643,7 @@ export namespace UIManager.Factory {
         controlBar,
         new CastStatusOverlay(),
         //new TitleBar(),
-        new RecommendationOverlay(),
+        new SmashcutNavOverlay(),
         // new Watermark(),
         new ErrorMessageOverlay(),
       ],
@@ -750,7 +750,7 @@ export namespace UIManager.Factory {
         }),
         settingsPanel,
         subtitleSettingsPanel,
-        new RecommendationOverlay(),
+        new SmashcutNavOverlay(),
         // new Watermark(),
         new ErrorMessageOverlay(),
       ],

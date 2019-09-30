@@ -1,0 +1,29 @@
+@import 'variables';
+@import '../mixins';
+
+.#{$prefix}-ui-smashcutnav-overlay {
+  @extend %ui-container;
+
+  @include layout-cover;
+  @include hidden-animated($animation-duration * 2);
+
+  background-color: $color-background-highlight;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > .#{$prefix}-container-wrapper {
+    padding: 3em;
+    display: flex;
+  }
+
+  a {
+    color: $color-primary;
+
+    &:hover,
+    &:visited {
+      color: $color-primary;
+    }
+  }
+}
