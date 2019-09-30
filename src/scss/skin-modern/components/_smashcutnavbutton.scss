@@ -38,6 +38,10 @@
     display: none;
   }
 
+  &.locked {
+    pointer-events: none;
+  }
+
   .#{$prefix}-label {
     font-size: 1em;
     display: block;
@@ -52,6 +56,7 @@
     line-height: 1.25;
     letter-spacing: normal;
     color: #ffffff;
+    pointer-events: inherit;
   }
 
   .#{$prefix}-image {
@@ -62,6 +67,7 @@
     border: solid 3px #ffffff;
     background-color: rgba(0, 0, 0, 0.8);
     margin-bottom: 9px;
+    pointer-events: inherit;
 
     &:before {
       @include fontAwesomeIcon('\f01e');
@@ -76,8 +82,6 @@
     }
 
     &.locked {
-      pointer-events: none;
-
       .#{$prefix}-image {
         &:before {
           @include fontAwesomeIcon('\f023');
@@ -94,8 +98,6 @@
     }
 
     &.locked {
-      pointer-events: none;
-
       .#{$prefix}-image {
         &:before {
           @include fontAwesomeIcon('\f023');
