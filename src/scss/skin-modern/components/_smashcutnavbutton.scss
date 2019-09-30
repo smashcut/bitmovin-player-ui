@@ -1,14 +1,15 @@
 @import 'variables';
 @import '../mixins';
 
-@mixin fontAwesomeIcon($content){
+@mixin fontAwesomeIcon($content, $top: 11px, $left: 0){
   font-family: 'Font Awesome 5 Free';
   content: $content !important;
   display: inline-block;
   font-weight: 900;
   font-size: 23px;
   color: white;
-  padding-top: 11px;
+  padding-top: $top;
+  padding-left: $left;
 }
 
 .#{$prefix}-ui-smashcutnavbutton {
@@ -22,25 +23,6 @@
   outline: none;
   width: 5em;
   margin: 1em;
-
-  &:hover {
-    .#{$prefix}-label {
-      opacity: 1;
-      transition: opacity 0.2s ease-in-out;
-    }
-    .#{$prefix}-image {
-      opacity: 1;
-      transition: opacity 0.2s ease-in-out;
-    }
-  }
-
-  &.notavailable {
-    display: none;
-  }
-
-  &.locked {
-    pointer-events: none;
-  }
 
   .#{$prefix}-label {
     font-size: 1em;
@@ -74,6 +56,25 @@
     }
   }
 
+  &:hover {
+    .#{$prefix}-label {
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .#{$prefix}-image {
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+
+  &.notavailable {
+    display: none;
+  }
+
+  &.locked {
+    pointer-events: none;
+  }
+
   &.prev {
     .#{$prefix}-image {
       &:before {
@@ -84,7 +85,7 @@
     &.locked {
       .#{$prefix}-image {
         &:before {
-          @include fontAwesomeIcon('\f023');
+          @include fontAwesomeIcon('\f023', 10px, 2px);
         }
       }
     }
@@ -100,10 +101,9 @@
     &.locked {
       .#{$prefix}-image {
         &:before {
-          @include fontAwesomeIcon('\f023');
+          @include fontAwesomeIcon('\f023', 10px, 2px);
         }
       }
     }
   }
-
 }
