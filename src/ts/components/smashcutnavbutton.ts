@@ -29,7 +29,7 @@ export class SmashcutNavButton extends Button<SmashcutNavButtonConfig> {
   }
 
   public setConfig(config: string) {
-    console.log('setConfig', config)
+    // console.log('setConfig', config)
     this.getDomElement().removeClass(('locked'));
     this.getDomElement().removeClass(('notavailable'));
     switch (config) {
