@@ -212,8 +212,8 @@ gulp.task('sass:ati', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
-gulp.task('sass:pearson', function() {
-  var theme = 'pearson';
+gulp.task('sass:escapestudios', function() {
+  var theme = 'escapestudios';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
@@ -222,7 +222,7 @@ gulp.task('build', function(callback) {
   // First run 'clean', then the other tasks
   // TODO remove runSequence on Gulp 4.0 and use built in serial execution instead
   runSequence('clean',
-    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati', 'sass:pearson'],
+    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati', 'sass:escapestudios'],
     callback);
 });
 
