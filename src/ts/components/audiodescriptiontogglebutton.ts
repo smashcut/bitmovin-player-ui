@@ -20,7 +20,7 @@ export class AudioDescriptionToggleButton extends ToggleButton<ToggleButtonConfi
     this.onClick.subscribe(() => {
       this.isOff() ? this.on() : this.off();
       this.getDomElement().dispatchSmashcutPlayerUiEvent({
-        action: 'toggleAudioDescription',
+        action: 'toggle-audio-description',
         originator: 'AudioDescriptionToggleButton',
         isOn: this.isOn(),
       });
