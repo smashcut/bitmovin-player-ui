@@ -11,6 +11,7 @@ import { CastStatusOverlay } from './components/caststatusoverlay';
 import { CastToggleButton } from './components/casttogglebutton';
 import { CastUIContainer } from './components/castuicontainer';
 import { CloseButton } from './components/closebutton';
+import { AudioDescriptionToggleButton } from './components/audiodescriptiontogglebutton';
 import { ClosedCaptioningToggleButton } from './components/closedcaptioningtogglebutton';
 import { CommentsToggleButton } from './components/commentstogglebutton';
 import { Component, ComponentConfig } from './components/component';
@@ -525,6 +526,7 @@ export namespace UIManager.Factory {
         new VolumeToggleButton({ tooltip: tooltip }),
         // new CommentsToggleButton({seekBar: seekBar}),
         new ClosedCaptioningToggleButton({ subtitleOverlay: subtitleOverlay, tooltip: tooltip }),
+        new AudioDescriptionToggleButton({ tooltip: tooltip }),
         new SettingsToggleButton({ settingsPanel: settingsPanel, tooltip: tooltip }),
         // new EmbedVideoToggleButton({embedVideoPanel: embedVideoPanel}),
         new FullscreenToggleButton({ tooltip: tooltip }),
@@ -605,6 +607,7 @@ export namespace UIManager.Factory {
           components: [
             new ReturnButton({ label: 'Return' }),
             new ClosedCaptioningToggleButton({subtitleOverlay: subtitleOverlay}),
+            new AudioDescriptionToggleButton(),
             new SettingsToggleButton({ settingsPanel: settingsPanel }),
           ],
           cssClasses: ['controlbar-1'],
