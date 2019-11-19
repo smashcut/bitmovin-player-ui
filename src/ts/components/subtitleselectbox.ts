@@ -14,18 +14,26 @@ export class SubtitleSelectBox extends SelectBox {
   configure(player: bitmovin.PlayerAPI, uimanager: UIInstanceManager): void {
     super.configure(player, uimanager);
 
+    let getAvailableSubtitles = () => {
+      return player.getAvailableSubtitles().filter(s => s.id);
+    }
+
     let selectCurrentSubtitle = () => {
       let currentSubtitle = player.getSubtitle();
-
-      if (currentSubtitle) {
+      if (currentSubtitle && currentSubtitle.id ) {
         this.selectItem(currentSubtitle.id);
+      } else {
+        const st = getAvailableSubtitles();
+        if (st.length) {
+          this.selectItem(st[0].id);
+        }
       }
     };
 
     let updateSubtitles = () => {
       this.clearItems();
 
-      for (let subtitle of player.getAvailableSubtitles()) {
+      for (let subtitle of getAvailableSubtitles()) {
         this.addItem(subtitle.id, subtitle.label);
       }
 

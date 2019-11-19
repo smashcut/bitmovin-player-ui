@@ -42,7 +42,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: local("Roboto"), local("Roboto-Regular"), url("data:application/font-woff2;base64,d09GMgABAAAAAALcAA4AAAAABWAAAAKKAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGiYbcBwsBmAAWBEMCoIYgXsLEAABNgIkAxwEIAWCCgcgG0AEyI7CtuUTMRwIxGEexERcKh7e3w89933AAvBUM02siC2wESTcMsXCzohmHpWcKhlk9/7sKUb1kgoSynSpQFQA2w92mrgZ18ZA5wJMoPNEF0jY1m1tsALM9Od5+sPf8QH4722b5Me56tQQtMgR0Q8RkkHAJKIUQkjo0QsEWkdZYS44eQRA8VFpXgYUn+UlpkPxdWxBFhQxcPgfBPEqMS8L/AiEXEKoJeMYzFJGCRBCKXlIv6weoXYcgCxvIj1gKT6x+hBLa5H98jQBg9jPAJPL17ydYbPkiRc5HMDTqp/CMvIdID9WTIGHh0bbebRwoCVPYCwDeTdYuvL/EAdfl0FAD+YBZt8NSiGpHf41MVCBQTQ4BZ6DwQdIESQaMHS9T3KQ45cYLBcrKU9J40+PEEsj6aLlNbevbdv7/V1S+/DRtb/dufv+/ihuA1Bzhz/9EFweLoT7bZIQ/gUGXBOVHRQ/9ujECLCVxDvHoq9CxR8DNIlsIZE0rn8Yvu62qganxgSG+kzi6MV5r63gyNik4FC3zdUGoU/GVxdOpanf6bu/F5dXDkSpP5gZ/5hvuyfzbBGq5DsUTpV5B7iYTUetApuYS0Cl2N8l4UDv8BPrzV4LpLXRL/vlPtFiFv/ruRqw801iG/hH/H5xBM1dEFSv//UUPwdc8A6IUlVZBxKcjF0o3qAo48mmHyOoLGNtYwQYJEnrOBM/RItcIO3ZbDKoZzM95pwtbFJkS/NsPjnotgh+ssXJViCbn0TJCmWIlSdIojz5UmXLwqNHiy59xswT0Fkb325pZpiioMkcZrSh4q9KS6wcseKlSKQlW55k2jKkipcoS75E+bR5cGXPkRd/jjTp0aKDBg7TJAgA") format("woff2");
+  src: local("Roboto"), local("Roboto-Regular"), url("https://fonts.gstatic.com/s/roboto/v16/tnj4SB6DNbdaQnsM8CFqBX-_kf6ByYO6CLYdB4HQE-Y.woff2") format("woff2");
   unicode-range: U+1F00-1FFF; }
 
 /* greek */
