@@ -222,6 +222,11 @@ gulp.task('sass:yearon', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
+gulp.task('sass:abelcine', function() {
+  var theme = 'abelcine';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
 gulp.task('sass:uchicago', function() {
   var theme = 'uchicago';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
@@ -232,7 +237,7 @@ gulp.task('build', function(callback) {
   // First run 'clean', then the other tasks
   // TODO remove runSequence on Gulp 4.0 and use built in serial execution instead
   runSequence('clean',
-    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati', 'sass:escapestudios', 'sass:yearon', 'sass:uchicago'],
+    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati', 'sass:escapestudios', 'sass:yearon', 'sass:uchicago', 'sass:abelcine'],
     callback);
 });
 
