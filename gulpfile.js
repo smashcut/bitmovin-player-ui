@@ -192,18 +192,8 @@ gulp.task('sass', function() {
   return buildSass(theme, gulp.dest(paths.target.css));
 });
 
-gulp.task('sass:smashcut', function() {
-  var theme = 'smashcut';
-  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
-});
-
-gulp.task('sass:montclair', function() {
-  var theme = 'montclair';
-  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
-});
-
-gulp.task('sass:nyu', function() {
-  var theme = 'nyu';
+gulp.task('sass:abelcine', function() {
+  var theme = 'abelcine';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
@@ -217,13 +207,28 @@ gulp.task('sass:escapestudios', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
-gulp.task('sass:yearon', function() {
-  var theme = 'yearon';
+gulp.task('sass:jhu', function() {
+  var theme = 'jhu';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
-gulp.task('sass:abelcine', function() {
-  var theme = 'abelcine';
+gulp.task('sass:montclair', function() {
+  var theme = 'montclair';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:nyu', function() {
+  var theme = 'nyu';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:smashcut', function() {
+  var theme = 'smashcut';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:taas', function() {
+  var theme = 'taas';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
@@ -232,12 +237,43 @@ gulp.task('sass:uchicago', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
+gulp.task('sass:ucolumbia', function() {
+  var theme = 'ucolumbia';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:wayfarer', function() {
+  var theme = 'wayfarer';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
+gulp.task('sass:yearon', function() {
+  var theme = 'yearon';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
 // Builds the complete project from the sources into the target directory
 gulp.task('build', function(callback) {
   // First run 'clean', then the other tasks
   // TODO remove runSequence on Gulp 4.0 and use built in serial execution instead
   runSequence('clean',
-    ['html', 'browserify', 'sass', 'sass:smashcut', 'sass:montclair', 'sass:nyu', 'sass:ati', 'sass:escapestudios', 'sass:yearon', 'sass:uchicago', 'sass:abelcine'],
+    [
+      'html',
+      'browserify',
+      'sass',
+      'sass:abelcine',
+      'sass:ati',
+      'sass:escapestudios',
+      'sass:jhu',
+      'sass:montclair',
+      'sass:nyu',
+      'sass:smashcut',
+      'sass:taas',
+      'sass:uchicago',
+      'sass:ucolumbia',
+      'sass:wayfarer',
+      'sass:yearon',
+    ],
     callback);
 });
 

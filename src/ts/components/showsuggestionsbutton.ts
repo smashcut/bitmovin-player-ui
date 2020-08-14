@@ -1,5 +1,5 @@
 import {ButtonConfig, Button} from './button';
-import {TimelineMarker, UIInstanceManager} from '../uimanager';
+import {TimelineMarker} from '../uimanager';
 
 /**
  * Configuration interface for the {@link ShowSuggestionsButton}.

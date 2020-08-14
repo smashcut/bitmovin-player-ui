@@ -101,7 +101,7 @@ export class SettingsPanel extends Container<SettingsPanelConfig> {
       this.hideTimeout.clear();
     }
   }
-  
+
   /**
    * Checks if there are active settings within this settings panel. An active setting is a setting that is visible
    * and enabled, which the user can interact with.

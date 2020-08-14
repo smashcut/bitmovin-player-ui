@@ -1,9 +1,9 @@
 import {UIInstanceManager} from '../uimanager';
-import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
-import {PlayerUtils} from '../playerutils';
-import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
+// import PlayerEvent = bitmovin.PlayerAPI.PlayerEvent;
+// import {PlayerUtils} from '../playerutils';
+// import TimeShiftAvailabilityChangedArgs = PlayerUtils.TimeShiftAvailabilityChangedArgs;
 import {Button, ButtonConfig} from './button';
-import {ToggleButton} from './togglebutton';
+// import {ToggleButton} from './togglebutton';
 import { Tooltip } from './tooltip';
 
 /**
@@ -31,7 +31,7 @@ export class SkipButton extends Button<SkipButtonConfig> {
     this.config = this.mergeConfig(config, {
       cssClass: config.duration > 0 ? 'ui-skipbutton-forward' : 'ui-skipbutton-backward',
       text: 'Skip',
-      label: config.text
+      label: config.text,
     }, this.config);
   }
 
@@ -61,12 +61,12 @@ export class SkipButton extends Button<SkipButtonConfig> {
         return;
       }
       let currentTime = player.getCurrentTime();
-      if(currentTime <= 0.1 && this.config.cssClass === 'ui-skipbutton-backward') {
+      if (currentTime <= 0.1 && this.config.cssClass === 'ui-skipbutton-backward') {
         return;
       }
       let duration = player.getDuration();
       let nextTime = Math.min(duration, Math.max(0, currentTime + (<SkipButtonConfig>this.config).duration));
-      
+
       if (nextTime !== currentTime) {
         player.seek(nextTime);
         this.getDomElement().dispatchSmashcutPlayerUiEvent({

@@ -10,7 +10,7 @@ export interface SettingsToggleButtonConfig extends ToggleButtonConfig {
    * The settings panel whose visibility the button should toggle.
    */
   settingsPanel: SettingsPanel;
-  tooltip?: Tooltip
+  tooltip?: Tooltip;
   /**
    * Decides if the button should be automatically hidden when the settings panel does not contain any active settings.
    * Default: true

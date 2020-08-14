@@ -76,7 +76,7 @@ export class UIContainer extends Container<UIContainerConfig> {
     let hideUi = () => {
       let previewHideEventArgs = <CancelEventArgs>{};
       uimanager.onPreviewControlsHide.dispatch(this, previewHideEventArgs);
-      // If the preview wasn't canceled, let subscribers know that they should now hide themselves	
+      // If the preview wasn't canceled, let subscribers know that they should now hide themselves
       uimanager.onControlsHide.dispatch(this);
       player.fireEvent(player.EVENT.ON_HIDE_CONTROLS, {});
       isUiShown = false;
@@ -84,7 +84,7 @@ export class UIContainer extends Container<UIContainerConfig> {
 
     // Timeout to defer UI hiding by the configured delay time
     this.uiHideTimeout = new Timeout(config.hideDelay, hideUi);
-    
+
     // When the mouse enters, we show the UI
     container.on('touchstart mouseenter', () => {
       showUi();

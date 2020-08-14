@@ -16,7 +16,7 @@ export class SubtitleSelectBox extends SelectBox {
 
     let getAvailableSubtitles = () => {
       return player.getAvailableSubtitles().filter(s => s.id);
-    }
+    };
 
     let selectCurrentSubtitle = () => {
       let currentSubtitle = player.getSubtitle();

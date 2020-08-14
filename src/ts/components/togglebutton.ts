@@ -10,7 +10,7 @@ export interface ToggleButtonConfig extends ButtonConfig {
    * The text on the button.
    */
   text?: string;
-  tooltip?: Tooltip
+  tooltip?: Tooltip;
 }
 
 /**
