@@ -197,6 +197,11 @@ gulp.task('sass:abelcine', function() {
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
 });
 
+gulp.task('sass:array101', function() {
+  var theme = 'array101';
+  return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
+});
+
 gulp.task('sass:ati', function() {
   var theme = 'ati';
   return buildSass(theme, gulp.dest(paths.target.css + '/' + theme));
@@ -272,6 +277,7 @@ gulp.task('build', function(callback) {
       'browserify',
       'sass',
       'sass:abelcine',
+      'sass:array101',
       'sass:ati',
       'sass:blackgirlfilmschool',
       'sass:escapestudios',
